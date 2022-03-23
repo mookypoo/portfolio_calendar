@@ -6,14 +6,22 @@ import 'calendar_models.dart';
 class CalendarProvider with ChangeNotifier {
   CalendarService _calendarService = CalendarService();
 
-  CalendarProvider(){
-    this.calendarInit();
+  MonthAndWeeksModel _selectedMonth = MonthAndWeeksModel(
+    month: DateTime.now().month,
+    year: DateTime.now().year,
+  );
+  MonthAndWeeksModel get selectedMonth => this._selectedMonth;
+  set selectedMonth(MonthAndWeeksModel l) => throw "error";
+
+  void prevMonth(){
+    this._selectedMonth.prevMonth();
+    this.notifyListeners();
+    return;
   }
 
-  MonthAndWeeksModel? _selectedMonth;
-  MonthAndWeeksModel? get selectedMonth => this._selectedMonth;
-  set selectedMonth(MonthAndWeeksModel? l) => throw "error";
-
-  void calendarInit() => this._selectedMonth = this._calendarService.init(month: DateTime.now().month, year: DateTime.now().year);
-
+  void nextMonth(){
+    this._selectedMonth.nextMonth();
+    this.notifyListeners();
+    return;
+  }
 }

@@ -16,40 +16,18 @@ class AndroidMain extends StatelessWidget {
             leading: IconButton(
               iconSize: 28.0,
               icon: Icon(Icons.arrow_left),
-              onPressed: () {
-
-              },
+              onPressed: this.calendarProvider.prevMonth,
             ),
             actions: [
               IconButton(
                 iconSize: 28.0,
                 icon: Icon(Icons.arrow_right),
-                onPressed: () {
-
-                },
+                onPressed: this.calendarProvider.nextMonth,
               ),
             ],
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: Text(2022.toString(), style: TextStyle(fontSize: 20.0)),
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        ),
-                        Container(
-                          child: Text(this.calendarProvider.selectedMonth!.month.toString(), style: TextStyle(fontSize: 20.0)),
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            title: GestureDetector(
+              onTap: () {},
+              child: Text(this.calendarProvider.selectedMonth.year.toString() + ". " + this.calendarProvider.selectedMonth.month.toString().padLeft(2, "0"), style: TextStyle(fontSize: 20.0)),
             ),
           ),
           SliverList(
@@ -62,8 +40,10 @@ class AndroidMain extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CalendarTopRow(onTap: (){}),
-                      ...List.generate(this.calendarProvider.selectedMonth!.weeks.length, (int index) => WeekRow(days: this.calendarProvider.selectedMonth!.weeks[index])),
+                      const CalendarTopRow(),
+                      ...List.generate(this.calendarProvider.selectedMonth.weeks.length, (int index) =>
+                          WeekRow(days: this.calendarProvider.selectedMonth.weeks[index], index: index, isThisMonth: this.calendarProvider.selectedMonth.isThisMonth),
+                      ),
                     ],
                   ),
                 );
