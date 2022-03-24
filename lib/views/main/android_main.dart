@@ -42,7 +42,7 @@ class AndroidMain extends StatelessWidget {
                     children: [
                       const CalendarTopRow(),
                       ...List.generate(this.calendarProvider.selectedMonth.weeks.length, (int index) =>
-                          WeekRow(days: this.calendarProvider.selectedMonth.weeks[index], index: index, isThisMonth: this.calendarProvider.selectedMonth.isThisMonth),
+                          WeekRow(days: this.calendarProvider.selectedMonth.weeks[index], weekIndex: index, isThisMonth: this.calendarProvider.selectedMonth.isThisMonth),
                       ),
                     ],
                   ),

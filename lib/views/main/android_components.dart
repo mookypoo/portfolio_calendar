@@ -23,9 +23,10 @@ class CalendarTopRow extends StatelessWidget {
 }
 
 class DateTile extends StatelessWidget {
-  const DateTile({Key? key, required this.date, required this.isThisMonth}) : super(key: key);
+  const DateTile({Key? key, required this.date, required this.isThisMonth, required this.dayIndex}) : super(key: key);
   final int? date;
   final bool isThisMonth;
+  final int dayIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,9 @@ class DateTile extends StatelessWidget {
         padding: EdgeInsets.all(2.0),
         height: 85.0,
         width: MediaQuery.of(context).size.width/7,
-        child: Text(this.date == null ? "" : this.date.toString(), style: TextStyle(fontSize: 16.0),),
+        child: Text(this.date == null ? "" : this.date.toString(), style: TextStyle(
+          fontSize: 16.0, color: this.dayIndex == 0 ? Color.fromRGBO(216, 31, 42, 1.0) : null),
+        ),
       ),
     );
   }
@@ -52,18 +55,20 @@ class DateTile extends StatelessWidget {
 }
 
 class WeekRow extends StatelessWidget {
-  const WeekRow({Key? key, required this.days, required this.index, required this.isThisMonth}) : super(key: key);
+  const WeekRow({Key? key, required this.days, required this.weekIndex, required this.isThisMonth}) : super(key: key);
   final List<int?> days;
-  final int index;
+  final int weekIndex;
   final bool Function(int index, int date) isThisMonth;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        children: this.days.map<Widget>((int? i) =>
-            DateTile(date: i, isThisMonth: this.isThisMonth(index, i!)),
-        ).toList(),
+        children: List.generate(7, (int dayIndex) => DateTile(
+          date: this.days[dayIndex],
+          isThisMonth: this.isThisMonth(weekIndex, this.days[dayIndex]!),
+          dayIndex: dayIndex,
+        ))
       ),
     );
   }

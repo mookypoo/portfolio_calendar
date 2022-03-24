@@ -1,21 +1,21 @@
-class DateAndDayModel {
+class DateDayModel {
   final int date; // 날짜
   final int day; // 요일
-  DateAndDayModel({required this.date, required this.day});
+  DateDayModel({required this.date, required this.day});
 }
 
-class MonthAndWeeksModel {
+class MonthModel {
   int year;
   int month;
   List<List<int?>> weeks = [];
 
-  MonthAndWeeksModel({required this.month, required this.year}){
+  MonthModel({required this.month, required this.year}){
     this._init();
   }
 
   void _init(){
     final List<int?> _firstWeek = this._firstWeek();
-    final DateAndDayModel _lastDay = this._lastDayOfMonth(month: this.month, year: this.year);
+    final DateDayModel _lastDay = this._lastDayOfMonth(month: this.month, year: this.year);
     final List<int?> _lastWeek = this._lastWeek(lastDay: _lastDay);
     this.weeks = this._weeks(firstWeek: _firstWeek, lastWeek: _lastWeek, lastDate: _lastDay.date);
     return;
@@ -52,13 +52,13 @@ class MonthAndWeeksModel {
     }
   }
 
-  DateAndDayModel _lastDayOfMonth({required int month, required int year}){
+  DateDayModel _lastDayOfMonth({required int month, required int year}){
     final int _lastDate = this._lastDate();
     final int _lastDay = DateTime.utc(year, month, _lastDate).weekday;
-    return DateAndDayModel(date: _lastDate, day: _lastDay);
+    return DateDayModel(date: _lastDate, day: _lastDay);
   }
 
-  List<int?> _lastWeek({required DateAndDayModel lastDay}){
+  List<int?> _lastWeek({required DateDayModel lastDay}){
     if (lastDay.day == 6) return [];
     int _lastDay = lastDay.day;
     if (lastDay.day == 7) _lastDay = 0;
