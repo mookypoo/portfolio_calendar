@@ -3,7 +3,7 @@ import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/android_components.dart';
 
-import '../../models/day_models.dart' show DateTileModel;
+import '../../models/day_class.dart' show DateTileData;
 import '../../repos/variables.dart' show MyColors;
 
 class AndroidMain extends StatelessWidget {
@@ -59,7 +59,7 @@ class AndroidMain extends StatelessWidget {
                             children: List.generate(7, (int dayIndex) => DateTile(
                               onPressed: this.calendarProvider.selectDate,
                               selectedDate: this.calendarProvider.selectedDate,
-                              data: DateTileModel(
+                              data: DateTileData(
                                 year: this.calendarProvider.year,
                                 date: this.calendarProvider.weeks[weekIndex][dayIndex],
                                 weekday: dayIndex,

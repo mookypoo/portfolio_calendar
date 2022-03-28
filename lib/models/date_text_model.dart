@@ -1,28 +1,11 @@
-import 'day_models.dart' show DateModel;
+import 'day_class.dart' show Day;
 
 class DateTextModel {
-  DateModel selectedDate;
+  Day selectedDate;
 
-  List<DateModel> listOfDates({required DateModel selectedDate}){
+  List<Day> listOfDates({required Day selectedDate}){
     return [
-      DateModel(
-        date: selectedDate.prevDate(date: selectedDate.date, month: selectedDate.month),
-        year: selectedDate.year,
-        weekday: selectedDate.prevDay(day: selectedDate.weekday),
-        month: selectedDate.prevMonth(month: selectedDate.month),
-      ),
-      DateModel(
-        date: selectedDate.date,
-        year: selectedDate.year,
-        weekday: selectedDate.weekday,
-        month: selectedDate.month,
-      ),
-      DateModel(
-        date: selectedDate.prevDate(date: selectedDate.date, month: selectedDate.month),
-        year: selectedDate.year,
-        weekday: selectedDate.nextDay(day: selectedDate.weekday),
-        month: selectedDate.nextMonth(month: selectedDate.month),
-      ),
+
     ];
   }
 

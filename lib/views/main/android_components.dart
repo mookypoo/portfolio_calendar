@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/day_models.dart' show DateTileModel, DateModel;
+import '../../models/day_class.dart' show DateTileData, Day;
 import '../../repos/variables.dart' show MyColors, Today;
+import '../../service/calendar_service.dart';
 
 class CalendarTopRow extends StatelessWidget {
   const CalendarTopRow({Key? key}) : super(key: key);
@@ -24,12 +25,12 @@ class CalendarTopRow extends StatelessWidget {
 
 class DateTile extends StatelessWidget {
   DateTile({Key? key, required this.data, required this.selectedDate, required this.onPressed}) : super(key: key);
-  final DateTileModel data;
-  DateModel selectedDate;
-  void Function(DateTileModel date) onPressed;
+  final DateTileData data;
+  Day selectedDate;
+  void Function(DateTileData date) onPressed;
 
-  Color _dateColor({required DateTileModel data}){
-    if (!data.isThisMonth()) {
+  Color _dateColor({required DateTileData data}){
+    if (!CalendarService.isThisMonth(data: data)) {
       if (data.weekday == 0) return MyColors.transpRed;
       return MyColors.transpBlack;
     } else {
@@ -38,7 +39,7 @@ class DateTile extends StatelessWidget {
     }
   }
 
-  Widget _today({required DateTileModel data}){
+  Widget _today({required DateTileData data}){
     return Container(
       padding: EdgeInsets.all(5.5),
       decoration: BoxDecoration(
@@ -49,7 +50,7 @@ class DateTile extends StatelessWidget {
     );
   }
 
-  Widget _date({required DateTileModel data, required Color color}){
+  Widget _date({required DateTileData data, required Color color}){
     return Padding(
       padding: EdgeInsets.all(4.5),
       child: Text(this.data.date.toString(), style: TextStyle(fontSize: 15.0, color: color),),
@@ -59,21 +60,16 @@ class DateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        this.onPressed(this.data);
-        print(this.data.month);
-        print(this.selectedDate.month);
-        print(this.selectedDate.year);
-      },
+      onTap: () => this.onPressed(this.data),
       child: Container(
         decoration: BoxDecoration(
-          border: this.data.isSame(date1: this.data, date2: this.selectedDate) ? Border.all(color: MyColors.primary) : null,
+          border: CalendarService.isSame(date1: this.data, date2: this.selectedDate) ? Border.all(color: MyColors.primary) : null,
         ),
         alignment: Alignment.topCenter,
         padding: const EdgeInsets.all(2.0),
         height: 110.0,
         width: MediaQuery.of(context).size.width/7,
-        child: this.data.isSame(date1: this.data, date2: Today.today)
+        child: CalendarService.isSame(date1: this.data, date2: Today.today)
           ? this._today(data: this.data)
           : this._date(data: this.data, color: this._dateColor(data: this.data))
       ),

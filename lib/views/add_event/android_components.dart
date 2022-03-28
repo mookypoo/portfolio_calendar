@@ -48,16 +48,19 @@ class TimeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 20.0,
-      margin: const EdgeInsets.only(bottom: 25.0),
-      width: 280.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(this.text, style: Theme.of(context).textTheme.bodyText1,),
-          this.widget,
-        ],
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 20.0,
+        margin: const EdgeInsets.only(bottom: 25.0),
+        width: 280.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(this.text, style: Theme.of(context).textTheme.bodyText1,),
+            this.widget,
+          ],
+        ),
       ),
     );
   }

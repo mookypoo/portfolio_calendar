@@ -1,17 +1,21 @@
 import 'package:flutter/widgets.dart';
+import 'package:portfolio_calendar/service/calendar_service.dart';
 
-import '../models/day_models.dart' show DateModel, DateTileModel;
+import '../models/day_class.dart' show Day, DateTileData;
 import '../models/selected_month.dart';
+import '../repos/variables.dart' show Today;
 
 class CalendarProvider with ChangeNotifier {
-  DateModel _selectedDate = DateModel(
+  CalendarService _calendarService = CalendarService();
+
+  Day _selectedDate = Day(
     date: DateTime.now().day,
     weekday: DateTime.now().weekday,
     month: DateTime.now().month,
     year: DateTime.now().year,
   );
-  DateModel get selectedDate => this.selectedDate;
-  set selectedDate(DateModel d) => throw "error";
+  Day get selectedDate => this._selectedDate;
+  set selectedDate(Day d) => throw "error";
 
   SelectedMonth _selectedMonth = SelectedMonth(
     month: DateTime.now().month,
@@ -32,21 +36,30 @@ class CalendarProvider with ChangeNotifier {
   List<List<int>> get weeks => [...this._selectedMonth.weekList];
 
   void nextMonth(){
-    this._selectedMonth.nextMonth();
-    this._selectedDate.changeMonth(month: this.month, year: this.year);
+    this._selectedMonth = this._calendarService.nextMonth(month: this.month, year: this.year);
+    this._changeSelectedDate(month: this.month, year: this.year);
     this.notifyListeners();
     return;
   }
 
   void prevMonth(){
-    this._selectedMonth.prevMonth();
-    this._selectedDate.changeMonth(month: this.month, year: this.year);
+    this._selectedMonth = this._calendarService.prevMonth(month: this.month, year: this.year);
+    this._changeSelectedDate(month: this.month, year: this.year);
     this.notifyListeners();
     return;
   }
 
-  void selectDate(DateTileModel date){
-    this._selectedDate.changeData(date);
+  void _changeSelectedDate({required int month, required int year}){
+    if (month == Today.today.month) {
+      this._selectedDate = this._calendarService.changeDay(Today.today);
+    } else {
+      this._selectedDate = Day(date: 1, month: month, weekday: 1, year: this.year);
+    }
+    return;
+  }
+
+  void selectDate(DateTileData newDate){
+    this._selectedDate = this._calendarService.changeDay(newDate);
     this.notifyListeners();
     return;
   }

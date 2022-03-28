@@ -18,11 +18,4 @@ class SelectedMonth extends MonthAbstract {
     super.weeks(month: month, year: year);
   }
 
-  void changeMonth({required int month, required int year}){
-    this.year = year;
-    this.month = month;
-    this._weeks(month: month, year: year);
-    return;
-  }
-
 }

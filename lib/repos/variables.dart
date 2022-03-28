@@ -1,13 +1,13 @@
 import 'dart:ui';
-import '../models/day_models.dart' show DateModel;
+import '../models/day_class.dart' show Day;
 
 class Today {
-  static final DateModel today = DateModel.today();
+  static final Day today = Day.today();
 }
 
 class MyColors {
   static const Color primary = const Color.fromRGBO(65, 105, 255, 1.0);
-  static const Color secondary = const Color.fromRGBO(65, 105, 255, 0.6);
+  static const Color secondary = const Color.fromRGBO(65, 105, 255, 0.2);
   static const Color bg = const Color.fromRGBO(204, 221, 255, 0.65);
   static const Color transpRed = const Color.fromRGBO(216, 31, 42, 0.3);
   static const Color red = const Color.fromRGBO(216, 31, 42, 1.0);
