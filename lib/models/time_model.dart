@@ -1,6 +1,6 @@
 abstract class TimeAbstract {
   int hour = DateTime.now().hour;
-  String minute = DateTime.now().minute.toString().padLeft(2, "0");
+  int minute = DateTime.now().minute;
   String amPM = "AM";
 
   void convertHour(){
@@ -33,7 +33,7 @@ class Time extends TimeAbstract {
   int hour = DateTime.now().hour;
 
   @override
-  String minute = "00";
+  int minute = 00;
 
   @override
   String amPM = "AM";
@@ -45,5 +45,5 @@ class Time extends TimeAbstract {
     }
   }
 
-  String get time => "${this.hour}:${this.minute} ${this.amPM}";
+  String get time => "${this.hour}:${this.minute.toString().padLeft(2, "0")} ${this.amPM}";
 }

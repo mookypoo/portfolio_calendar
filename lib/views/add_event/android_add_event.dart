@@ -3,10 +3,12 @@ import 'package:portfolio_calendar/views/add_event/android_components.dart';
 
 import '../../provider/time_provider.dart';
 import '../../repos/variables.dart';
+import 'common_components.dart';
 
 class AndroidAddEvent extends StatelessWidget {
   AndroidAddEvent({Key? key, required this.timeProvider}) : super(key: key);
   final TimeProvider timeProvider;
+  ScrollController _minuteCt = FixedExtentScrollController();
 
   final List<Color> _eventColors = [
     EventColors.orange, EventColors.green, EventColors.red, EventColors.yellow, EventColors.purple, EventColors.blue,
@@ -42,8 +44,13 @@ class AndroidAddEvent extends StatelessWidget {
                   AddEventRow(
                     widget: Column(
                       children: <Widget>[
-                        TimeRow(text: "All day", widget: Switch(value: false, onChanged: (bool b) {}),),
-                        TimeRow(text: "Starts", widget: Row(
+                        RepeatAllDay(widget: Switch(value: false, onChanged: (bool b) {}), text: "All day"),
+                        TimeRow(
+
+                          period: this.timeProvider.startPeriod,
+                          isExpanded: this.timeProvider.isStartExpanded,
+                          timeProvider: this.timeProvider,
+                          text: "Starts", widget: Row(
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
@@ -52,12 +59,23 @@ class AndroidAddEvent extends StatelessWidget {
                             Text(this.timeProvider.startTime),
                           ],
                         ),),
-                        TimeRow(text: "Ends", widget: Row(
+                        TimeRow(
+                          period: this.timeProvider.endPeriod,
+                          isExpanded: this.timeProvider.isEndExpanded,
+                          timeProvider: this.timeProvider,
+                          text: "Ends", widget: Row(
                           children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: Text(this.timeProvider.dateText),
+                            ),
                             Text(this.timeProvider.endTime),
                           ],
                         ),),
-                        TimeRow(text: "Repeat", widget:Text("Never"),),
+                        RepeatAllDay(
+                          widget: Text("Never"),
+                          text: "Repeat",
+                        ),
                       ],
                     ),
                     icon: Icon(Icons.access_time),
