@@ -6,6 +6,7 @@ import 'package:portfolio_calendar/views/add_event/ios_add_event.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/time_provider.dart';
+import '../../provider/user_provider.dart';
 
 class AddEventPage extends StatelessWidget {
   const AddEventPage({Key? key}) : super(key: key);
@@ -14,9 +15,10 @@ class AddEventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TimeProvider _timeProvider = Provider.of<TimeProvider>(context);
+    UserProvider _userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Platform.isAndroid
-        ? AndroidAddEvent(timeProvider: _timeProvider)
+        ? AndroidAddEvent(timeProvider: _timeProvider, userProvider: _userProvider,)
         : IosAddEvent();
   }
 }

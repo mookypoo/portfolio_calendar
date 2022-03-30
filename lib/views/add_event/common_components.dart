@@ -1,63 +1,44 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../models/time_model.dart' show Period;
 import '../../provider/time_provider.dart';
 import '../../repos/variables.dart';
 
-class TimeRow extends StatefulWidget {
-  TimeRow({Key? key, required this.text, required this.widget, required this.period, required this.timeProvider, required this.isExpanded}) : super(key: key);
+class TimeRow extends StatelessWidget {
+  TimeRow({Key? key, required this.text, required this.widget, required this.period, required this.timeProvider, required this.isExpanded, required this.hourCt, required this.periodCt}) : super(key: key);
   final String text;
   final Widget widget;
   TimeProvider timeProvider;
   bool isExpanded;
   Period period;
+  ScrollController hourCt;
+  ScrollController periodCt;
 
-  @override
-  State<TimeRow> createState() => _TimeRowState();
-}
-
-class _TimeRowState extends State<TimeRow> {
-  ScrollController? _periodCt;
-  ScrollController _hourCt = FixedExtentScrollController();
-
-  Widget _scrollWidget({ScrollController? ct, required void Function(int i) onSelectedItemChanged, required List<Widget> children}){
+  Widget _scrollWidget({bool isPeriod = false, ScrollController? ct, required void Function(int i) onSelectedItemChanged, required List<Widget> children}){
     return Container(
       width: 60.0,
       height: 90.0,
       child: ListWheelScrollView.useDelegate(
-        controller: ct,
-        physics: FixedExtentScrollPhysics(),
-        onSelectedItemChanged: onSelectedItemChanged,
-        itemExtent: 30.0,
-        childDelegate: ListWheelChildLoopingListDelegate(
-          children: children,
-        )),
+          controller: ct,
+          physics: FixedExtentScrollPhysics(),
+          onSelectedItemChanged: onSelectedItemChanged,
+          itemExtent: 30.0,
+          childDelegate: isPeriod ? ListWheelChildListDelegate(children: children) : ListWheelChildLoopingListDelegate(
+            children: children,
+          )),
     );
   }
 
   @override
-  void initState() {
-    this._periodCt = FixedExtentScrollController(initialItem: this.widget.period == Period.AM ? 0 : 1);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    this._periodCt?.dispose();
-    this._hourCt.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              this.widget.timeProvider.expand(this.widget.text);
+              this.timeProvider.expand(this.text);
             },
             child: Container(
               height: 20.0,
@@ -65,13 +46,13 @@ class _TimeRowState extends State<TimeRow> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(this.widget.text, style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary)),
-                  this.widget.widget,
+                  Text(this.text, style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary)),
+                  this.widget,
                 ],
               ),
             ),
           ),
-          this.widget.isExpanded ? Stack(
+          this.isExpanded ? Stack(
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 10.0),
@@ -79,53 +60,42 @@ class _TimeRowState extends State<TimeRow> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Container(
-                      width: 60.0,
-                      height: 90.0,
-                      child: ListWheelScrollView.useDelegate(
-                          physics: FixedExtentScrollPhysics(),
-                          onSelectedItemChanged: (int i) {
-                            final bool _isIncrement = this._hourCt.position.userScrollDirection == ScrollDirection.reverse;
-                            final bool _scrollAmPm = this.widget.text == "Starts"
-                                ? this.widget.timeProvider.changeStartHour(index: i, isIncrement: _isIncrement,)
-                                : this.widget.timeProvider.changeEndHour(index: i, isIncrement: _isIncrement);
-                            if (_scrollAmPm) {
-                              if (this.widget.period == Period.PM){
-                                this._periodCt?.animateTo(this._periodCt!.position.minScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
-                              } else {
-                                this._periodCt?.animateTo(this._periodCt!.position.maxScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
-                              }
-                            }
-                          },
-                          controller: this._hourCt,
-                          itemExtent: 30.0,
-                          childDelegate: ListWheelChildLoopingListDelegate(children: this.widget.timeProvider.hours.map<Widget>((int i) => Container(
-                              alignment: Alignment.center,
-                              child: Text(i.toString())
-                          )).toList(),
-                          )),
+                    this._scrollWidget(
+                      onSelectedItemChanged: (int i) {
+                        final bool _isIncrement = this.hourCt.position.userScrollDirection == ScrollDirection.reverse;
+                        final bool _scrollAmPm = this.text == "Starts"
+                            ? this.timeProvider.changeStartHour(index: i, isIncrement: _isIncrement,)
+                            : this.timeProvider.changeEndHour(index: i, isIncrement: _isIncrement);
+                        if (_scrollAmPm) {
+                          if (this.period == Period.PM){
+                            this.periodCt.animateTo(this.periodCt.position.minScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+                          } else {
+                            this.periodCt.animateTo(this.periodCt.position.maxScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+                          }
+                        }
+                      },
+                      children: this.timeProvider.hours.map<Widget>((int i) => Container(
+                          alignment: Alignment.center,
+                          child: Text(i.toString())
+                      )).toList(),
+                      ct: this.hourCt,
                     ),
                     Text(":", style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),),
                     this._scrollWidget(
-                      onSelectedItemChanged: (int i) => this.widget.timeProvider.changeSelectedMinute(i, this.widget.text),
-                      children: this.widget.timeProvider.minuteList.map<Widget>((int i) => Container(
+                      onSelectedItemChanged: (int i) => this.timeProvider.changeSelectedMinute(i, this.text),
+                      children: this.timeProvider.minuteList.map<Widget>((int i) => Container(
                         alignment: Alignment.center,
                         child: Text(i.toString().padLeft(2, "0")),
                       )).toList(),
-                    )
-                    Container(
-                        width: 50.0,
-                        height: 90.0,
-                        child: ListWheelScrollView(
-                          physics: FixedExtentScrollPhysics(),
-                          controller: this._periodCt,
-                          onSelectedItemChanged: this.widget.timeProvider.changeAmPm,
-                          itemExtent: 30.0,
-                          children: this.widget.timeProvider.periodList.map<Widget>((String s) => Container(
-                              alignment: Alignment.center,
-                              child: Text(s)
-                          )).toList(),
-                        )
+                    ),
+                    this._scrollWidget(
+                      isPeriod: true,
+                      onSelectedItemChanged: this.timeProvider.changeAmPm,
+                      children: this.timeProvider.periodList.map<Widget>((String s) => Container(
+                          alignment: Alignment.center,
+                          child: Text(s)
+                      )).toList(),
+                      ct: this.periodCt,
                     ),
                   ],
                 ),
@@ -146,6 +116,161 @@ class _TimeRowState extends State<TimeRow> {
     );
   }
 }
+
+class ColorCircle extends StatelessWidget {
+  const ColorCircle({Key? key, required this.color, this.onTap}) : super(key: key);
+  final Color color;
+  final void Function(Color color)? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: this.onTap != null ? () => this.onTap!(this.color) : null,
+      child: Container(
+        margin: EdgeInsets.only(right: 22.0),
+        height: 22.0,
+        width: 22.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: this.color,
+        ),
+      ),
+    );
+  }
+}
+
+
+// class TimeRow extends StatefulWidget {
+//   TimeRow({Key? key, required this.text, required this.widget, required this.period, required this.timeProvider, required this.isExpanded}) : super(key: key);
+//   final String text;
+//   final Widget widget;
+//   TimeProvider timeProvider;
+//   bool isExpanded;
+//   Period period;
+//
+//   @override
+//   State<TimeRow> createState() => _TimeRowState();
+// }
+//
+// class _TimeRowState extends State<TimeRow> {
+//   ScrollController? _periodCt;
+//   ScrollController _hourCt = FixedExtentScrollController();
+//
+//   Widget _scrollWidget({bool isPeriod = false, ScrollController? ct, required void Function(int i) onSelectedItemChanged, required List<Widget> children}){
+//     return Container(
+//       width: 60.0,
+//       height: 90.0,
+//       child: ListWheelScrollView.useDelegate(
+//         controller: ct,
+//         physics: FixedExtentScrollPhysics(),
+//         onSelectedItemChanged: onSelectedItemChanged,
+//         itemExtent: 30.0,
+//         childDelegate: isPeriod ? ListWheelChildListDelegate(children: children) : ListWheelChildLoopingListDelegate(
+//           children: children,
+//         )),
+//     );
+//   }
+//
+//   @override
+//   void initState() {
+//     this._periodCt = FixedExtentScrollController(initialItem: this.widget.period == Period.AM ? 0 : 1);
+//     super.initState();
+//   }
+//
+//   @override
+//   void dispose() {
+//     this._periodCt?.dispose();
+//     this._hourCt.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 20.0),
+//       child: Column(
+//         children: <Widget>[
+//           GestureDetector(
+//             onTap: () {
+//               this.widget.timeProvider.expand(this.widget.text);
+//             },
+//             child: Container(
+//               height: 20.0,
+//               width: 280.0,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: <Widget>[
+//                   Text(this.widget.text, style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary)),
+//                   this.widget.widget,
+//                 ],
+//               ),
+//             ),
+//           ),
+//           this.widget.isExpanded ? Stack(
+//             children: <Widget>[
+//               Container(
+//                 margin: EdgeInsets.only(top: 10.0),
+//                 width: 290.0,
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.end,
+//                   children: <Widget>[
+//                     this._scrollWidget(
+//                       onSelectedItemChanged: (int i) {
+//                         final bool _isIncrement = this._hourCt.position.userScrollDirection == ScrollDirection.reverse;
+//                         final bool _scrollAmPm = this.widget.text == "Starts"
+//                             ? this.widget.timeProvider.changeStartHour(index: i, isIncrement: _isIncrement,)
+//                             : this.widget.timeProvider.changeEndHour(index: i, isIncrement: _isIncrement);
+//                         if (_scrollAmPm) {
+//                           if (this.widget.period == Period.PM){
+//                             this._periodCt?.animateTo(this._periodCt!.position.minScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+//                           } else {
+//                             this._periodCt?.animateTo(this._periodCt!.position.maxScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+//                           }
+//                         }
+//                       },
+//                       children: this.widget.timeProvider.hours.map<Widget>((int i) => Container(
+//                           alignment: Alignment.center,
+//                           child: Text(i.toString())
+//                       )).toList(),
+//                       ct: this._hourCt,
+//                     ),
+//                     Text(":", style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),),
+//                     this._scrollWidget(
+//                       onSelectedItemChanged: (int i) => this.widget.timeProvider.changeSelectedMinute(i, this.widget.text),
+//                       children: this.widget.timeProvider.minuteList.map<Widget>((int i) => Container(
+//                         alignment: Alignment.center,
+//                         child: Text(i.toString().padLeft(2, "0")),
+//                       )).toList(),
+//                     ),
+//                     this._scrollWidget(
+//                       isPeriod: true,
+//                       onSelectedItemChanged: this.widget.timeProvider.changeAmPm,
+//                       children: this.widget.timeProvider.periodList.map<Widget>((String s) => Container(
+//                           alignment: Alignment.center,
+//                           child: Text(s)
+//                       )).toList(),
+//                       ct: this._periodCt,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               Positioned(
+//                 width: 290.0,
+//                 left: 0.0,
+//                 top: 39.0,
+//                 child: Container(
+//                   height: 30.0,
+//                   color: MyColors.secondary,
+//                 ),
+//               ),
+//             ],
+//           ) : Container(),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class AddEventRow extends StatelessWidget {
   const AddEventRow({Key? key, required this.widget, required this.icon}) : super(key: key);

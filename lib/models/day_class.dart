@@ -1,5 +1,7 @@
 import 'package:portfolio_calendar/models/class/calendar_class.dart';
 
+import 'event_model.dart' show Event;
+
 abstract class DayAbstract extends Calendar {
   int date = 1; // 날짜
   int weekday = 1; // 요일
@@ -82,7 +84,20 @@ class DateTileData extends Day {
   int month;
   int year;
 
-  DateTileData({required this.date, required this.weekday, required this.month, required this.year, required this.weekIndex})
-    : super.withWeekIndex(date: date, year: year, weekIndex: weekIndex, month: month, weekday: year);
+  List<Event> startEvents = [];
+  List<Event> endEvents = [];
+
+  DateTileData({required this.date, required this.weekday, required this.month, required this.year, required this.weekIndex, required List<Event> events})
+    : super.withWeekIndex(date: date, year: year, weekIndex: weekIndex, month: month, weekday: year) {
+        this._events(events: events);
+      }
+
+  void _events({required List<Event> events}){
+    for (int i = 0; i < events.length; i++){
+      if (events[i].startTime.day.date == this.date) this.startEvents.add(events[i]);
+      if (events[i].endTime.day.date == this.date) this.endEvents.add(events[i]);
+    }
+    return;
+  }
 
 }

@@ -3,15 +3,26 @@ import 'dart:ui';
 import 'package:portfolio_calendar/models/time_model.dart' show Time;
 import 'package:portfolio_calendar/repos/variables.dart';
 
+import 'day_class.dart' show Day;
+
+
+class EventTime {
+  final Day day;
+  final Time time;
+
+  EventTime({required this.day, required this.time});
+}
+
 class Event {
-  Time startTime;
-  Time endTime;
+  final String title;
+  final EventTime startTime;
+  final EventTime endTime;
 
-  Color color;
+  final Color color;
 
-  String? notes;
+  final String? notes;
 
-  Event({required this.endTime, required this.startTime, this.color = EventColors.orange, this.notes});
+  Event({required this.endTime, required this.startTime, this.color = EventColors.orange, this.notes, required this.title});
 }
 
 

@@ -2,10 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/time_service.dart';
 
 import '../models/day_class.dart' show Day;
-
-enum Period {
-  AM, PM,
-}
+import '../models/event_model.dart' show EventTime;
+import '../models/time_model.dart' show Period, Time;
 
 class TimeProvider with ChangeNotifier {
   bool _isStartExpanded = false;
@@ -16,8 +14,8 @@ class TimeProvider with ChangeNotifier {
   bool get isEndExpanded => this._isEndExpanded;
   TimeService _timeService = TimeService();
 
-  Day date;
-  String get dateText => this.date.textInfo();
+  Day day;
+  String get dateText => this.day.textInfo();
 
   int _startMinute = 00;
   int get startMinute => this._startMinute;
@@ -60,7 +58,7 @@ class TimeProvider with ChangeNotifier {
   List<int> get hours => [...this._hours];
   set hours(List<int> l) => throw "error";
 
-  TimeProvider(this.date){
+  TimeProvider(this.day){
     print("time provider init");
     this._init();
   }
@@ -146,4 +144,16 @@ class TimeProvider with ChangeNotifier {
     return false;
   }
 
+  EventTime get startData => this._startData();
+  EventTime get endData => this._endData();
+
+  EventTime _startData(){
+    final Time _time = Time(hour: this._startHour, minute: this._startMinute, period: this._startPeriod);
+    return EventTime(day: this.day, time: _time);
+  }
+
+  EventTime _endData(){
+    final Time _time = Time(hour: this._endHour, minute: this._endMinute, period: this._endPeriod);
+    return EventTime(day: this.day, time: _time);
+  }
 }

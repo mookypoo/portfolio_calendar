@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "216115166092",
+    "project_id": "calendar-a208e",
+    "storage_bucket": "calendar-a208e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216115166092:android:080cb0dc3b7f1cf5ec74a9",
+        "android_client_info": {
+          "package_name": "com.Mooky.calendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216115166092-vsmaqduqhlse5rknaiaj7a7gka7q4l4r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Mooky.calendar",
+            "certificate_hash": "407aafe2891c0a79420488b24833cc6ced610b13"
+          }
+        },
+        {
+          "client_id": "216115166092-du5ntunuea0ulbll0n11bme3hnmr8j84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl0UEtBeYwV87i4Ih9M0Xkgh5nhQrJzJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216115166092-du5ntunuea0ulbll0n11bme3hnmr8j84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

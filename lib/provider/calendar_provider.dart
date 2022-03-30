@@ -6,7 +6,12 @@ import '../models/selected_month.dart';
 import '../repos/variables.dart' show Today;
 
 class CalendarProvider with ChangeNotifier {
+
   CalendarService _calendarService = CalendarService();
+
+  CalendarProvider(){
+    print("calendar provider init");
+  }
 
   Day _selectedDate = Day(
     date: DateTime.now().day,

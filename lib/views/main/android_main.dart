@@ -4,14 +4,17 @@ import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/android_components.dart';
 
 import '../../models/day_class.dart' show DateTileData;
+import '../../provider/user_provider.dart';
 import '../../repos/variables.dart' show MyColors;
 
 class AndroidMain extends StatelessWidget {
-  const AndroidMain({Key? key, required this.calendarProvider}) : super(key: key);
+  const AndroidMain({Key? key, required this.calendarProvider, required this.userProvider}) : super(key: key);
   final CalendarProvider calendarProvider;
+  final UserProvider userProvider;
 
   @override
   Widget build(BuildContext context) {
+    print(userProvider.thisMonthEvents.length);
 
     return Scaffold(
       body: CustomScrollView(
@@ -22,11 +25,7 @@ class AndroidMain extends StatelessWidget {
             leading: IconButton(
               iconSize: 28.0,
               icon: const Icon(Icons.arrow_left),
-              onPressed: (){
-                this.calendarProvider.prevMonth();
-                print(this.calendarProvider.selectedDate.month);
-                print(this.calendarProvider.selectedDate.date);
-              },
+              onPressed: this.calendarProvider.prevMonth,
             ),
             actions: [
               IconButton(
@@ -57,9 +56,11 @@ class AndroidMain extends StatelessWidget {
                       ...List.generate(this.calendarProvider.weeks.length, (int weekIndex) =>
                           Row(
                             children: List.generate(7, (int dayIndex) => DateTile(
+                              thisMonthEvents: this.userProvider.thisMonthEvents,
                               onPressed: this.calendarProvider.selectDate,
                               selectedDate: this.calendarProvider.selectedDate,
                               data: DateTileData(
+                                events: this.userProvider.thisMonthEvents,
                                 year: this.calendarProvider.year,
                                 date: this.calendarProvider.weeks[weekIndex][dayIndex],
                                 weekday: dayIndex,
@@ -82,7 +83,10 @@ class AndroidMain extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.primary,
         child: Icon(Icons.add),
-        onPressed: () async => await Navigator.of(context).pushNamed(AddEventPage.routeName),
+        onPressed: () async {
+          final bool _save = await Navigator.of(context).pushNamed<bool>(AddEventPage.routeName) ?? false;
+          print(_save);
+        },
       ),
     );
   }

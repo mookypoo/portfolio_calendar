@@ -1,4 +1,4 @@
-import '../provider/time_provider.dart' show Period;
+import '../models/time_model.dart' show Period;
 
 class TimeService {
 
