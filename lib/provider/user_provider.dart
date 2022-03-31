@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../models/day_class.dart' show Day;
-import '../models/event_model.dart';
+import '../models/class/day_class.dart' show Day;
+import '../models/class/event_class.dart';
 import '../models/selected_month.dart';
 import '../models/time_model.dart' show Period, Time;
 import '../repos/variables.dart' show EventColors;

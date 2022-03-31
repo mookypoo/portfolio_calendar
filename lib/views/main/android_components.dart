@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/day_class.dart' show DateTileData, Day;
-import '../../models/event_model.dart';
+import '../../models/class/day_class.dart' show DateTileData, Day;
+import '../../models/class/event_class.dart';
 import '../../repos/variables.dart' show MyColors, Today;
 import '../../service/calendar_service.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/time_service.dart';
 
-import '../models/day_class.dart' show Day;
-import '../models/event_model.dart' show EventTime;
+import '../models/class/day_class.dart' show Day;
+import '../models/class/event_class.dart' show EventTime;
 import '../models/time_model.dart' show Period, Time;
 
 class TimeProvider with ChangeNotifier {

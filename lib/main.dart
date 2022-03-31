@@ -15,9 +15,9 @@ import 'package:portfolio_calendar/views/auth/main/auth_page.dart';
 import 'package:portfolio_calendar/views/main/main_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseService.initializeFirebase();
+  await FirebaseService.initializeFirebase();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown, DeviceOrientation.portraitUp,
   ]);
@@ -49,7 +49,7 @@ class PortfolioCalendar extends StatelessWidget {
             builder: (BuildContext context) => MultiProvider(
               providers: [
                 ChangeNotifierProvider<TimeProvider>(
-                  create: (_) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+                  create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
                 ),
               ],
               child: AddEventPage(),

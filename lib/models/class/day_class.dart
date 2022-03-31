@@ -1,6 +1,6 @@
 import 'package:portfolio_calendar/models/class/calendar_class.dart';
 
-import 'event_model.dart' show Event;
+import 'event_class.dart' show Event;
 
 abstract class DayAbstract extends Calendar {
   int date = 1; // 날짜

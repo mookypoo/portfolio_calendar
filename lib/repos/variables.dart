@@ -1,5 +1,5 @@
 import 'dart:ui';
-import '../models/day_class.dart' show Day;
+import '../models/class/day_class.dart' show Day;
 
 class Today {
   static final Day today = Day.today();

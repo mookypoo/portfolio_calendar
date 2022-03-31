@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/calendar_service.dart';
 
-import '../models/day_class.dart' show Day, DateTileData;
+import '../models/class/day_class.dart' show Day, DateTileData;
 import '../models/selected_month.dart';
 import '../repos/variables.dart' show Today;
 

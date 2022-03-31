@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:216115166092:android:080cb0dc3b7f1cf5ec74a9",
+        "mobilesdk_app_id": "1:216115166092:android:82cbc9482f8d531aec74a9",
         "android_client_info": {
-          "package_name": "com.Mooky.calendar"
+          "package_name": "com.Mooky.portfolio_calendar"
         }
       },
       "oauth_client": [
         {
-          "client_id": "216115166092-vsmaqduqhlse5rknaiaj7a7gka7q4l4r.apps.googleusercontent.com",
+          "client_id": "216115166092-t4bdpr14smqjnnolaf56bobvo4amk66g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.Mooky.calendar",
+            "package_name": "com.Mooky.portfolio_calendar",
             "certificate_hash": "407aafe2891c0a79420488b24833cc6ced610b13"
           }
         },

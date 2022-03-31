@@ -3,14 +3,16 @@ import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/android_components.dart';
 
-import '../../models/day_class.dart' show DateTileData;
+import '../../models/class/day_class.dart' show DateTileData;
+import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/variables.dart' show MyColors;
 
 class AndroidMain extends StatelessWidget {
-  const AndroidMain({Key? key, required this.calendarProvider, required this.userProvider}) : super(key: key);
+  const AndroidMain({Key? key, required this.calendarProvider, required this.userProvider, required this.authProvider}) : super(key: key);
   final CalendarProvider calendarProvider;
   final UserProvider userProvider;
+  final AuthProvider authProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +24,35 @@ class AndroidMain extends StatelessWidget {
           SliverAppBar(
             backgroundColor: MyColors.primary,
             centerTitle: true,
-            leading: IconButton(
-              iconSize: 28.0,
-              icon: const Icon(Icons.arrow_left),
-              onPressed: this.calendarProvider.prevMonth,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  iconSize: 28.0,
+                  icon: const Icon(Icons.arrow_left),
+                  onPressed: this.calendarProvider.prevMonth,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    this.calendarProvider.textMonth + " ${this.calendarProvider.year}" ,
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
+                ),
+                IconButton(
+                  iconSize: 28.0,
+                  icon: const Icon(Icons.arrow_right),
+                  onPressed: this.calendarProvider.nextMonth,
+                ),
+              ],
             ),
             actions: [
               IconButton(
                 iconSize: 28.0,
-                icon: const Icon(Icons.arrow_right),
-                onPressed: this.calendarProvider.nextMonth,
+                icon: const Icon(Icons.person),
+                onPressed: this.authProvider.firebaseSignOut,
               ),
             ],
-            title: GestureDetector(
-              onTap: () {},
-              child: Text(
-                this.calendarProvider.textMonth + " ${this.calendarProvider.year}" ,
-                style: const TextStyle(fontSize: 20.0),
-              ),
-            ),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(

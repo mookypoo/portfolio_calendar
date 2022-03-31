@@ -1,4 +1,4 @@
-import '../models/day_class.dart' show DateTileData, Day;
+import '../models/class/day_class.dart' show DateTileData, Day;
 import '../models/selected_month.dart';
 
 class CalendarService {
