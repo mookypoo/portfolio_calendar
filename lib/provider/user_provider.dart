@@ -27,7 +27,7 @@ class UserProvider with ChangeNotifier {
           period: Period.AM,
         ),
         day: Day(
-            selectedMonth: 3,
+            month: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -40,7 +40,7 @@ class UserProvider with ChangeNotifier {
           period: Period.AM,
         ),
         day: Day(
-            selectedMonth: 3,
+            month: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -57,7 +57,7 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: Day(
-          selectedMonth: 3,
+          month: 3,
           year: 2022,
           weekday: 3,
           date: 30
@@ -70,7 +70,7 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: Day(
-            selectedMonth: 3,
+            month: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -115,13 +115,13 @@ class UserProvider with ChangeNotifier {
     selectedMonth.weekList.forEach((List<int> week) {
       week.forEach((int date) {
         if (selectedMonth.weekList.indexOf(week) == 0 && date < 32) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month - 1 && e.startTime.day.date == date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == date);
           _thisMonthEvents.addAll(_indices);
         } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && date < 7) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month + 1 && e.startTime.day.date == date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == date);
           _thisMonthEvents.addAll(_indices);
         } else {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month && e.startTime.day.date == date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == date);
           _thisMonthEvents.addAll(_indices);
         }
       });

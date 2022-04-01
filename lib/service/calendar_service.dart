@@ -29,7 +29,7 @@ class CalendarService {
   }
 
   static bool isSame({required DateTileData date1, required Day date2}){
-    if (date1.date == date2.date && date1.selectedMonth == date2.selectedMonth && date1.year == date2.year) {
+    if (date1.date == date2.date && date1.month == date2.month && date1.year == date2.year) {
       return true;
     } else {
       return false;

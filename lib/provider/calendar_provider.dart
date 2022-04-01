@@ -16,7 +16,7 @@ class CalendarProvider with ChangeNotifier {
   Day _selectedDate = Day(
     date: DateTime.now().day,
     weekday: DateTime.now().weekday,
-    selectedMonth: DateTime.now().month,
+    month: DateTime.now().month,
     year: DateTime.now().year,
   );
   Day get selectedDate => this._selectedDate;
@@ -55,10 +55,10 @@ class CalendarProvider with ChangeNotifier {
   }
 
   void _changeSelectedDate({required int month, required int year}){
-    if (month == Today.today.selectedMonth) {
+    if (month == Today.today.month) {
       this._selectedDate = this._calendarService.changeDay(Today.today);
     } else {
-      this._selectedDate = Day(date: 1, selectedMonth: month, weekday: 1, year: this.year);
+      this._selectedDate = Day(date: 1, month: month, weekday: 1, year: this.year);
     }
     return;
   }

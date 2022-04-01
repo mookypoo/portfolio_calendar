@@ -1,14 +1,17 @@
+import 'class/day_class.dart' show DateTileData;
+
 abstract class MonthAbstract {
   int year = 2022;
   int month = 1;
+  List<List<DateTileData>> days = [];
   List<List<int>> weekList = [];
 
-  List<int> _days({required int month, required int year}){
-    List<int> _days = [];
+  List<DateTileData> _days({required int month, required int year}){
+    List<DateTileData> _days = [];
     final int _firstDay = DateTime.utc(year, month, 1).weekday;
     if (_firstDay != 7) {
       final int _pmLastDay = this._lastDate(month: month == 1 ? 12 : month - 1);
-      for (int i = 0; i < _firstDay; i++) _days.insert(0, _pmLastDay - i);
+      for (int i = 0; i < _firstDay; i++) _days.insert(0, DateTileData(date: _pmLastDay - i, ));
     }
 
     final int _tmLastDate = this._lastDate();
@@ -21,13 +24,14 @@ abstract class MonthAbstract {
     return _days;
   }
 
-  void weeks({required int month, required int year}){
-    List<int> _days = this._days(month: month, year: year);
+  List<List<int>> _weeks({required int month, required int year}){
+    final List<int> _days = this._days(month: month, year: year);
     List<List<int>> _weeks = [];
     for (int i = 0; i < _days.length/7; i++) {
       _weeks.add(List.generate(7, (int index) => _days[7*i + index]));
     }
     this.weekList = _weeks;
+    return _weeks;
   }
 
   int _lastDate({int? month}){
@@ -48,16 +52,24 @@ abstract class MonthAbstract {
     }
   }
 
-  void prevMonth(){
-    this.year = this.month == 1 ? this.year - 1 : this.year;
-    this.month = this.month == 1 ? 12 : this.month - 1;
-    this.weeks(month: this.month, year: this.year);
-  }
+  void fetchDateTileData({required int month, required int year}){
+    List<List<int>> _weeks = this._weeks(month: month, year: year);
 
-  void nextMonth(){
-    this.year = this.month == 12 ? this.year + 1 : this.year;
-    this.month = this.month == 12 ? 1 : this.month + 1;
-    this.weeks(month: this.month, year: this.year);
+    List<List<DateTileData>> _dateTileDays = [];
+    _weeks.forEach((List<int> week) {
+      week.forEach((int date) {
+        if (_weeks.indexOf(week) == 0 && date < 32) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month - 1 && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
+        } else if (month.weekList.indexOf(week) == month.weekList.length - 1 && date < 7) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month + 1 && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
+        } else {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
+        }
+      });
+    });
   }
 
 }

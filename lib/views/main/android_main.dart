@@ -76,7 +76,7 @@ class AndroidMain extends StatelessWidget {
                                 year: this.calendarProvider.year,
                                 date: this.calendarProvider.weeks[weekIndex][dayIndex],
                                 weekday: dayIndex,
-                                selectedMonth: this.calendarProvider.month,
+                                month: this.calendarProvider.month,
                                 weekIndex: weekIndex,
                               ),
                             ),
