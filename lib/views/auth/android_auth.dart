@@ -3,11 +3,10 @@ import 'package:portfolio_calendar/models/auth_class.dart';
 import 'package:portfolio_calendar/views/auth/android_components.dart';
 import 'package:portfolio_calendar/views/auth/common_components.dart';
 
-import '../../../provider/auth_provider.dart';
+import '../../provider/auth_provider.dart';
 
 class AndroidAuth extends StatefulWidget {
   const AndroidAuth({Key? key, required this.authProvider}) : super(key: key);
-
   final AuthProvider authProvider;
 
   @override
@@ -66,48 +65,32 @@ class _AndroidAuthState extends State<AndroidAuth> {
             width: _size.width,
             child: Stack(
               children: <Widget>[
-                Container(
-                  height: _size.height * 0.4,
-                  child: Image.network(
-                    "https://www.pixelstalk.net/wp-content/uploads/2014/12/Abstract-flower-wallpaper-download-free.jpg",
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
+                TopImage(),
                 Positioned(
                   left: 0.0,
                   right: 0.0,
                   bottom: 0.0,
                   child: Stack(
                     children: <Widget>[
-                      Container(
-                        height: _size.height * 0.76,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              const Color.fromRGBO(255, 255, 255, 0.75),
-                              const Color.fromRGBO(255, 255, 255, 1.0),
-                            ],
-                            begin: const Alignment(0.0, -1.0),
-                            end: const Alignment(0.0, -0.7),
-                          ),
-                          borderRadius: BorderRadius.circular(45.0),
-                        ),
-                      ),
+                      BackgroundContainer(),
                       Positioned(
                         top: 10.0,
                         left: 0.0,
                         right: 0.0,
-                        child: Icon(
-                          Icons.person,
-                          size: _size.width * 0.20,
-                        ),
+                        child: Icon(Icons.person, size: _size.width * 0.20,),
                       ),
                       Positioned(
                         left: 0.0,
                         right: 0.0,
-                        top: 10.0 + _size.width * 0.20 + 5.0,
+                        top: 77.0,
                         child: this.widget.authProvider.isLoginPage
-                          ? Container()
+                          ? AndroidLoginWidget(
+                              emailCt: this._emailCt,
+                              pw1Ct: this._pw1Ct,
+                              pw1Focus: this._pw1Focus,
+                              emailFocus: this._emailFocus,
+                              authProvider: this.widget.authProvider,
+                            )
                           : AndroidSignUpWidget(
                               emailFocus: this._emailFocus,
                               nameFocus: this._nameFocus,
@@ -120,14 +103,43 @@ class _AndroidAuthState extends State<AndroidAuth> {
                               pw2Ct: this._pw2Ct,
                             ),
                       ),
-                      SignUpWidget(
-                        onTap: () => this.widget.authProvider.firebaseSignUp(
-                          data: SignUpInfo(
-                            name: this._nameCt.text.trim(),
-                            isMale: this.widget.authProvider.isMale,
-                            email: this._emailCt.text.trim(),
-                            pw: this._pw1Ct.text.trim(),
-                          ))),
+                      this.widget.authProvider.isLoginPage
+                        ? LogInBottom(
+                            onTapLogin: () async {
+                              final bool _hasErrors = this.widget.authProvider.validate(email: this._emailCt.text.trim(), pw: this._pw1Ct.text.trim());
+                              if (_hasErrors) return;
+                              await this.widget.authProvider.firebaseSignIn(
+                                data: LoginInfo(
+                                  email: this._emailCt.text.trim(),
+                                  pw: this._pw1Ct.text.trim(),
+                                ),);
+                            },
+                            switchPage: () {
+                              this.widget.authProvider.switchPage();
+                              <TextEditingController>[this._nameCt, this._emailCt, this._pw1Ct, this._pw2Ct].forEach(
+                                      (TextEditingController ct) => ct.clear());
+                            },
+                          )
+                        : SignUpBottom(
+                            switchPage: () {
+                              this.widget.authProvider.switchPage();
+                              <TextEditingController>[this._nameCt, this._emailCt, this._pw1Ct, this._pw2Ct].forEach(
+                                      (TextEditingController ct) => ct.clear());
+                            },
+                            onTapSignUp: () async {
+                              final bool _hasErrors = this.widget.authProvider.validate(
+                                email: this._emailCt.text.trim(), pw: this._pw1Ct.text.trim(), name: this._nameCt.text, pw2: this._pw2Ct.text.trim(),
+                              );
+                              if (_hasErrors) return;
+                              await this.widget.authProvider.firebaseSignUp(
+                                data: SignUpInfo(
+                                  name: this._nameCt.text.trim(),
+                                  isMale: this.widget.authProvider.isMale,
+                                  email: this._emailCt.text.trim(),
+                                  pw: this._pw1Ct.text.trim(),
+                                ),
+                              );
+                            }),
                     ],
                   ),
                 ),

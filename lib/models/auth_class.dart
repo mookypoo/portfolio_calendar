@@ -18,6 +18,12 @@ class SignUpInfo extends AuthAbstract {
 
 }
 
-class Login extends AuthAbstract {
+class LoginInfo extends AuthAbstract {
+  @override
+  final String email;
 
+  @override
+  final String pw;
+
+  LoginInfo({required this.email, required this.pw});
 }

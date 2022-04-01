@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:portfolio_calendar/service/firebase_service.dart';
 
-import '../models/auth_class.dart' show SignUpInfo;
+import '../models/auth_class.dart';
 import '../service/auth_service.dart';
 
 enum AuthState {
@@ -29,7 +29,13 @@ class AuthProvider with ChangeNotifier {
   bool get pw2obscure => this._pw2obscure;
   set pw2obscure(bool b) => throw "error";
 
-  bool isLoginPage = false;
+  bool _isTosChecked = true;
+  bool get isTosChecked => this._isTosChecked;
+  set isTosChecked(bool b) => throw "error";
+
+  bool _isLoginPage = false;
+  bool get isLoginPage => this._isLoginPage;
+  set isLoginPage(bool b) => throw "error";
 
   String? _nameErrorText;
   String? get nameErrorText => this._nameErrorText;
@@ -51,9 +57,20 @@ class AuthProvider with ChangeNotifier {
   String? get pw2ErrorText => this._pw2ErrorText;
   set pw2ErrorText(String? s) => throw "error";
 
-  void clearSubtexts(){
-    <String?>[this._pwErrorText, this._pw2ErrorText, this._emailErrorText, this._nameErrorText].forEach((String? s) => s = null);
+  void switchPage(){
+    this._isLoginPage = !this._isLoginPage;
+    this._clearSubtexts();
+    this.notifyListeners();
+    return;
+  }
+
+  void _clearSubtexts(){
+    this._pw2ErrorText = null;
+    this._emailErrorText = null;
+    this._nameErrorText = null;
     this._isMale = true;
+    this._pwErrorText = null;
+    this.notifyListeners();
     return;
   }
 
@@ -86,7 +103,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   void checkPw({required String pw}){
-    this._pwErrorText = this._authService.checkPw(pw: pw);
+    if (!this._isLoginPage) this._pwErrorText = this._authService.checkPw(pw: pw);
+    if (this._isLoginPage && pw == "") this._pwErrorText = "비밀번호를 입력해주세요.";
     this.notifyListeners();
     return;
   }
@@ -97,30 +115,45 @@ class AuthProvider with ChangeNotifier {
     return;
   }
 
-  bool hasErrors(){
+  void checkTos(){
+    this._isTosChecked = !this._isTosChecked;
+    this.notifyListeners();
+    return;
+  }
+
+  bool _hasErrors(){
     if ([this._nameErrorText, this._emailErrorText, this._pwErrorText, this._pw2ErrorText].any((String? s) => s != null)) return true;
     return false;
   }
 
-  Future<String?> firebaseSignUp({required SignUpInfo data}) async {
-    if (this.hasErrors()) return null;
+  Future<void> firebaseSignUp({required SignUpInfo data}) async {
+    if (this._hasErrors()) return;
     final _res1 = await this._firebaseService.signup(email: data.email, pw: data.pw);
-    if (_res1.runtimeType == String) return _res1 as String;
-    if (_res1.runtimeType == UserCredential) {
-      final _res2 = await await this.firebaseSignIn(data: data);
-      if (_res2.runtimeType == String) return _res2 as String;
+    if (_res1.runtimeType == String) {
+      _res1 as String;
+      if (_res1.contains("이메일")) this._emailErrorText = _res1;
+      if (_res1.contains("비밀번호")) this._pwErrorText = _res1;
     }
-    return null;
+    if (_res1.runtimeType == UserCredential) await this.firebaseSignIn(data: data);
+    this.notifyListeners();
+    return;
   }
 
-  Future<String?> firebaseSignIn({required SignUpInfo data}) async {
+  Future<void> firebaseSignIn({required AuthAbstract data}) async {
     final _res = await this._firebaseService.signIn(email: data.email, pw: data.pw);
-    if (_res.runtimeType == String) return _res as String;
+    if (_res.runtimeType == String) {
+      _res as String;
+      if (_res.contains("비밀번호")) this._pwErrorText = _res;
+      if (_res.contains("가입")) this._emailErrorText = _res;
+    }
     if (_res.runtimeType == UserCredential) {
       final User? _user = (_res as UserCredential).user;
-      if (_user != null && !_user.emailVerified) this._firebaseService.sendEmailVerification();
+      if (_user != null) {
+        if (!_user.emailVerified) await this._firebaseService.sendEmailVerification();
+        this._authState = AuthState.loggedIn;
+        this._clearSubtexts();
+      }
     }
-    this._authState = AuthState.loggedIn;
     this.notifyListeners();
     return null;
   }
@@ -130,5 +163,14 @@ class AuthProvider with ChangeNotifier {
     this._authState = AuthState.loggedOut;
     this.notifyListeners();
     return;
+  }
+
+  bool validate({String? name, required String email, required String pw, String? pw2}){
+    this.checkEmail(email: email);
+    this.checkPw(pw: pw);
+    if (name != null) this.checkName(name: name);
+    if (pw2 != null) this.confirmPw(pw: pw, pw2: pw2);
+    if (this._hasErrors()) return true;
+    return false;
   }
 }

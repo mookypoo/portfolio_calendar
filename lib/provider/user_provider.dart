@@ -10,8 +10,9 @@ import '../repos/variables.dart' show EventColors;
 
 class UserProvider with ChangeNotifier {
   SelectedMonth selectedMonth;
+  List<List<int>> weekList;
 
-  UserProvider(this.selectedMonth){
+  UserProvider(this.selectedMonth, this.weekList){
     print("user provider init");
     this._thisMonthEvents = this._fetchThisMonthEvents(selectedMonth: this.selectedMonth);
   }

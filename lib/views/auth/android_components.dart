@@ -29,10 +29,11 @@ class AuthTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 25.0, right: 5.0, left: 5.0),
+      padding: const EdgeInsets.only(top: 22.0, right: 5.0, left: 5.0),
       child: TextField(
         focusNode: this.focusNode,
         controller: this.textCt,
+        style: TextStyle(fontSize: 17.0),
         textAlignVertical: TextAlignVertical.bottom,
         decoration: InputDecoration(
           counterText: "",
@@ -59,6 +60,24 @@ class AuthTextField extends StatelessWidget {
   }
 }
 
+class AndroidRedEye extends StatelessWidget {
+  AndroidRedEye({Key? key, required this.onPressed, required this.isPw1}) : super(key: key);
+
+  bool isPw1;
+  final void Function(bool isPw1) onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      constraints: BoxConstraints(maxHeight: 20.0,),
+      padding: const EdgeInsets.all(0.0),
+      icon: const Icon(Icons.remove_red_eye_outlined, size: 20.0),
+      onPressed: () => onPressed(isPw1),
+    );
+  }
+}
+
+
 class AndroidSignUpWidget extends StatelessWidget {
   AndroidSignUpWidget({Key? key,
     required this.authProvider,
@@ -84,25 +103,17 @@ class AndroidSignUpWidget extends StatelessWidget {
 
   final AuthProvider authProvider;
 
-  Widget _redEye({required bool isPw1, required void Function(bool isPw1) onPressed}){
-    return IconButton(
-      constraints: BoxConstraints(maxHeight: 20.0,),
-      padding: const EdgeInsets.all(0.0),
-      icon: const Icon(Icons.remove_red_eye_outlined, size: 20.0),
-      onPressed: () => onPressed(isPw1),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: _size.width * 0.08),
-      height: _size.height * 0.45,
+      height: _size.height * 0.55,
       child: Column(
         children: <Widget>[
           AuthTextField(
+
             focusNode: this.nameFocus,
             textCt: this.nameCt,
             hintText: "이름",
@@ -127,7 +138,7 @@ class AndroidSignUpWidget extends StatelessWidget {
             focusNode: this.pw1Focus,
             textCt: this.pw1Ct,
             hintText: "비밀번호",
-            suffixIcon: this._redEye(onPressed: this.authProvider.onTapRedEye, isPw1: true),
+            suffixIcon: AndroidRedEye(onPressed: this.authProvider.onTapRedEye, isPw1: true),
             errorText: this.authProvider.pwErrorText,
             textInputAction: TextInputAction.next,
             obscureText: this.authProvider.pw1obscure,
@@ -136,7 +147,7 @@ class AndroidSignUpWidget extends StatelessWidget {
             focusNode: this.pw2Focus,
             textCt: this.pw2Ct,
             hintText: "비밀번호 확인",
-            suffixIcon: this._redEye(onPressed: this.authProvider.onTapRedEye, isPw1: false),
+            suffixIcon: AndroidRedEye(onPressed: this.authProvider.onTapRedEye, isPw1: false),
             errorText: this.authProvider.pw2ErrorText,
             obscureText: this.authProvider.pw2obscure,
           ),
@@ -145,8 +156,8 @@ class AndroidSignUpWidget extends StatelessWidget {
             margin: const EdgeInsets.all(12.0),
             child: Tos(
               iconData: Icons.check,
-              onPressed: () {},
-              isChecked: true,
+              onPressed: this.authProvider.checkTos,
+              isChecked: this.authProvider.isTosChecked,
             ),
           ),
         ],
@@ -154,4 +165,49 @@ class AndroidSignUpWidget extends StatelessWidget {
     );
   }
 }
+
+class AndroidLoginWidget extends StatelessWidget {
+  const AndroidLoginWidget({Key? key, required this.authProvider, required this.emailCt, required this.pw1Ct, required this.emailFocus, required this.pw1Focus}) : super(key: key);
+
+  final TextEditingController emailCt;
+  final TextEditingController pw1Ct;
+  final FocusNode pw1Focus;
+  final FocusNode emailFocus;
+
+  final AuthProvider authProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: _size.width * 0.08),
+      height: _size.height * 0.45,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(child: Text("Mooky's Calendar", style: TextStyle(fontSize: 25.0),), padding: EdgeInsets.only(bottom: 35.0)),
+          AuthTextField(
+            focusNode: this.emailFocus,
+            textCt: this.emailCt,
+            hintText: "이메일",
+            errorText: this.authProvider.emailErrorText,
+            textInputAction: TextInputAction.next,
+            textInputType: TextInputType.emailAddress,
+          ),
+          AuthTextField(
+            focusNode: this.pw1Focus,
+            textCt: this.pw1Ct,
+            hintText: "비밀번호",
+            suffixIcon: AndroidRedEye(onPressed: this.authProvider.onTapRedEye, isPw1: true),
+            errorText: this.authProvider.pwErrorText,
+            textInputAction: TextInputAction.next,
+            obscureText: this.authProvider.pw1obscure,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 

@@ -1,6 +1,44 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/repos/variables.dart';
 
+class TopImage extends StatelessWidget {
+  const TopImage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: Image.network(
+        "https://www.pixelstalk.net/wp-content/uploads/2014/12/Abstract-flower-wallpaper-download-free.jpg",
+        fit: BoxFit.fitHeight,
+      ),
+    );
+  }
+}
+
+class BackgroundContainer extends StatelessWidget {
+  const BackgroundContainer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.79,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            const Color.fromRGBO(255, 255, 255, 0.75),
+            const Color.fromRGBO(255, 255, 255, 1.0),
+          ],
+          begin: const Alignment(0.0, -1.0),
+          end: const Alignment(0.0, -0.7),
+        ),
+        borderRadius: BorderRadius.circular(45.0),
+      ),
+    );
+  }
+}
+
+
 class GenderWidget extends StatelessWidget {
   const GenderWidget({Key? key, required this.maleIcon, required this.isMale, required this.femaleIcon, required this.onSelect}) : super(key: key);
 
@@ -29,7 +67,7 @@ class GenderWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const Text("Select Gender", style: TextStyle(fontSize: 16.0,)),
+          const Text("성별", style: TextStyle(fontSize: 16.0,)),
           this._gender(icon: this.maleIcon, isMale: this.isMale,),
           this._gender(icon: this.femaleIcon, isMale: !this.isMale,),
         ],
@@ -38,31 +76,28 @@ class GenderWidget extends StatelessWidget {
   }
 }
 
-class SignUpWidget extends StatelessWidget {
-  const SignUpWidget({Key? key, required this.onTap}) : super(key: key);
+class SignUpBottom extends StatelessWidget {
+  SignUpBottom({Key? key, required this.onTapSignUp, required this.switchPage}) : super(key: key);
 
-  final Future<void> Function() onTap;
+  final Future<void> Function() onTapSignUp;
+  final void Function() switchPage;
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
-
     return Positioned(
-      bottom: 40.0,
+      bottom: 35.0,
       left: 0.0,
       right: 0.0,
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () async {
-              await this.onTap();
-            },
+            onTap: () async => await this.onTapSignUp(),
             child: Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(bottom: 20.0),
+              margin: const EdgeInsets.only(bottom: 15.0),
               padding: const EdgeInsets.all(7.0),
-              width: _size.width * 0.23,
-              height: _size.width * 0.13,
+              width: 110.0,
+              height: 50.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25.0),
                 gradient: LinearGradient(
@@ -73,7 +108,7 @@ class SignUpWidget extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                "Sign Up",
+                "가입하기",
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Color.fromRGBO(255, 255, 255, 1.0),
@@ -84,10 +119,66 @@ class SignUpWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text("Already Registered?   ",),
+              const Text("이미 가입을 했습니까?   ",),
               GestureDetector(
-                child: Text("Login", style: TextStyle(fontSize: 17.0, color: MyColors.primary),),
-                onTap: () {},
+                child: Text("로그인하러 가기", style: TextStyle(color: MyColors.primary, fontWeight: FontWeight.w600),),
+                onTap: this.switchPage,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LogInBottom extends StatelessWidget {
+  LogInBottom({Key? key, required this.onTapLogin, required this.switchPage}) : super(key: key);
+
+  final Future<void> Function() onTapLogin;
+  final void Function() switchPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 65.0,
+      left: 0.0,
+      right: 0.0,
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () async => await this.onTapLogin(),
+            child: Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 20.0),
+              padding: const EdgeInsets.all(7.0),
+              width: 90.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25.0),
+                gradient: LinearGradient(
+                  colors: <Color>[
+                    const Color.fromRGBO(0, 96, 255, 1.0),
+                    const Color.fromRGBO(255, 132, 188, 1.0)
+                  ],
+                ),
+              ),
+              child: const Text(
+                "로그인",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Color.fromRGBO(255, 255, 255, 1.0),
+                ),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text("아직 가입을 안했습니까?   ",),
+              GestureDetector(
+                child: Text("가입하기", style: TextStyle(color: MyColors.primary, fontWeight: FontWeight.w600),),
+                onTap: this.switchPage,
               ),
             ],
           ),
@@ -115,7 +206,7 @@ class Tos extends StatelessWidget {
             children: <Widget>[
               Icon(this.iconData, size: 27.0, color: this.isChecked ? Color.fromRGBO(0,0,0, 1.0) : Color.fromRGBO(255, 255, 255, 1.0)),
               Positioned(
-                bottom: 5.0,
+                bottom: 4.0,
                 left: 5.0,
                 child: Container(
                   width: 14.0,
@@ -128,7 +219,7 @@ class Tos extends StatelessWidget {
             ]
           ),
           Container(
-            margin: const EdgeInsets.only(left: 5.0, top: 15.0),
+            margin: const EdgeInsets.only(left: 5.0, top: 10.0),
             width: _size.width * 0.68,
             child: Text(
               "By proceeding, I agree to Mooky's Terms of Use and Conditions.",

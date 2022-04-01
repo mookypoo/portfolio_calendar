@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
-import '../auth/main/auth_page.dart';
+import '../auth/auth_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);

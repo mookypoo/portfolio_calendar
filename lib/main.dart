@@ -10,8 +10,6 @@ import 'package:portfolio_calendar/provider/user_provider.dart';
 import 'package:portfolio_calendar/repos/variables.dart';
 import 'package:portfolio_calendar/service/firebase_service.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
-import 'package:portfolio_calendar/views/auth/login/login_page.dart';
-import 'package:portfolio_calendar/views/auth/main/auth_page.dart';
 import 'package:portfolio_calendar/views/main/main_page.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +35,7 @@ class PortfolioCalendar extends StatelessWidget {
         splashFactory: InkRipple.splashFactory,
         textTheme: TextTheme(
           bodyText1: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary),
-          bodyText2: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, ),
+          bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, ),
         ),
         iconTheme: IconThemeData(color: MyColors.primary),
         switchTheme: SwitchThemeData(),
@@ -55,12 +53,6 @@ class PortfolioCalendar extends StatelessWidget {
               child: AddEventPage(),
             ),
             settings: RouteSettings(name: AddEventPage.routeName),
-          );
-        }
-        if (route.name == AuthPage.routeName) {
-          return MaterialPageRoute(
-            builder: (_) => LoginPage(),
-            settings: RouteSettings(name: AuthPage.routeName),
           );
         }
       },
