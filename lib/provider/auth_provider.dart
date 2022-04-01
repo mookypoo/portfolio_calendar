@@ -17,7 +17,7 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
-  AuthState _authState = AuthState.loggedOut;
+  AuthState _authState = AuthState.loggedIn;
   AuthState get authState => this._authState;
   set authState(AuthState a) => throw "error";
 
@@ -59,12 +59,12 @@ class AuthProvider with ChangeNotifier {
 
   void switchPage(){
     this._isLoginPage = !this._isLoginPage;
-    this._clearSubtexts();
+    this.clearSubtexts();
     this.notifyListeners();
     return;
   }
 
-  void _clearSubtexts(){
+  void clearSubtexts(){
     this._pw2ErrorText = null;
     this._emailErrorText = null;
     this._nameErrorText = null;
@@ -141,6 +141,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> firebaseSignIn({required AuthAbstract data}) async {
     final _res = await this._firebaseService.signIn(email: data.email, pw: data.pw);
+    print(_res);
     if (_res.runtimeType == String) {
       _res as String;
       if (_res.contains("비밀번호")) this._pwErrorText = _res;
@@ -151,7 +152,7 @@ class AuthProvider with ChangeNotifier {
       if (_user != null) {
         if (!_user.emailVerified) await this._firebaseService.sendEmailVerification();
         this._authState = AuthState.loggedIn;
-        this._clearSubtexts();
+        this.clearSubtexts();
       }
     }
     this.notifyListeners();

@@ -62,7 +62,6 @@ class DateTile extends StatelessWidget {
   }
 
   Widget _events({required Event event}){
-
     return Container(
       margin: const EdgeInsets.only(top: 2.0),
       height: 35.0,
@@ -92,7 +91,6 @@ class DateTile extends StatelessWidget {
         height: 110.0,
         width:  MediaQuery.of(context).size.width/7,
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             CalendarService.isSame(date1: this.data, date2: Today.today)

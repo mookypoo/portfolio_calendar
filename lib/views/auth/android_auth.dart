@@ -39,6 +39,8 @@ class _AndroidAuthState extends State<AndroidAuth> {
           if (fn == this._emailFocus) this.widget.authProvider.checkEmail(email: this._emailCt.text);
           if (fn == this._pw1Focus) this.widget.authProvider.checkPw(pw: this._pw1Ct.text.trim());
           if (fn == this._pw2Focus) this.widget.authProvider.confirmPw(pw: this._pw1Ct.text.trim(), pw2: this._pw2Ct.text.trim());
+        } else {
+          this.widget.authProvider.clearSubtexts();
         }
       });
     });

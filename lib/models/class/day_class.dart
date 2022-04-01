@@ -29,27 +29,27 @@ class Day extends DayAbstract {
   @override
   int weekday;
 
-  int month;
+  int selectedMonth;
   int year;
 
   factory Day.newDay(Day newDate){
-    return Day(year: newDate.year, weekday: newDate.weekday, month: newDate.month, date: newDate.date);
+    return Day(year: newDate.year, weekday: newDate.weekday, selectedMonth: newDate.selectedMonth, date: newDate.date);
   }
 
-  Day({required this.date, required this.weekday, required this.month, required this.year}){
+  Day({required this.date, required this.weekday, required this.selectedMonth, required this.year}){
     if (this.weekday == 7) super.changeWeekday();
   }
 
-  Day.withWeekIndex({required this.date, required this.weekday, required this.month, required this.year, required int weekIndex}){
-    if (weekIndex == 0 && this.date > 7) this.month =- 1;
-    if (weekIndex > 3 && this.date < 7) this.month += 1;
+  Day.withWeekIndex({required this.date, required this.weekday, required this.selectedMonth, required this.year, required int weekIndex}){
+    if (weekIndex == 0 && this.date > 7) this.selectedMonth =- 1;
+    if (weekIndex > 3 && this.date < 7) this.selectedMonth += 1;
   }
 
-  Day.today() : this(date: DateTime.now().day, month: DateTime.now().month, weekday: DateTime.now().weekday, year: DateTime.now().year);
+  Day.today() : this(date: DateTime.now().day, selectedMonth: DateTime.now().month, weekday: DateTime.now().weekday, year: DateTime.now().year);
 
   String textInfo(){
     final String _day = super.convertWeekday(weekday: this.weekday);
-    final String _month = this.convertMonth(month: this.month);
+    final String _month = this.convertMonth(month: this.selectedMonth);
     return "$_day, ${this.date} $_month";
   }
 
@@ -81,14 +81,14 @@ class DateTileData extends Day {
   final int weekday;
 
   int weekIndex;
-  int month;
+  int selectedMonth;
   int year;
 
   List<Event> startEvents = [];
   List<Event> endEvents = [];
 
-  DateTileData({required this.date, required this.weekday, required this.month, required this.year, required this.weekIndex, required List<Event> events})
-    : super.withWeekIndex(date: date, year: year, weekIndex: weekIndex, month: month, weekday: year) {
+  DateTileData({required this.date, required this.weekday, required this.selectedMonth, required this.year, required this.weekIndex, required List<Event> events})
+    : super.withWeekIndex(date: date, year: year, weekIndex: weekIndex, selectedMonth: selectedMonth, weekday: year) {
         this._events(events: events);
       }
 

@@ -10,9 +10,9 @@ import '../repos/variables.dart' show EventColors;
 
 class UserProvider with ChangeNotifier {
   SelectedMonth selectedMonth;
-  List<List<int>> weekList;
+  // List<List<int>> weekList;
 
-  UserProvider(this.selectedMonth, this.weekList){
+  UserProvider(this.selectedMonth){
     print("user provider init");
     this._thisMonthEvents = this._fetchThisMonthEvents(selectedMonth: this.selectedMonth);
   }
@@ -27,7 +27,7 @@ class UserProvider with ChangeNotifier {
           period: Period.AM,
         ),
         day: Day(
-            month: 3,
+            selectedMonth: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -40,7 +40,7 @@ class UserProvider with ChangeNotifier {
           period: Period.AM,
         ),
         day: Day(
-            month: 3,
+            selectedMonth: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -57,7 +57,7 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: Day(
-          month: 3,
+          selectedMonth: 3,
           year: 2022,
           weekday: 3,
           date: 30
@@ -70,7 +70,7 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: Day(
-            month: 3,
+            selectedMonth: 3,
             year: 2022,
             weekday: 3,
             date: 30
@@ -89,13 +89,44 @@ class UserProvider with ChangeNotifier {
 
   List<Event> _fetchThisMonthEvents({required SelectedMonth selectedMonth}){
     List<Event> _thisMonthEvents = [];
-    for (int i = 0; i < this._userEvents.length; i++){
-      if (this._userEvents[i].startTime.day.year == selectedMonth.year) {
-        if (this._userEvents[i].startTime.day.month == selectedMonth.month) {
-          _thisMonthEvents.add(this._userEvents[i]);
+    // for (int i = 0; i < this._userEvents.length; i++){
+    //   if (this._userEvents[i].startTime.day.year == selectedMonth.year) {
+    //     if (this._userEvents[i].startTime.day.month == selectedMonth.month) {
+    //       _thisMonthEvents.add(this._userEvents[i]);
+    //     }
+    //   }
+    // }
+    // todo prev year and next year
+
+    // selectedMonth.weekList.forEach((List<int> week) {
+    //   week.forEach((int date) {
+    //     if (selectedMonth.weekList.indexOf(week) == 0 && date < 32) {
+    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == date);
+    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
+    //     } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && date < 7) {
+    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == date);
+    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
+    //     } else {
+    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == date);
+    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
+    //     }
+    //   });
+    // });
+    selectedMonth.weekList.forEach((List<int> week) {
+      week.forEach((int date) {
+        if (selectedMonth.weekList.indexOf(week) == 0 && date < 32) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month - 1 && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
+        } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && date < 7) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month + 1 && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
+        } else {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.selectedMonth == selectedMonth.month && e.startTime.day.date == date);
+          _thisMonthEvents.addAll(_indices);
         }
-      }
-    }
+      });
+    });
+    print(_thisMonthEvents.length);
     return _thisMonthEvents;
   }
 
