@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../models/class/day_class.dart' show Day;
+import '../models/class/day_class.dart' show DateTileData, DayData;
 import '../models/class/event_class.dart';
 import '../models/selected_month.dart';
 import '../models/time_model.dart' show Period, Time;
@@ -10,7 +10,6 @@ import '../repos/variables.dart' show EventColors;
 
 class UserProvider with ChangeNotifier {
   SelectedMonth selectedMonth;
-  // List<List<int>> weekList;
 
   UserProvider(this.selectedMonth){
     print("user provider init");
@@ -26,10 +25,9 @@ class UserProvider with ChangeNotifier {
           minute: 0,
           period: Period.AM,
         ),
-        day: Day(
+        day: DayData(
             month: 3,
             year: 2022,
-            weekday: 3,
             date: 30
         ),
       ),
@@ -39,10 +37,9 @@ class UserProvider with ChangeNotifier {
           minute: 0,
           period: Period.AM,
         ),
-        day: Day(
+        day: DayData(
             month: 3,
             year: 2022,
-            weekday: 3,
             date: 30
         ),
       ),
@@ -56,10 +53,9 @@ class UserProvider with ChangeNotifier {
           minute: 0,
           period: Period.PM,
         ),
-        day: Day(
+        day: DayData(
           month: 3,
           year: 2022,
-          weekday: 3,
           date: 30
         ),
       ),
@@ -69,14 +65,181 @@ class UserProvider with ChangeNotifier {
           minute: 0,
           period: Period.PM,
         ),
-        day: Day(
+        day: DayData(
             month: 3,
             year: 2022,
-            weekday: 3,
             date: 30
         ),
       ),
       title: "Study Coding",
+    ),
+    Event(
+      color: EventColors.purple,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 2,
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 2,
+        ),
+      ),
+      title: "Tattoo",
+    ),
+    Event(
+      color: EventColors.green,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 5,
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 5,
+        ),
+      ),
+      title: "Mom's Bday",
+    ),
+    Event(
+      color: EventColors.red,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 20
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 20
+        ),
+      ),
+      title: "Sarah at Gangnam",
+    ),
+    Event(
+      color: EventColors.orange,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 30,
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+            month: 4,
+            year: 2022,
+            date: 30,
+        ),
+      ),
+      title: "Team meeting",
+    ),
+    Event(
+      color: EventColors.purple,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+          month: 5,
+          year: 2022,
+          date: 6,
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+          month: 5,
+          year: 2022,
+          date: 6,
+        ),
+      ),
+      title: "My bday",
+    ),
+    Event(
+      color: EventColors.red,
+      startTime: EventTime(
+        time: Time(
+          hour: 8,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+          month: 5,
+          year: 2022,
+          date: 31,
+        ),
+      ),
+      endTime: EventTime(
+        time: Time(
+          hour: 9,
+          minute: 0,
+          period: Period.PM,
+        ),
+        day: DayData(
+          month: 5,
+          year: 2022,
+          date: 31,
+        ),
+      ),
+      title: "Team meeting",
     ),
   ];
 
@@ -87,46 +250,23 @@ class UserProvider with ChangeNotifier {
   Color get color => this._color;
   set color(Color c) => throw "error";
 
+  // todo 서버에서 갖고올때는 이 코드 써서 갖고오면 될듯
   List<Event> _fetchThisMonthEvents({required SelectedMonth selectedMonth}){
     List<Event> _thisMonthEvents = [];
-    // for (int i = 0; i < this._userEvents.length; i++){
-    //   if (this._userEvents[i].startTime.day.year == selectedMonth.year) {
-    //     if (this._userEvents[i].startTime.day.month == selectedMonth.month) {
-    //       _thisMonthEvents.add(this._userEvents[i]);
-    //     }
-    //   }
-    // }
-    // todo prev year and next year
-
-    // selectedMonth.weekList.forEach((List<int> week) {
-    //   week.forEach((int date) {
-    //     if (selectedMonth.weekList.indexOf(week) == 0 && date < 32) {
-    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == date);
-    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
-    //     } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && date < 7) {
-    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == date);
-    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
-    //     } else {
-    //       final int _index = this._userEvents.indexWhere((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == date);
-    //       if (_index != -1) _thisMonthEvents.add(this._userEvents[_index]);
-    //     }
-    //   });
-    // });
-    selectedMonth.weekList.forEach((List<int> week) {
-      week.forEach((int date) {
-        if (selectedMonth.weekList.indexOf(week) == 0 && date < 32) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == date);
+    selectedMonth.weekList.forEach((List<DateTileData> week) {
+      week.forEach((DateTileData data) {
+        if (selectedMonth.weekList.indexOf(week) == 0 && data.date < 32 && data.date > 24) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
-        } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && date < 7) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == date);
+        } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && data.date < 7) {
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
         } else {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
         }
       });
     });
-    print(_thisMonthEvents.length);
     return _thisMonthEvents;
   }
 

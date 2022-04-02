@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/class/day_class.dart' show DateTileData, Day;
+import '../../models/class/day_class.dart' show DateTileData, DayData;
 import '../../models/class/event_class.dart';
 import '../../repos/variables.dart' show MyColors, Today;
 import '../../service/calendar_service.dart';
@@ -25,18 +25,20 @@ class CalendarTopRow extends StatelessWidget {
 }
 
 class DateTile extends StatelessWidget {
-  DateTile({Key? key, required this.data, required this.selectedDate, required this.onPressed, required this.thisMonthEvents}) : super(key: key);
+  DateTile({Key? key, required this.dayIndex, required this.data, required this.selectedMonth, required this.selectedDate, required this.onPressed, required this.thisMonthEvents}) : super(key: key);
   final DateTileData data;
-  Day selectedDate;
+  DayData selectedDate;
   void Function(DateTileData date) onPressed;
   List<Event> thisMonthEvents;
+  final int selectedMonth;
+  final int dayIndex;
 
-  Color _dateColor({required DateTileData data}){
-    if (!CalendarService.isThisMonth(data: data)) {
-      if (data.weekday == 0) return MyColors.transpRed;
+  Color _dateColor({required DateTileData data, required int dayIndex}){
+    if (this.selectedMonth != data.month) {
+      if (dayIndex == 0) return MyColors.transpRed;
       return MyColors.transpBlack;
     } else {
-      if (data.weekday == 0) return MyColors.red;
+      if (dayIndex == 0) return MyColors.red;
       return MyColors.black;
     }
   }
@@ -79,32 +81,53 @@ class DateTile extends StatelessWidget {
     );
   }
 
+  Color? _tileColor({required DateTileData data}){
+    if (this.selectedMonth != data.month) {
+      return Colors.grey.withOpacity(0.17);
+    } else {
+      return null;
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => this.onPressed(this.data),
-      child: Container(
-        decoration: BoxDecoration(
-          border: CalendarService.isSame(date1: this.data, date2: this.selectedDate) ? Border.all(color: MyColors.primary) : null,
-        ),
-        padding: const EdgeInsets.only(top: 2.0),
-        height: 110.0,
-        width:  MediaQuery.of(context).size.width/7,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            CalendarService.isSame(date1: this.data, date2: Today.today)
-                ? this._today(data: this.data)
-                : this._date(data: this.data, color: this._dateColor(data: this.data)),
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: this.data.startEvents.length,
-                itemBuilder: (BuildContext context, int i) => this._events(event: this.data.startEvents[i]),
-              ),
+      onTap: () {
+        this.onPressed(this.data);
+      },
+      child: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              border: CalendarService.isSame(date1: this.data, date2: this.selectedDate) ? Border.all(color: MyColors.primary) : null,
             ),
-          ],
-        ),
+            padding: const EdgeInsets.only(top: 2.0),
+            height: 110.0,
+            width:  MediaQuery.of(context).size.width/7,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                CalendarService.isSame(date1: this.data, date2: Today.today)
+                    ? this._today(data: this.data)
+                    : this._date(data: this.data, color: this._dateColor(data: this.data, dayIndex: this.dayIndex)),
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: this.data.startEvents.length,
+                    itemBuilder: (BuildContext context, int i) => this._events(event: this.data.startEvents[i]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 110.0,
+            width:  MediaQuery.of(context).size.width/7,
+            color: this._tileColor(data: this.data),
+          ),
+        ],
       ),
     );
   }

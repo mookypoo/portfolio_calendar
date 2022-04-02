@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/time_service.dart';
 
-import '../models/class/day_class.dart' show Day;
+import '../models/class/day_class.dart' show DayData;
 import '../models/class/event_class.dart' show EventTime;
 import '../models/time_model.dart' show Period, Time;
 
@@ -12,9 +12,11 @@ class TimeProvider with ChangeNotifier {
 
   bool _isEndExpanded = false;
   bool get isEndExpanded => this._isEndExpanded;
+  set isEndExpanded(bool b) => throw "error";
+
   TimeService _timeService = TimeService();
 
-  Day day;
+  DayData day;
   String get dateText => this.day.textInfo();
 
   int _startMinute = 00;
@@ -58,35 +60,45 @@ class TimeProvider with ChangeNotifier {
   List<int> get hours => [...this._hours];
   set hours(List<int> l) => throw "error";
 
+  EventTime get startData => this._startData();
+  EventTime get endData => this._endData();
+
   TimeProvider(this.day){
     print("time provider init");
     this._init();
-  }
-
-  void expand(String startOrEnd){
-    if (startOrEnd == "Starts") {
-      this._isStartExpanded = !this._isStartExpanded;
-      this._isEndExpanded = false;
-      if (this.isStartExpanded) {
-        this._minuteList = this._timeService.minutes(currentMinute: this._startMinute);
-        this._hours = this._timeService.hours(startHour: this._startHour);
-      }
-    } else {
-      this._isEndExpanded = !this._isEndExpanded;
-      this._isStartExpanded = false;
-      if (this.isEndExpanded) {
-        this._minuteList = this._timeService.minutes(currentMinute: this._endMinute);
-        this._hours = this._timeService.hours(startHour: this._endHour);
-      }
-    }
-    this.notifyListeners();
-    return;
   }
 
   void _init(){
     if (this._startHour > 12) this._convertStart();
     if (this._endHour > 12) this._convertEnd();
     this._hours = this._timeService.hours(startHour: this._startHour);
+    return;
+  }
+
+  void expand(String startOrEnd){
+    if (startOrEnd == "Starts") this._expandStart();
+    if (startOrEnd == "Ends") this._expandEnd();
+    this.notifyListeners();
+    return;
+  }
+
+  void _expandStart(){
+    this._isStartExpanded = !this._isStartExpanded;
+    this._isEndExpanded = false;
+    if (this._isStartExpanded) {
+      this._minuteList = this._timeService.minutes(currentMinute: this._startMinute);
+      this._hours = this._timeService.hours(startHour: this._startHour);
+    }
+    return;
+  }
+
+  void _expandEnd(){
+    this._isEndExpanded = !this._isEndExpanded;
+    this._isStartExpanded = false;
+    if (this._isEndExpanded) {
+      this._minuteList = this._timeService.minutes(currentMinute: this._endMinute);
+      this._hours = this._timeService.hours(startHour: this._endHour);
+    }
     return;
   }
 
@@ -143,9 +155,6 @@ class TimeProvider with ChangeNotifier {
     this.notifyListeners();
     return false;
   }
-
-  EventTime get startData => this._startData();
-  EventTime get endData => this._endData();
 
   EventTime _startData(){
     final Time _time = Time(hour: this._startHour, minute: this._startMinute, period: this._startPeriod);

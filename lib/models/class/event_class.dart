@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:portfolio_calendar/models/time_model.dart' show Time;
 import 'package:portfolio_calendar/repos/variables.dart';
 
-import 'day_class.dart' show Day;
+import 'day_class.dart' show DayData;
 
 
 class EventTime {
-  final Day day;
+  final DayData day;
   final Time time;
 
   EventTime({required this.day, required this.time});

@@ -1,36 +1,44 @@
-import 'class/day_class.dart' show DateTileData;
+import 'class/day_class.dart' show DateTileData, week;
 
 abstract class MonthAbstract {
-  int year = 2022;
-  int month = 1;
-  List<List<DateTileData>> days = [];
-  List<List<int>> weekList = [];
+  final int year = 2022;
+  final int month = 1;
 
-  List<DateTileData> _days({required int month, required int year}){
-    List<DateTileData> _days = [];
+  final List<week> weekList = [];
+
+  week _days({required int month, required int year}){
+    week _days = [];
     final int _firstDay = DateTime.utc(year, month, 1).weekday;
     if (_firstDay != 7) {
       final int _pmLastDay = this._lastDate(month: month == 1 ? 12 : month - 1);
-      for (int i = 0; i < _firstDay; i++) _days.insert(0, DateTileData(date: _pmLastDay - i, ));
+      for (int i = 0; i < _firstDay; i++) _days.insert(0, DateTileData(
+        date: _pmLastDay - i,
+        year: month - 1 == 0 ? year - 1 : year,
+        month: month - 1 == 0 ? 12 : month -1),
+      );
     }
 
     final int _tmLastDate = this._lastDate();
-    final int _tmLastDay = DateTime.utc(year, month, _tmLastDate).weekday;
+    int _tmLastDay = DateTime.utc(year, month, _tmLastDate).weekday;
+    if (_tmLastDay == 7) _tmLastDay = 0;
 
-    for (int i = 1; i < _tmLastDate + 1; i++) _days.add(i);
+    for (int i = 1; i < _tmLastDate + 1; i++) _days.add(DateTileData(date: i, month: month, year: year));
     if (_tmLastDay != 6) {
-      for (int i = 1; i < 7 - _tmLastDay; i ++) _days.add(i);
+      for (int i = 1; i < 7 - _tmLastDay; i ++) _days.add(DateTileData(
+          date: i,
+          year: month + 1 == 13 ? year + 1 : year,
+          month: month + 1 == 13 ? 1 : month + 1,
+      ));
     }
     return _days;
   }
 
-  List<List<int>> _weeks({required int month, required int year}){
-    final List<int> _days = this._days(month: month, year: year);
-    List<List<int>> _weeks = [];
+  List<week> weeks({required int month, required int year}){
+    final week _days = this._days(month: month, year: year);
+    List<week> _weeks = [];
     for (int i = 0; i < _days.length/7; i++) {
       _weeks.add(List.generate(7, (int index) => _days[7*i + index]));
     }
-    this.weekList = _weeks;
     return _weeks;
   }
 
@@ -51,25 +59,4 @@ abstract class MonthAbstract {
       default: return 31;
     }
   }
-
-  void fetchDateTileData({required int month, required int year}){
-    List<List<int>> _weeks = this._weeks(month: month, year: year);
-
-    List<List<DateTileData>> _dateTileDays = [];
-    _weeks.forEach((List<int> week) {
-      week.forEach((int date) {
-        if (_weeks.indexOf(week) == 0 && date < 32) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month - 1 && e.startTime.day.date == date);
-          _thisMonthEvents.addAll(_indices);
-        } else if (month.weekList.indexOf(week) == month.weekList.length - 1 && date < 7) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month + 1 && e.startTime.day.date == date);
-          _thisMonthEvents.addAll(_indices);
-        } else {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == month.month && e.startTime.day.date == date);
-          _thisMonthEvents.addAll(_indices);
-        }
-      });
-    });
-  }
-
 }

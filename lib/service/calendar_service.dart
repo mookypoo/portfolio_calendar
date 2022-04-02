@@ -1,8 +1,8 @@
-import '../models/class/day_class.dart' show DateTileData, Day;
+import '../models/class/day_class.dart' show DateTileData, DayData;
 import '../models/selected_month.dart';
 
 class CalendarService {
-  Day changeDay(Day newDate) => Day.newDay(newDate);
+  DayData changeDay(DayData newDate) => DayData.newDay(newDate);
 
   SelectedMonth prevMonth({required int month, required int year}) {
     int _month;
@@ -28,22 +28,12 @@ class CalendarService {
     return SelectedMonth(year: _year, month: _month);
   }
 
-  static bool isSame({required DateTileData date1, required Day date2}){
+  static bool isSame({required DateTileData date1, required DayData date2}){
     if (date1.date == date2.date && date1.month == date2.month && date1.year == date2.year) {
       return true;
     } else {
       return false;
     }
-  }
-
-  static bool isThisMonth({required DateTileData data}){
-    if (data.weekIndex == 0) {
-      if (data.date > 7) return false;
-    }
-    if (data.weekIndex == 4 || data.weekIndex == 5) {
-      if (data.date < 7) return false;
-    }
-    return true;
   }
 
 }
