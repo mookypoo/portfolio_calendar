@@ -56,7 +56,7 @@ class UserProvider with ChangeNotifier {
         day: DayData(
           month: 3,
           year: 2022,
-          date: 30
+          date: 30,
         ),
       ),
       endTime: EventTime(
@@ -82,9 +82,9 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: DayData(
-            month: 4,
-            year: 2022,
-            date: 2,
+          month: 4,
+          year: 2022,
+          date: 2,
         ),
       ),
       endTime: EventTime(
@@ -95,8 +95,8 @@ class UserProvider with ChangeNotifier {
         ),
         day: DayData(
             month: 4,
-            year: 2022,
-            date: 2,
+          year: 2022,
+          date: 2,
         ),
       ),
       title: "Tattoo",
@@ -110,9 +110,9 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: DayData(
-            month: 4,
-            year: 2022,
-            date: 5,
+          month: 4,
+          year: 2022,
+          date: 5,
         ),
       ),
       endTime: EventTime(
@@ -122,9 +122,9 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: DayData(
-            month: 4,
-            year: 2022,
-            date: 5,
+          month: 4,
+          year: 2022,
+          date: 5,
         ),
       ),
       title: "Mom's Bday",
@@ -166,9 +166,9 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: DayData(
-            month: 4,
-            year: 2022,
-            date: 30,
+          month: 4,
+          year: 2022,
+          date: 30,
         ),
       ),
       endTime: EventTime(
@@ -178,9 +178,9 @@ class UserProvider with ChangeNotifier {
           period: Period.PM,
         ),
         day: DayData(
-            month: 4,
-            year: 2022,
-            date: 30,
+          month: 4,
+          year: 2022,
+          date: 30,
         ),
       ),
       title: "Team meeting",

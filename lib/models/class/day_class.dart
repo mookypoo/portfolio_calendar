@@ -44,7 +44,7 @@ class DayData extends DayAbstract {
 
   DayData({required this.date, required this.month, required this.year})
     : this.weekday = DateTime(year, month, date).weekday {
-      if (this.weekday == 7) super.changeWeekday();
+    if (this.weekday == 7) super.changeWeekday();
   }
 
   DayData.today() : this(date: DateTime.now().day, month: DateTime.now().month, year: DateTime.now().year);
@@ -94,8 +94,8 @@ class DateTileData extends DayData {
 
   DateTileData({required this.date, required this.month, required this.year, List<Event>? events})
     : super(date: date, year: year, month: month) {
-        if (events != null) this._events(events: events);
-      }
+    if (events != null) this._events(events: events);
+  }
 
   void _events({required List<Event> events}){
     for (int i = 0; i < events.length; i++){

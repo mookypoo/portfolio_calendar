@@ -17,7 +17,7 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
-  AuthState _authState = AuthState.loggedIn;
+  AuthState _authState = AuthState.await;
   AuthState get authState => this._authState;
   set authState(AuthState a) => throw "error";
 

@@ -54,7 +54,7 @@ class AndroidMain extends StatelessWidget {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
                   color: MyColors.bg,
@@ -76,8 +76,8 @@ class AndroidMain extends StatelessWidget {
                                 events: this.userProvider.thisMonthEvents,
                               ),
                             ),
+                            ),
                           ),
-                        ),
                       ),
                     ],
                   ),
