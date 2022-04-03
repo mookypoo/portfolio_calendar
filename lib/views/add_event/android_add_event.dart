@@ -71,30 +71,26 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                               period: this.widget.timeProvider.startPeriod,
                               isExpanded: this.widget.timeProvider.isStartExpanded,
                               timeProvider: this.widget.timeProvider,
-                              text: "Starts", widget: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15.0),
-                                  child: Text(this.widget.timeProvider.dateText),
-                                ),
-                                Text(this.widget.timeProvider.startTime),
-                              ],
-                            ),),
+                              text: "Starts",
+                              widget: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: Text(this.widget.timeProvider.dateText),
+                                  ),
+                                  Text(this.widget.timeProvider.startTime),
+                                ],
+                              ),
+                            ),
                             TimeRow(
                               hourCt: this._hourCt,
                               periodCt: this._periodCt,
                               period: this.widget.timeProvider.endPeriod,
                               isExpanded: this.widget.timeProvider.isEndExpanded,
                               timeProvider: this.widget.timeProvider,
-                              text: "Ends", widget: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15.0),
-                                  child: Text(this.widget.timeProvider.dateText),
-                                ),
-                                Text(this.widget.timeProvider.endTime),
-                              ],
-                            ),),
+                              text: "Ends",
+                              widget: Text(this.widget.timeProvider.endTime),
+                            ),
                             RepeatAllDay(
                               widget: Text("Never"),
                               text: "Repeat",

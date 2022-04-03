@@ -2,6 +2,11 @@ import '../models/time_model.dart' show Period;
 
 class TimeService {
 
+  void changeHour(){
+
+  }
+
+
   List<int> hours({required int startHour}){
     List<int> hours = [];
     for (int i = 0; i < 12; i++) {

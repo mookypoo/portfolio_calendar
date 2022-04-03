@@ -1,0 +1,27 @@
+{
+  "name": "portfolio_calendar",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sookim482/portfolio_calendar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sookim482/portfolio_calendar/issues"
+  },
+  "homepage": "https://github.com/sookim482/portfolio_calendar#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
+

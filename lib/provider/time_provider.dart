@@ -136,24 +136,30 @@ class TimeProvider with ChangeNotifier {
 
   bool changeStartHour({required int index, required bool isIncrement}){
     this._startHour = this._hours[index];
+    bool _shouldScroll = false;
     if (this._startHour == 12 && isIncrement || this._startHour == 11 && !isIncrement) {
       this._startPeriod = this._timeService.convertPeriod(period: this._startPeriod);
-      this.notifyListeners();
-      return true;
+      _shouldScroll = true;
+    }
+    if (this._startPeriod == this._endPeriod) {
+      if (this._startHour == this._endHour) this._endHour += 1;
     }
     this.notifyListeners();
-    return false;
+    return _shouldScroll;
   }
 
   bool changeEndHour({required int index, required bool isIncrement}){
     this._endHour = this._hours[index];
+    bool _shouldScroll = false;
     if (this._endHour == 12 && isIncrement || this._endHour == 11 && !isIncrement) {
       this._endPeriod = this._timeService.convertPeriod(period: this._endPeriod);
-      this.notifyListeners();
-      return true;
+      _shouldScroll = true;
+    }
+    if (this._startPeriod == this._endPeriod) {
+      if (this._startHour == this._endHour) this._startHour =- 1;
     }
     this.notifyListeners();
-    return false;
+    return _shouldScroll;
   }
 
   EventTime _startData(){

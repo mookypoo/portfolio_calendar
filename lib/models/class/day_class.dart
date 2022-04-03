@@ -9,11 +9,9 @@ abstract class DayAbstract extends Calendar {
   final int date = 1; // 날짜
   int? weekday = 1; // 요일
 
-  void changeWeekday() => this.weekday = 0;
-
   String convertWeekday({required int weekday}){
     switch (weekday) {
-      case 0: return "Sun";
+      case 7: return "Sun";
       case 1: return "Mon";
       case 2: return "Tue";
       case 3: return "Wed";
@@ -43,9 +41,7 @@ class DayData extends DayAbstract {
   }
 
   DayData({required this.date, required this.month, required this.year})
-    : this.weekday = DateTime(year, month, date).weekday {
-    if (this.weekday == 7) super.changeWeekday();
-  }
+    : this.weekday = DateTime(year, month, date).weekday;
 
   DayData.today() : this(date: DateTime.now().day, month: DateTime.now().month, year: DateTime.now().year);
 
