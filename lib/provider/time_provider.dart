@@ -53,7 +53,8 @@ class TimeProvider with ChangeNotifier {
   List<int> get minuteList => [...this._minuteList];
   set minuteList(List<int> l) => throw "error";
 
-  final List<String> periodList = [Period.AM.toString().substring(7), Period.PM.toString().substring(7)];
+  final List<Period> _periodList = [Period.AM, Period.PM];
+  List<String> get periodList => this._periodList.map<String>((Period p) => p.toString().substring(7)).toList();
   set periodList(List<String> l) => throw "error";
 
   List<int> _hours = [];
@@ -114,21 +115,18 @@ class TimeProvider with ChangeNotifier {
     return;
   }
 
-  void changeSelectedMinute(int index, String startOrEnd){
-    if (startOrEnd == "Starts") {
-      this._startMinute = this._minuteList[index];
-    } else {
-      this._endMinute = this._minuteList[index];
-    }
+  void changeSelectedMinute(int index){
+    if (this._isStartExpanded) this._startMinute = this._minuteList[index];
+    if (this._isEndExpanded) this._endMinute = this._minuteList[index];
     this.notifyListeners();
     return;
   }
 
-  void changeAmPm(int index){
-    if (index == 0) {
-      this._startPeriod = Period.AM;
+  void convertPeriod(int index){
+    if (this._isStartExpanded) {
+      this._startPeriod = this._periodList[index];
     } else {
-      this._startPeriod = Period.PM;
+      this._endPeriod = this._periodList[index];
     }
     this.notifyListeners();
     return;
@@ -142,7 +140,10 @@ class TimeProvider with ChangeNotifier {
       _shouldScroll = true;
     }
     if (this._startPeriod == this._endPeriod) {
-      if (this._startHour == this._endHour) this._endHour += 1;
+      if (this._startHour == this._endHour) {
+        this._endHour = this._timeService.convertHour(hour: this._endHour + 1);
+        if (this._endHour == 12) this._endPeriod = this._timeService.convertPeriod(period: this._endPeriod);
+      }
     }
     this.notifyListeners();
     return _shouldScroll;
@@ -156,7 +157,8 @@ class TimeProvider with ChangeNotifier {
       _shouldScroll = true;
     }
     if (this._startPeriod == this._endPeriod) {
-      if (this._startHour == this._endHour) this._startHour =- 1;
+      if (this._startHour == this._endHour) this._startHour = this._timeService.convertHour(hour: this._endHour - 1);
+      if (this._startHour == 11) this._startPeriod = this._timeService.convertPeriod(period: this._startPeriod);
     }
     this.notifyListeners();
     return _shouldScroll;

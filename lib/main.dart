@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio_calendar/provider/add_event_provider.dart';
 import 'package:portfolio_calendar/provider/auth_provider.dart';
 import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/provider/time_provider.dart';
@@ -48,6 +49,9 @@ class PortfolioCalendar extends StatelessWidget {
               providers: [
                 ChangeNotifierProvider<TimeProvider>(
                   create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+                ),
+                ChangeNotifierProvider<AddEventProvider>(
+                  create: (BuildContext context) => AddEventProvider(),
                 ),
               ],
               child: AddEventPage(),

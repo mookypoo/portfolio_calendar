@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio_calendar/views/add_event/android_components.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/add_event_provider.dart';
 import '../../provider/time_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/variables.dart';
@@ -9,9 +10,10 @@ import 'common_components.dart';
 import '../../models/time_model.dart' show Period;
 
 class AndroidAddEvent extends StatefulWidget {
-  AndroidAddEvent({Key? key, required this.timeProvider, required this.userProvider}) : super(key: key);
+  AndroidAddEvent({Key? key, required this.addEventProvider, required this.timeProvider, required this.userProvider}) : super(key: key);
   final TimeProvider timeProvider;
   final UserProvider userProvider;
+  final AddEventProvider addEventProvider;
 
   @override
   State<AndroidAddEvent> createState() => _AndroidAddEventState();
@@ -60,7 +62,7 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                   //color: MyColors.bg,
                   child: Column(
                     children: <Widget>[
-                      TitleTextField(textCt: this._textCt, color: context.watch<UserProvider>().color,),
+                      TitleTextField(textCt: this._textCt, color: this.widget.addEventProvider.color,),
                       AddEventRow(
                         widget: Column(
                           children: <Widget>[
@@ -103,7 +105,7 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                         icon: Icon(Icons.label_outline, size: 28.0,),
                         widget: Row(
                           children: this._eventColors.map<Widget>((Color c) =>
-                              ColorCircle(color: c, onTap: this.widget.userProvider.changeColor,)).toList(),
+                              ColorCircle(color: c, onTap: this.widget.addEventProvider.changeColor,)).toList(),
                         ),
                       ),
                       AddEventRow(
@@ -132,6 +134,7 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                       BottomWidget(
                         onPressed: () {
                           this.widget.userProvider.addEvent(
+                            color: this.widget.addEventProvider.color,
                             title: this._textCt.text,
                             startTime: this.widget.timeProvider.startData,
                             endTime: this.widget.timeProvider.endData,

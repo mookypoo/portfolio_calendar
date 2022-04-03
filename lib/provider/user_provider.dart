@@ -246,10 +246,6 @@ class UserProvider with ChangeNotifier {
   List<Event> _thisMonthEvents = [];
   List<Event> get thisMonthEvents => [...this._thisMonthEvents];
 
-  Color _color = EventColors.orange;
-  Color get color => this._color;
-  set color(Color c) => throw "error";
-
   // todo 서버에서 갖고올때는 이 코드 써서 갖고오면 될듯
   List<Event> _fetchThisMonthEvents({required SelectedMonth selectedMonth}){
     List<Event> _thisMonthEvents = [];
@@ -270,17 +266,10 @@ class UserProvider with ChangeNotifier {
     return _thisMonthEvents;
   }
 
-  void changeColor(Color c){
-    this._color = c;
-    this.notifyListeners();
-    return;
-  }
-
-  void addEvent({required String title, required EventTime startTime, required EventTime endTime}){
-    final Event _newEvent = Event(title: title, startTime: startTime, color: this.color, endTime: endTime);
+  void addEvent({required String title, required EventTime startTime, required EventTime endTime, required Color color}){
+    final Event _newEvent = Event(title: title, startTime: startTime, color: color, endTime: endTime);
     this._thisMonthEvents.add(_newEvent);
     this.notifyListeners();
     return;
   }
-
 }

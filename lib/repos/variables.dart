@@ -13,6 +13,7 @@ class MyColors {
   static const Color red = const Color.fromRGBO(216, 31, 42, 1.0);
   static const Color transpBlack = const Color.fromRGBO(0, 0, 0, 0.5);
   static const Color black = const Color.fromRGBO(0, 0, 0, 1.0);
+  static const Color transparent = const Color.fromRGBO(215, 227, 250, 0.0);
 }
 
 class EventColors {
