@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio_calendar/models/class/day_class.dart';
 import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/android_components.dart';
 
-import '../../models/class/day_class.dart' show DateTileData;
 import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/variables.dart' show MyColors;
@@ -16,8 +16,6 @@ class AndroidMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(userProvider.thisMonthEvents.length);
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -35,7 +33,7 @@ class AndroidMain extends StatelessWidget {
                 GestureDetector(
                   onTap: () {},
                   child: Text(
-                    this.calendarProvider.textMonth + " ${this.calendarProvider.year}" ,
+                    this.calendarProvider.monthString + " ${this.calendarProvider.year}" ,
                     style: const TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -56,7 +54,7 @@ class AndroidMain extends StatelessWidget {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
                   color: MyColors.bg,
@@ -65,23 +63,21 @@ class AndroidMain extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const CalendarTopRow(),
-                      ...List.generate(this.calendarProvider.weeks.length, (int weekIndex) =>
+                      ...List.generate(this.calendarProvider.weekList.length, (int weekIndex) =>
                           Row(
                             children: List.generate(7, (int dayIndex) => DateTile(
+                              dayIndex: dayIndex,
+                              selectedMonth: this.calendarProvider.month,
                               thisMonthEvents: this.userProvider.thisMonthEvents,
                               onPressed: this.calendarProvider.selectDate,
                               selectedDate: this.calendarProvider.selectedDate,
-                              data: DateTileData(
+                              data: DateTileData.withEvents(
+                                data: this.calendarProvider.weekList[weekIndex][dayIndex],
                                 events: this.userProvider.thisMonthEvents,
-                                year: this.calendarProvider.year,
-                                date: this.calendarProvider.weeks[weekIndex][dayIndex],
-                                weekday: dayIndex,
-                                month: this.calendarProvider.month,
-                                weekIndex: weekIndex,
                               ),
                             ),
+                            ),
                           ),
-                        ),
                       ),
                     ],
                   ),

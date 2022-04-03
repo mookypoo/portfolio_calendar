@@ -1,26 +1,17 @@
-import 'class/day_class.dart' show DateTileData;
-import 'month_model.dart' show  MonthAbstract;
+import 'class/day_class.dart' show week;
+import 'month_model.dart' show MonthAbstract;
 
 class SelectedMonth extends MonthAbstract {
   @override
-  int year;
+  final int year;
 
   @override
-  int month;
+  final int month;
 
   @override
-  List<List<int>> weekList = [];
+  List<week> weekList = [];
 
   SelectedMonth({required this.month, required this.year}){
-    this._weekss(month: this.month, year: this.year);
+    this.weekList = super.weeks(month: this.month, year: this.year);
   }
-
-  void _weekss({required int month, required int year}){
-    //super.weeks(month: month, year: year);
-  }
-
-  List<DateTileData> _weeks(){
-
-  }
-
 }

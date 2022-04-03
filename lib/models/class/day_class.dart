@@ -1,12 +1,15 @@
 import 'package:portfolio_calendar/models/class/calendar_class.dart';
 
 import 'event_class.dart' show Event;
+typedef week = List<DateTileData>;
 
 abstract class DayAbstract extends Calendar {
-  int date = 1; // 날짜
-  int weekday = 1; // 요일
+  final int year = 2022;
+  final int month = 1;
+  final int date = 1; // 날짜
+  int? weekday = 1; // 요일
 
-  int changeWeekday() => this.weekday = 0;
+  void changeWeekday() => this.weekday = 0;
 
   String convertWeekday({required int weekday}){
     switch (weekday) {
@@ -22,38 +25,38 @@ abstract class DayAbstract extends Calendar {
   }
 }
 
-class Day extends DayAbstract {
+class DayData extends DayAbstract {
   @override
-  int date;
+  final int year;
 
   @override
-  int weekday;
+  final int month;
 
-  int month;
-  int year;
+  @override
+  final int date;
 
-  factory Day.newDay(Day newDate){
-    return Day(year: newDate.year, weekday: newDate.weekday, month: newDate.month, date: newDate.date);
+  @override
+  final int? weekday;
+
+  factory DayData.newDay(DayData newDate){
+    return DayData(year: newDate.year, month: newDate.month, date: newDate.date,);
   }
 
-  Day({required this.date, required this.weekday, required this.month, required this.year}){
+  DayData({required this.date, required this.month, required this.year})
+      : this.weekday = DateTime(year, month, date).weekday {
     if (this.weekday == 7) super.changeWeekday();
   }
 
-  Day.withWeekIndex({required this.date, required this.weekday, required this.month, required this.year, required int weekIndex}){
-    if (weekIndex == 0 && this.date > 7) this.month =- 1;
-    if (weekIndex > 3 && this.date < 7) this.month += 1;
-  }
-
-  Day.today() : this(date: DateTime.now().day, month: DateTime.now().month, weekday: DateTime.now().weekday, year: DateTime.now().year);
+  DayData.today() : this(date: DateTime.now().day, month: DateTime.now().month, year: DateTime.now().year);
 
   String textInfo(){
-    final String _day = super.convertWeekday(weekday: this.weekday);
-    final String _month = this.convertMonth(month: this.month);
+    assert(this.weekday != null, "weekday is null");
+    final String _day = super.convertWeekday(weekday: this.weekday ?? 1);
+    final String _month = this.monthToString(month: this.month);
     return "$_day, ${this.date} $_month";
   }
 
-  String convertMonth({required int month}){
+  String monthToString({required int month}){
     switch (month) {
       case 1: return "Jan";
       case 2: return "Feb";
@@ -73,31 +76,37 @@ class Day extends DayAbstract {
 
 }
 
-class DateTileData extends Day {
+class DateTileData extends DayData {
+  @override
+  final int year;
+
+  @override
+  final int month;
+
   @override
   final int date;
 
   @override
-  final int weekday;
-
-  int weekIndex;
-  int month;
-  int year;
+  int? weekday;
 
   List<Event> startEvents = [];
   List<Event> endEvents = [];
 
-  DateTileData({required this.date, required this.weekday, required this.month, required this.year, required this.weekIndex, required List<Event> events})
-    : super.withWeekIndex(date: date, year: year, weekIndex: weekIndex, month: month, weekday: year) {
-        this._events(events: events);
-      }
+  DateTileData({required this.date, required this.month, required this.year, List<Event>? events})
+      : super(date: date, year: year, month: month) {
+    if (events != null) this._events(events: events);
+  }
 
   void _events({required List<Event> events}){
     for (int i = 0; i < events.length; i++){
-      if (events[i].startTime.day.date == this.date) this.startEvents.add(events[i]);
-      if (events[i].endTime.day.date == this.date) this.endEvents.add(events[i]);
+      if (events[i].startTime.day.date == this.date && events[i].startTime.day.month == this.month) this.startEvents.add(events[i]);
+      if (events[i].endTime.day.date == this.date && events[i].startTime.day.month == this.month) this.endEvents.add(events[i]);
     }
     return;
+  }
+
+  factory DateTileData.withEvents({required DateTileData data, required List<Event> events}){
+    return DateTileData(date: data.date, month: data.month, year: data.year, events: events);
   }
 
 }
