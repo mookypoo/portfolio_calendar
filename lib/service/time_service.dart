@@ -29,11 +29,9 @@ class TimeService {
   }
 
   Period convertPeriod({required Period period}){
-    if (period == Period.AM) {
-      return Period.PM;
-    } else {
-      return Period.AM;
-    }
+    if (period == Period.AM) return Period.PM;
+    if (period == Period.PM) return Period.AM;
+    return period;
   }
 
   List<int> minutes({required int currentMinute}){

@@ -35,6 +35,7 @@ class PortfolioCalendar extends StatelessWidget {
       theme: ThemeData(
         splashFactory: InkRipple.splashFactory,
         textTheme: TextTheme(
+          button: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.red),
           bodyText1: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary),
           bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, ),
         ),
@@ -51,7 +52,7 @@ class PortfolioCalendar extends StatelessWidget {
                   create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
                 ),
                 ChangeNotifierProvider<AddEventProvider>(
-                  create: (BuildContext context) => AddEventProvider(),
+                  create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
                 ),
               ],
               child: AddEventPage(),
@@ -70,10 +71,7 @@ class PortfolioCalendar extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<CalendarProvider>(create: (_) => CalendarProvider()),
-        ChangeNotifierProxyProvider<CalendarProvider, UserProvider>(
-          create: (BuildContext context) => UserProvider(Provider.of<CalendarProvider>(context, listen: false).selectedMonth),
-          update: (_, CalendarProvider calendar, __) => UserProvider(calendar.selectedMonth),
-        ),
+        ChangeNotifierProvider<UserProvider>(create: (BuildContext context) => UserProvider(Provider.of<CalendarProvider>(context, listen: false).selectedMonth)),
       ],
       child: Platform.isAndroid ? this._androidApp() : this._iosApp(),
     );

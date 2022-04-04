@@ -8,10 +8,10 @@ enum ProviderState {
   Complete,
   Error,
 }
-
+//
 class Connect {
   final String _serverEndPoint = "http://192.168.200.181:3000";
-  final Map<String, String> _headers = {"telldoc": "astanos", "content-type": "application/x-www-form-urlencoded"};
+  final Map<String, String> _headers = {"Mooky": "calendar", "content-type": "application/json"};
 
   Future<T?> reqPostServer<T>({required String path, required void Function(ReqModel) cb, Map<String, String>? headers, dynamic body}) async {
     String _path = path.trim();
@@ -19,16 +19,14 @@ class Connect {
 
     try {
       final http.Response _res = await http.post(Uri.parse(this._serverEndPoint + _path),
-        headers: {...headers ?? {}, ..._headers},
-        body: body,
+        headers: {...headers ?? {}, ...this._headers},
+        body: json.encode(body),
       ).timeout(Duration(seconds: 13), onTimeout: () async => await http.Response("null", 404));
       cb(ReqModel(statusCode: _res.statusCode));
-      print("connect");
-      print(json.decode(_res.body));
+      print(_res.headers);
       return json.decode(_res.body) as T;
-
     } catch (e) {
-      print(path);
+
       print(e.toString());
       return null;
     }
@@ -40,17 +38,13 @@ class Connect {
 
     try {
       http.Response _res = await http.get(
-          Uri.parse(this._serverEndPoint + "/" + _path),
-          headers: {...headers ?? {}, ..._headers}).timeout(Duration(seconds: 13), onTimeout: () async => http.Response("null", 404));
+          Uri.parse(this._serverEndPoint + _path),
+          headers: {...headers ?? {}, ...this._headers}).timeout(Duration(seconds: 13), onTimeout: () async => http.Response("null", 404));
       cb(ReqModel(statusCode: _res.statusCode));
-      // if (path.contains("imgs")) {
-      //   return ;
-      // }
-      // print(_res.body);
-      return json.decode(_res.body) as T;
+      print(_res.body);
+      return _res.body as T;
 
     } catch (e) {
-      print(path);
       print(e.toString());
       return null;
     }

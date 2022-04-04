@@ -90,7 +90,7 @@ class TimeRow extends StatelessWidget {
                     ),
                     this._scrollWidget(
                       isPeriod: true,
-                      onSelectedItemChanged: this.timeProvider.convertPeriod,
+                      onSelectedItemChanged: this.timeProvider.scrollPeriod,
                       children: this.timeProvider.periodList.map<Widget>((String s) => Container(
                           alignment: Alignment.center,
                           child: Text(s)

@@ -132,7 +132,7 @@ class _AndroidAuthState extends State<AndroidAuth> {
                               final bool _hasErrors = this.widget.authProvider.validate(
                                 email: this._emailCt.text.trim(), pw: this._pw1Ct.text.trim(), name: this._nameCt.text, pw2: this._pw2Ct.text.trim(),
                               );
-                              if (_hasErrors) return;
+                              //if (_hasErrors) return;
                               await this.widget.authProvider.firebaseSignUp(
                                 data: SignUpInfo(
                                   name: this._nameCt.text.trim(),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_calendar/views/add_event/android_components.dart';
 import 'package:provider/provider.dart';
-
+import '../../models/class/user_color.dart';
 import '../../provider/add_event_provider.dart';
 import '../../provider/time_provider.dart';
 import '../../provider/user_provider.dart';
-import '../../repos/variables.dart';
+import '../../repos/variables.dart' show MyColors;
 import 'common_components.dart';
 import '../../models/time_model.dart' show Period;
 
@@ -23,10 +23,6 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
   ScrollController _hourCt = FixedExtentScrollController();
   ScrollController _periodCt = FixedExtentScrollController();
   TextEditingController _textCt = TextEditingController();
-
-  final List<Color> _eventColors = [
-    EventColors.orange, EventColors.green, EventColors.red, EventColors.yellow, EventColors.purple, EventColors.blue,
-  ];
 
   @override
   void initState() {
@@ -103,18 +99,80 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                       ),
                       AddEventRow(
                         icon: Icon(Icons.label_outline, size: 28.0,),
-                        widget: Row(
-                          children: this._eventColors.map<Widget>((Color c) =>
-                              ColorCircle(color: c, onTap: this.widget.addEventProvider.changeColor,)).toList(),
+                        widget: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                this.widget.addEventProvider.switchMode();
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(),
+                                child: Text("Add New Colors", style: Theme.of(context).textTheme.bodyText1,),
+                              ),
+                            ),
+                            !this.widget.addEventProvider.isAddMode
+                              ? Container(
+                                  width: 300.0,
+                                  height: 50.0,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemBuilder: (_, int index) => ColorCircle(
+                                      color: this.widget.addEventProvider.eventColors[index],
+                                      onTap: this.widget.addEventProvider.changeColor,
+                                    ),
+                                    itemCount: this.widget.addEventProvider.eventColors.length,
+                                    scrollDirection: Axis.horizontal,
+                                  ),
+                                )
+                              : Container(),
+                          ],
                         ),
                       ),
+                      this.widget.addEventProvider.isAddMode ? Container(
+                        margin: MediaQuery.of(context).viewInsets,
+                        padding: EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+                        height: 130.0,
+                        width: _size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    cursorColor: MyColors.primary,
+                                    decoration: InputDecoration(
+                                      hintText: "Title",
+                                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: MyColors.primary)),
+                                      contentPadding: EdgeInsets.only(bottom: 8.0, top: 10.0),
+                                      isDense: true,
+                                    ),
+                                  ),
+                                ),
+                                ColorCircle(color: this.widget.addEventProvider.newColor),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text("Available Colors", style: Theme.of(context).textTheme.bodyText1),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemBuilder: (_, int index) => ColorCircle(
+                                  color: this.widget.addEventProvider.eventColors[index],
+                                  onTap: this.widget.addEventProvider.changeNewColor,
+                                ),
+                                itemCount: this.widget.addEventProvider.eventColors.length,
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ) : Container(),
                       AddEventRow(
                         icon: Icon(Icons.notifications_outlined, ),
                         widget: Text("Add notification",style: Theme.of(context).textTheme.bodyText1, )
-                      ),
-                      AddEventRow(
-                          icon: Icon(Icons.location_on_outlined, ),
-                          widget: Text("Add location",style: Theme.of(context).textTheme.bodyText1, )
                       ),
                       AddEventRow(
                           icon: Icon(Icons.notes_outlined ),
@@ -127,7 +185,6 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
               Positioned(
                 bottom: 0.0,
                 child: Container(
-
                   child: Row(
                     children: <Widget>[
                       BottomWidget(text: "Cancel", save: false,),

@@ -70,8 +70,8 @@ class TimeProvider with ChangeNotifier {
   }
 
   void _init(){
-    if (this._startHour > 12) this._convertStart();
-    if (this._endHour > 12) this._convertEnd();
+    if (this._startHour > 12) this._startHour = this._convertToPM(hour: this._startHour, period: this._startPeriod);
+    if (this._endHour > 12) this._endHour = this._convertToPM(hour: this._endHour, period: this._endPeriod);
     this._hours = this._timeService.hours(startHour: this._startHour);
     return;
   }
@@ -103,17 +103,17 @@ class TimeProvider with ChangeNotifier {
     return;
   }
 
-  void _convertStart(){
-    this._startHour = this._timeService.convertHour(hour: this._startHour);
-    this._startPeriod = Period.PM;
-    return;
+  // todo see if this works since enums are reference types
+  int _convertToPM({required int hour, required Period period}){
+    period = Period.PM;
+    return this._timeService.convertHour(hour: hour);
   }
 
-  void _convertEnd(){
-    this._endHour = this._timeService.convertHour(hour: this._endHour);
-    this._endPeriod = Period.PM;
-    return;
-  }
+  // void _convertEnd(){
+  //   this._endHour = this._timeService.convertHour(hour: this._endHour);
+  //   this._endPeriod = Period.PM;
+  //   return;
+  // }
 
   void changeSelectedMinute(int index){
     if (this._isStartExpanded) this._startMinute = this._minuteList[index];
@@ -122,12 +122,9 @@ class TimeProvider with ChangeNotifier {
     return;
   }
 
-  void convertPeriod(int index){
-    if (this._isStartExpanded) {
-      this._startPeriod = this._periodList[index];
-    } else {
-      this._endPeriod = this._periodList[index];
-    }
+  void scrollPeriod(int index){
+    if (this._isStartExpanded) this._startPeriod = this._periodList[index];
+    if (this._isEndExpanded) this._endPeriod = this._periodList[index];
     this.notifyListeners();
     return;
   }
@@ -140,10 +137,8 @@ class TimeProvider with ChangeNotifier {
       _shouldScroll = true;
     }
     if (this._startPeriod == this._endPeriod) {
-      if (this._startHour == this._endHour) {
-        this._endHour = this._timeService.convertHour(hour: this._endHour + 1);
-        if (this._endHour == 12) this._endPeriod = this._timeService.convertPeriod(period: this._endPeriod);
-      }
+      if (this._startHour == this._endHour) this._endHour = this._timeService.convertHour(hour: this._endHour + 1);
+      if (this._endHour == 12) this._endPeriod = this._timeService.convertPeriod(period: this._endPeriod);
     }
     this.notifyListeners();
     return _shouldScroll;

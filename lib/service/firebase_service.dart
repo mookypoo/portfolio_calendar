@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:portfolio_calendar/repos/connect.dart';
 
 class FirebaseService {
   static Future<void> initializeFirebase() async => await Firebase.initializeApp();
   FirebaseAuth _auth = FirebaseAuth.instance;
+  Connect _connect = Connect();
 
   Future<Object?> signup({required String email, required String pw}) async {
     try {
@@ -13,6 +15,25 @@ class FirebaseService {
       if (e.code == "email-already-in-use") return "이미 가입한 이메일입니다.";
       if (e.code == "invalid-email") return "잘못된 이메일 주소입니다.";
       if (e.code == "weak-password") return "더 강화된 비밀번호를 사용하세요.";
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<void> sendAuthInfo({required UserCredential user, required String name, required bool isMale}) async {
+    try {
+      assert(user.user != null, "user is null!");
+      final Map<String, dynamic> _body = {
+        "email": user.user?.email,
+        "signUpDate": user.user?.metadata.creationTime.toString(),
+        "userUid": user.user?.uid,
+        "name": name,
+        "isMale": isMale,
+      };
+      final Map<String, dynamic> _res = await this._connect.reqPostServer(path: "/users/signUp", cb: (ReqModel rm) {}, body: _body);
+      if (_res["userUid"] == user.user?.uid) return;
+      throw "couldn't save auth data";
     } catch (e) {
       print(e);
     }

@@ -1,20 +1,40 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:portfolio_calendar/repos/enum.dart';
+import 'package:portfolio_calendar/service/user_service.dart';
 
 import '../models/class/day_class.dart' show DateTileData, DayData;
 import '../models/class/event_class.dart';
+import '../models/class/user_color.dart';
 import '../models/selected_month.dart';
 import '../models/time_model.dart' show Period, Time;
 import '../repos/variables.dart' show EventColors;
 
 class UserProvider with ChangeNotifier {
+  UserService _userService = UserService();
+  ProviderState providerState = ProviderState.open;
+
   SelectedMonth selectedMonth;
 
   UserProvider(this.selectedMonth){
     print("user provider init");
     this._thisMonthEvents = this._fetchThisMonthEvents(selectedMonth: this.selectedMonth);
+    if (this.providerState == ProviderState.open) Future(this.getUserColors);
   }
+
+  Future<void> getUserColors() async {
+    print("requesting");
+    this.providerState = ProviderState.connecting;
+    // await this._userService.getUserColors(userUid: 1);
+    this.providerState = ProviderState.complete;
+  }
+
+  List<UserColor> _userColors = [
+    //UserColor(title: title, color: color),
+  ];
+  List<UserColor> get userColors => [...this._userColors];
+  set UserColors(List<UserColor> c) => throw "error";
 
   List<Event> _userEvents = [
     Event(
@@ -242,6 +262,7 @@ class UserProvider with ChangeNotifier {
       title: "Team meeting",
     ),
   ];
+
 
   List<Event> _thisMonthEvents = [];
   List<Event> get thisMonthEvents => [...this._thisMonthEvents];

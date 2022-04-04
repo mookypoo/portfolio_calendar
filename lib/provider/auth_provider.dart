@@ -127,14 +127,18 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> firebaseSignUp({required SignUpInfo data}) async {
-    if (this._hasErrors()) return;
+    //if (this._hasErrors()) return;
+    final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
     final _res1 = await this._firebaseService.signup(email: data.email, pw: data.pw);
     if (_res1.runtimeType == String) {
       _res1 as String;
       if (_res1.contains("이메일")) this._emailErrorText = _res1;
       if (_res1.contains("비밀번호")) this._pwErrorText = _res1;
     }
-    if (_res1.runtimeType == UserCredential) await this.firebaseSignIn(data: data);
+    if (_res1.runtimeType == UserCredential) {
+      await this.firebaseSignIn(data: data);
+      await this._firebaseService.sendAuthInfo(user: _res1 as UserCredential, name: data.name, isMale: data.isMale);
+    }
     this.notifyListeners();
     return;
   }
