@@ -48,7 +48,7 @@ class AndroidMain extends StatelessWidget {
               IconButton(
                 iconSize: 28.0,
                 icon: const Icon(Icons.person),
-                onPressed: this.authProvider.firebaseSignOut,
+                onPressed: () async => await this.authProvider.firebaseSignOut(userUid: this.userProvider.userUid),
               ),
             ],
           ),

@@ -15,19 +15,19 @@ class UserProvider with ChangeNotifier {
   UserService _userService = UserService();
   ProviderState providerState = ProviderState.open;
 
+  String? userUid;
+
   SelectedMonth selectedMonth;
 
   UserProvider(this.selectedMonth){
     print("user provider init");
     this._thisMonthEvents = this._fetchThisMonthEvents(selectedMonth: this.selectedMonth);
-    if (this.providerState == ProviderState.open) Future(this.getUserColors);
   }
 
-  Future<void> getUserColors() async {
-    print("requesting");
-    this.providerState = ProviderState.connecting;
-    // await this._userService.getUserColors(userUid: 1);
-    this.providerState = ProviderState.complete;
+  void init({required String userUid}){
+    this.userUid = userUid;
+    print(userUid);
+    return;
   }
 
   List<UserColor> _userColors = [

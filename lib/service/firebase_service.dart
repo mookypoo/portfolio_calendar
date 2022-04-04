@@ -30,6 +30,7 @@ class FirebaseService {
         "userUid": user.user?.uid,
         "name": name,
         "isMale": isMale,
+        "method": "firebase",
       };
       final Map<String, dynamic> _res = await this._connect.reqPostServer(path: "/users/signUp", cb: (ReqModel rm) {}, body: _body);
       if (_res["userUid"] == user.user?.uid) return;
@@ -48,6 +49,7 @@ class FirebaseService {
       if (e.code == "user-not-found") return "아직 가입하지 않은 이메일입니다.";
       if (e.code == "invalid-email") return "잘못된 이메일 주소입니다.";
       if (e.code == "wrong-password") return "잘못된 비밀번호입니다.";
+      if (e.code == "too-many-reqests") return "가능한 로그인 시도 횟수를 초과했습니다.";
     } catch (e) {
       print(e);
     }
@@ -67,6 +69,22 @@ class FirebaseService {
       print(e);
     }
     return;
+  }
+
+  Future<void> logAuth({required String userUid, required bool isLogin}) async {
+    try {
+      final Map<String, dynamic> _body = {
+        "userUid": userUid,
+        "loginTime": isLogin ? DateTime.now().toString() : null,
+        "logoutTime": !isLogin ? DateTime.now().toString() : null,
+      };
+      print(_body);
+      var _res = await this._connect.reqPostServer(path: "users/log", cb: (ReqModel rm) {}, body: _body);
+      print("logAuth");
+      print(_res);
+    } catch (e) {
+      print(e);
+    }
   }
 }
 

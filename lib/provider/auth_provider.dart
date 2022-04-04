@@ -17,6 +17,10 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
+  String? _userUid;
+  String? get userUid => this._userUid;
+  set userUid(String? s) => throw "error";
+
   AuthState _authState = AuthState.await;
   AuthState get authState => this._authState;
   set authState(AuthState a) => throw "error";
@@ -128,7 +132,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> firebaseSignUp({required SignUpInfo data}) async {
     //if (this._hasErrors()) return;
-    final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
+    //final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
     final _res1 = await this._firebaseService.signup(email: data.email, pw: data.pw);
     if (_res1.runtimeType == String) {
       _res1 as String;
@@ -145,27 +149,33 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> firebaseSignIn({required AuthAbstract data}) async {
     final _res = await this._firebaseService.signIn(email: data.email, pw: data.pw);
+    print("firebaseSignIn");
     print(_res);
     if (_res.runtimeType == String) {
       _res as String;
       if (_res.contains("비밀번호")) this._pwErrorText = _res;
       if (_res.contains("가입")) this._emailErrorText = _res;
+      if (_res.contains("가능한")) this._pwErrorText = _res;
     }
     if (_res.runtimeType == UserCredential) {
       final User? _user = (_res as UserCredential).user;
       if (_user != null) {
         if (!_user.emailVerified) await this._firebaseService.sendEmailVerification();
+        this._userUid = _user.uid;
         this._authState = AuthState.loggedIn;
         this.clearSubtexts();
+        await this._firebaseService.logAuth(userUid: _user.uid, isLogin: true);
       }
     }
     this.notifyListeners();
     return null;
   }
 
-  Future<void> firebaseSignOut() async {
+  Future<void> firebaseSignOut({required String? userUid}) async {
+    assert(userUid != null, "userUid is null");
     await this._firebaseService.signOut();
     this._authState = AuthState.loggedOut;
+    await this._firebaseService.logAuth(userUid: userUid!, isLogin: false);
     this.notifyListeners();
     return;
   }

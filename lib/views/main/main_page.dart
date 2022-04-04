@@ -20,6 +20,7 @@ class MainPage extends StatelessWidget {
     UserProvider _userProvider = Provider.of<UserProvider>(context);
 
     if (_authProvider.authState != AuthState.loggedIn) return AuthPage();
+    if (_authProvider.authState == AuthState.loggedIn) _userProvider.init(userUid: _authProvider.userUid ?? "");
 
     return Platform.isAndroid ? AndroidMain(calendarProvider: _calendarProvider, userProvider: _userProvider, authProvider: _authProvider,) : IosMain();
   }

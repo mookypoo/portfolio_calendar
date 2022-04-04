@@ -24,6 +24,7 @@ class Connect {
       ).timeout(Duration(seconds: 13), onTimeout: () async => await http.Response("null", 404));
       cb(ReqModel(statusCode: _res.statusCode));
       print(_res.headers);
+      print(_res.body);
       return json.decode(_res.body) as T;
     } catch (e) {
 
