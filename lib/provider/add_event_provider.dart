@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/repos/variables.dart';
 
-import '../models/class/user_color.dart';
+import '../class/user_color.dart';
 
 class AddEventProvider with ChangeNotifier {
 
@@ -14,7 +14,7 @@ class AddEventProvider with ChangeNotifier {
   List<Color> get eventColors => [...this._eventColors];
   set eventColors(List<Color> c) => throw "error";
 
-  List<UserColor> userColors = [UserColor(title: "yo", color: EventColors.red, )];
+  List<UserColor> userColors = [];
 
   String _title = "";
   String get title => this._title;
@@ -30,6 +30,7 @@ class AddEventProvider with ChangeNotifier {
 
   bool _isAddMode = false;
   bool get isAddMode => this._isAddMode;
+  set isAddMode(bool b) => throw "error";
 
   void switchMode(){
     this._isAddMode = !this._isAddMode;
@@ -44,7 +45,6 @@ class AddEventProvider with ChangeNotifier {
 
   void changeNewColor(Color c){
     this._newColor = c;
-    print("changing new color");
     this.notifyListeners();
     return;
   }

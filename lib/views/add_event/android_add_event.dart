@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_calendar/views/add_event/android_components.dart';
-import 'package:provider/provider.dart';
-import '../../models/class/user_color.dart';
 import '../../provider/add_event_provider.dart';
 import '../../provider/time_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/variables.dart' show MyColors;
 import 'common_components.dart';
-import '../../models/time_model.dart' show Period;
+import '../../class/time_model.dart' show Period;
 
 class AndroidAddEvent extends StatefulWidget {
   AndroidAddEvent({Key? key, required this.addEventProvider, required this.timeProvider, required this.userProvider}) : super(key: key);
@@ -111,21 +109,21 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                                 child: Text("Add New Colors", style: Theme.of(context).textTheme.bodyText1,),
                               ),
                             ),
-                            !this.widget.addEventProvider.isAddMode
-                              ? Container(
-                                  width: 300.0,
-                                  height: 50.0,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemBuilder: (_, int index) => ColorCircle(
-                                      color: this.widget.addEventProvider.eventColors[index],
-                                      onTap: this.widget.addEventProvider.changeColor,
-                                    ),
-                                    itemCount: this.widget.addEventProvider.eventColors.length,
-                                    scrollDirection: Axis.horizontal,
-                                  ),
-                                )
-                              : Container(),
+                            // !this.widget.addEventProvider.isAddMode
+                            //   ? Container(
+                            //       width: 300.0,
+                            //       height: 50.0,
+                            //       child: ListView.builder(
+                            //         shrinkWrap: true,
+                            //         itemBuilder: (_, int index) => ColorCircle(
+                            //           color: this.widget.addEventProvider.eventColors[index],
+                            //           onTap: this.widget.addEventProvider.changeColor,
+                            //         ),
+                            //         itemCount: this.widget.addEventProvider.eventColors.length,
+                            //         scrollDirection: Axis.horizontal,
+                            //       ),
+                            //     )
+                            //   : Container(),
                           ],
                         ),
                       ),

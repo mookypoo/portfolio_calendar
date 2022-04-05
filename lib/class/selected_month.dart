@@ -1,4 +1,4 @@
-import 'class/day_class.dart' show week;
+import 'day_class.dart' show week;
 import 'month_model.dart' show MonthAbstract;
 
 class SelectedMonth extends MonthAbstract {

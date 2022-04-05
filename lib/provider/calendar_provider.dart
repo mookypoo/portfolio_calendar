@@ -1,9 +1,9 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/calendar_service.dart';
 
-import '../models/class/day_class.dart' show DateTileData, DayData, week;
-import '../models/selected_month.dart';
+import '../class/day_class.dart' show DateTileData, DayData, week;
+
+import '../class/selected_month.dart';
 import '../repos/variables.dart' show Today;
 
 class CalendarProvider with ChangeNotifier {

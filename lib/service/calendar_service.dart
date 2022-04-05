@@ -1,5 +1,5 @@
-import '../models/class/day_class.dart' show DateTileData, DayData;
-import '../models/selected_month.dart';
+import '../class/day_class.dart' show DateTileData, DayData;
+import '../class/selected_month.dart';
 
 class CalendarService {
   DayData changeDay(DayData newDate) => DayData.newDay(newDate);

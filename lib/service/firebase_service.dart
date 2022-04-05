@@ -4,6 +4,7 @@ import 'package:portfolio_calendar/repos/connect.dart';
 
 class FirebaseService {
   static Future<void> initializeFirebase() async => await Firebase.initializeApp();
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   Connect _connect = Connect();
 
@@ -21,7 +22,7 @@ class FirebaseService {
     return null;
   }
 
-  Future<void> sendAuthInfo({required UserCredential user, required String name, required bool isMale}) async {
+  Future<String?> sendAuthInfo({required UserCredential user, required String name, required bool isMale}) async {
     try {
       assert(user.user != null, "user is null!");
       final Map<String, dynamic> _body = {
@@ -33,8 +34,8 @@ class FirebaseService {
         "method": "firebase",
       };
       final Map<String, dynamic> _res = await this._connect.reqPostServer(path: "/users/signUp", cb: (ReqModel rm) {}, body: _body);
-      if (_res["userUid"] == user.user?.uid) return;
-      throw "couldn't save auth data";
+      if (_res["userUid"] == user.user?.uid) return _res["userUid"] as String;
+      return "couldn't save auth data";
     } catch (e) {
       print(e);
     }
@@ -69,22 +70,6 @@ class FirebaseService {
       print(e);
     }
     return;
-  }
-
-  Future<void> logAuth({required String userUid, required bool isLogin}) async {
-    try {
-      final Map<String, dynamic> _body = {
-        "userUid": userUid,
-        "loginTime": isLogin ? DateTime.now().toString() : null,
-        "logoutTime": !isLogin ? DateTime.now().toString() : null,
-      };
-      print(_body);
-      var _res = await this._connect.reqPostServer(path: "users/log", cb: (ReqModel rm) {}, body: _body);
-      print("logAuth");
-      print(_res);
-    } catch (e) {
-      print(e);
-    }
   }
 }
 

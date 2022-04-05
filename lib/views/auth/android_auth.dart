@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_calendar/models/auth_class.dart';
+import 'package:portfolio_calendar/class/auth_class.dart';
 import 'package:portfolio_calendar/views/auth/android_components.dart';
 import 'package:portfolio_calendar/views/auth/common_components.dart';
 

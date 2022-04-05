@@ -1,4 +1,4 @@
-import '../models/time_model.dart' show Period;
+import '../class/time_model.dart' show Period;
 
 class TimeService {
 
@@ -9,6 +9,16 @@ class TimeService {
       hours.add(_nextHour);
     }
     return hours;
+  }
+
+  List<int> minutes({required int currentMinute}){
+    List<int> _minutes = [];
+    for (int i = 0; i < 12; i++) {
+      int _nextMinute = currentMinute + 5 * i;
+      if (_nextMinute >= 60) _nextMinute = _nextMinute - 60;
+      _minutes.add(_nextMinute);
+    }
+    return _minutes;
   }
 
   int convertHour({required int hour}){
@@ -32,15 +42,5 @@ class TimeService {
     if (period == Period.AM) return Period.PM;
     if (period == Period.PM) return Period.AM;
     return period;
-  }
-
-  List<int> minutes({required int currentMinute}){
-    List<int> _minutes = [];
-    for (int i = 0; i < 12; i++) {
-      int _nextMinute = currentMinute + 5 * i;
-      if (_nextMinute >= 60) _nextMinute = _nextMinute - 60;
-      _minutes.add(_nextMinute);
-    }
-    return _minutes;
   }
 }

@@ -1,4 +1,4 @@
-import 'package:portfolio_calendar/models/class/calendar_class.dart';
+import 'package:portfolio_calendar/class/calendar_class.dart';
 
 import 'event_class.dart' show Event;
 typedef week = List<DateTileData>;

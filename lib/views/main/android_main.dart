@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_calendar/models/class/day_class.dart';
+import 'package:portfolio_calendar/class/day_class.dart';
 import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/android_components.dart';
 
 import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
+import '../../repos/enum.dart';
 import '../../repos/variables.dart' show MyColors;
 
 class AndroidMain extends StatelessWidget {
@@ -48,7 +49,10 @@ class AndroidMain extends StatelessWidget {
               IconButton(
                 iconSize: 28.0,
                 icon: const Icon(Icons.person),
-                onPressed: () async => await this.authProvider.firebaseSignOut(userUid: this.userProvider.userUid),
+                onPressed: () async {
+                  await this.authProvider.firebaseSignOut(userUid: this.userProvider.userUid);
+                  this.userProvider.changeState(ProviderState.open);
+                },
               ),
             ],
           ),

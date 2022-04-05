@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/time_service.dart';
 
-import '../models/class/day_class.dart' show DayData;
-import '../models/class/event_class.dart' show EventTime;
-import '../models/time_model.dart' show Period, Time;
+import '../class/day_class.dart' show DayData;
+import '../class/event_class.dart' show EventTime;
+import '../class/time_model.dart' show Period, Time;
 
 class TimeProvider with ChangeNotifier {
   bool _isStartExpanded = false;

@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' show UserCredential, User;
 import 'package:flutter/foundation.dart';
 import 'package:portfolio_calendar/service/firebase_service.dart';
 
-import '../models/auth_class.dart';
+import '../class/auth_class.dart';
 import '../service/auth_service.dart';
 
 enum AuthState {
@@ -21,7 +21,7 @@ class AuthProvider with ChangeNotifier {
   String? get userUid => this._userUid;
   set userUid(String? s) => throw "error";
 
-  AuthState _authState = AuthState.await;
+  AuthState _authState = AuthState.loggedIn;
   AuthState get authState => this._authState;
   set authState(AuthState a) => throw "error";
 
@@ -85,11 +85,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   void onTapRedEye(bool isPw1){
-    if (isPw1) {
-      this._pw1obscure = !this._pw1obscure;
-    } else {
-      this._pw2obscure = !this._pw2obscure;
-    }
+    if (isPw1) this._pw1obscure = !this._pw1obscure;
+    if (!isPw1) this._pw2obscure = !this._pw2obscure;
     this.notifyListeners();
     return;
   }
@@ -130,9 +127,11 @@ class AuthProvider with ChangeNotifier {
     return false;
   }
 
-  Future<void> firebaseSignUp({required SignUpInfo data}) async {
+  // todo exception handling when can't save auth info to server
+  Future<bool> firebaseSignUp({required SignUpInfo data}) async {
     //if (this._hasErrors()) return;
-    //final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
+    final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
+    bool _success = false;
     final _res1 = await this._firebaseService.signup(email: data.email, pw: data.pw);
     if (_res1.runtimeType == String) {
       _res1 as String;
@@ -140,17 +139,19 @@ class AuthProvider with ChangeNotifier {
       if (_res1.contains("비밀번호")) this._pwErrorText = _res1;
     }
     if (_res1.runtimeType == UserCredential) {
-      await this.firebaseSignIn(data: data);
-      await this._firebaseService.sendAuthInfo(user: _res1 as UserCredential, name: data.name, isMale: data.isMale);
+      _res1 as UserCredential;
+      final String? _res2 = await this._firebaseService.sendAuthInfo(user: _res1, name: data.name, isMale: data.isMale);
+      if (_res2 == _res1.user?.uid) {
+        await this.firebaseSignIn(data: data);
+        _success = true;
+      }
     }
     this.notifyListeners();
-    return;
+    return _success;
   }
 
   Future<void> firebaseSignIn({required AuthAbstract data}) async {
     final _res = await this._firebaseService.signIn(email: data.email, pw: data.pw);
-    print("firebaseSignIn");
-    print(_res);
     if (_res.runtimeType == String) {
       _res as String;
       if (_res.contains("비밀번호")) this._pwErrorText = _res;
@@ -162,9 +163,9 @@ class AuthProvider with ChangeNotifier {
       if (_user != null) {
         if (!_user.emailVerified) await this._firebaseService.sendEmailVerification();
         this._userUid = _user.uid;
-        this._authState = AuthState.loggedIn;
         this.clearSubtexts();
-        await this._firebaseService.logAuth(userUid: _user.uid, isLogin: true);
+        await this._authService.logAuth(userUid: _user.uid, isLogin: true);
+        this._authState = AuthState.loggedIn;
       }
     }
     this.notifyListeners();
@@ -175,7 +176,7 @@ class AuthProvider with ChangeNotifier {
     assert(userUid != null, "userUid is null");
     await this._firebaseService.signOut();
     this._authState = AuthState.loggedOut;
-    await this._firebaseService.logAuth(userUid: userUid!, isLogin: false);
+    await this._authService.logAuth(userUid: userUid!, isLogin: false);
     this.notifyListeners();
     return;
   }

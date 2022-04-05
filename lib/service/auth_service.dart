@@ -1,4 +1,7 @@
+import '../repos/connect.dart';
+
 class AuthService {
+  Connect _connect = Connect();
 
   String? checkName({required String name}){
     if (name.isEmpty) return "ⓘ 이름을 입력해주세요.";
@@ -32,6 +35,20 @@ class AuthService {
     if (pw2.isEmpty) return "ⓘ 비밀번호를 다시 입력해주세요.";
     if (pw != pw2) return "ⓘ 비밀번호가 일치하지 않습니다.";
     return null;
+  }
+
+  Future<void> logAuth({required String userUid, required bool isLogin}) async {
+    try {
+      final Map<String, dynamic> _body = {
+        "userUid": userUid,
+        "loginTime": isLogin ? DateTime.now().toString() : null,
+        "logoutTime": !isLogin ? DateTime.now().toString() : null,
+      };
+      final Map<String, dynamic> _res = await this._connect.reqPostServer(path: "users/log", cb: (ReqModel rm) {}, body: _body);
+      print(_res);
+    } catch (e) {
+      print(e);
+    }
   }
 
 }

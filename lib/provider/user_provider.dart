@@ -4,16 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:portfolio_calendar/repos/enum.dart';
 import 'package:portfolio_calendar/service/user_service.dart';
 
-import '../models/class/day_class.dart' show DateTileData, DayData;
-import '../models/class/event_class.dart';
-import '../models/class/user_color.dart';
-import '../models/selected_month.dart';
-import '../models/time_model.dart' show Period, Time;
+import '../class/day_class.dart' show DateTileData, DayData;
+import '../class/event_class.dart';
+import '../class/user_color.dart';
+import '../class/selected_month.dart';
+import '../class/time_model.dart' show Period, Time;
 import '../repos/variables.dart' show EventColors;
 
 class UserProvider with ChangeNotifier {
   UserService _userService = UserService();
-  ProviderState providerState = ProviderState.open;
+
+  ProviderState _state = ProviderState.open;
+  ProviderState get state => this._state;
+  set state(ProviderState s) => throw "error";
 
   String? userUid;
 
@@ -26,7 +29,11 @@ class UserProvider with ChangeNotifier {
 
   void init({required String userUid}){
     this.userUid = userUid;
-    print(userUid);
+    if (this._state == ProviderState.open) {
+      this._userService.getUserColors(userUid: userUid);
+      this._state = ProviderState.complete;
+    }
+
     return;
   }
 
@@ -291,6 +298,11 @@ class UserProvider with ChangeNotifier {
     final Event _newEvent = Event(title: title, startTime: startTime, color: color, endTime: endTime);
     this._thisMonthEvents.add(_newEvent);
     this.notifyListeners();
+    return;
+  }
+
+  void changeState(ProviderState state){
+    this._state = state;
     return;
   }
 }

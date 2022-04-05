@@ -1,4 +1,4 @@
-import 'class/day_class.dart' show DateTileData, week;
+import 'day_class.dart' show DateTileData, week;
 
 abstract class MonthAbstract {
   final int year = 2022;

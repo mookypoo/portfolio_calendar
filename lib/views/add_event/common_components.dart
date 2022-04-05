@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../models/time_model.dart' show Period;
+import '../../class/time_model.dart' show Period;
 import '../../provider/time_provider.dart';
 import '../../repos/variables.dart';
 

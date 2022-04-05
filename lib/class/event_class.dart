@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:portfolio_calendar/models/time_model.dart' show Time;
+import 'package:portfolio_calendar/class/time_model.dart' show Time;
 import 'package:portfolio_calendar/repos/variables.dart';
 
 import 'day_class.dart' show DayData;
