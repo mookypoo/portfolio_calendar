@@ -6,4 +6,8 @@ class UserColor {
 
   UserColor({required this.title, required this.color});
 
+  factory UserColor.fromJson(Map<String, dynamic> json) => UserColor(
+    color: Color(json["color"] as int),
+    title: json["title"].toString(),
+  );
 }

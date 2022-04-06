@@ -17,10 +17,8 @@ class Connect {
         body: json.encode(body),
       ).timeout(Duration(seconds: 13), onTimeout: () async => await http.Response("null", 404));
       cb(ReqModel(statusCode: _res.statusCode));
-      print(_res.headers);
+
       print("connect-req post");
-      print(_res.body);
-      print(json.decode(_res.body));
       return json.decode(_res.body) as T;
     } catch (e) {
       print(e.toString());
@@ -33,15 +31,13 @@ class Connect {
     if (!path.trim().startsWith("/")) _path = "/" + _path;
 
     try {
-      http.Response _res = await http.get(
+      final http.Response _res = await http.get(
           Uri.parse(this._serverEndPoint + _path),
           headers: {...headers ?? {}, ...this._headers}).timeout(Duration(seconds: 13), onTimeout: () async => http.Response("null", 404));
       cb(ReqModel(statusCode: _res.statusCode));
-      print(_res.headers);
+
       print("connect-req get");
-      print(_res.body);
-      print(json.decode(_res.body));
-      return _res.body as T;
+      return json.decode(_res.body) as T;
     } catch (e) {
       print(e.toString());
       return null;

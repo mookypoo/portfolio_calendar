@@ -17,7 +17,7 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
-  String? _userUid;
+  String? _userUid = "eqwLGthgyHY6JAQESn6g7WPnXij2";
   String? get userUid => this._userUid;
   set userUid(String? s) => throw "error";
 

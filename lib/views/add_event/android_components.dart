@@ -58,3 +58,16 @@ class TitleTextField extends StatelessWidget {
   }
 }
 
+class EditUserColor extends StatefulWidget {
+  const EditUserColor({Key? key}) : super(key: key);
+
+  @override
+  _EditUserColorState createState() => _EditUserColorState();
+}
+
+class _EditUserColorState extends State<EditUserColor> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

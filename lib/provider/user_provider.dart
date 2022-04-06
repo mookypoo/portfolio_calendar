@@ -27,19 +27,21 @@ class UserProvider with ChangeNotifier {
     this._thisMonthEvents = this._fetchThisMonthEvents(selectedMonth: this.selectedMonth);
   }
 
-  void init({required String userUid}){
+  void init({required String userUid}) async {
     this.userUid = userUid;
     if (this._state == ProviderState.open) {
-      this._userService.getUserColors(userUid: userUid);
+      final Map<String, dynamic>? _res = await this._userService.getUserColors(userUid: userUid);
+      if (_res != null) {
+        final List<Map<String, dynamic>> _colors = List<Map<String, dynamic>>.from(_res["colors"]);
+        this._userColors = _colors.map((Map<String, dynamic> json) => UserColor.fromJson(json)).toList();
+      }
+
       this._state = ProviderState.complete;
     }
-
     return;
   }
 
-  List<UserColor> _userColors = [
-    //UserColor(title: title, color: color),
-  ];
+  List<UserColor> _userColors = [];
   List<UserColor> get userColors => [...this._userColors];
   set UserColors(List<UserColor> c) => throw "error";
 
@@ -305,4 +307,9 @@ class UserProvider with ChangeNotifier {
     this._state = state;
     return;
   }
+
+  void addColor(UserColor uc) => this._userColors.add(uc);
+
+  void removeColor(UserColor uc) => this._userColors.removeWhere((UserColor c) => c.color == uc.color);
+
 }

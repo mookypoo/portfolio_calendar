@@ -2,6 +2,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../class/time_model.dart' show Period;
+import '../../class/user_color.dart';
 import '../../provider/time_provider.dart';
 import '../../repos/variables.dart';
 
@@ -118,9 +119,13 @@ class TimeRow extends StatelessWidget {
 }
 
 class ColorCircle extends StatelessWidget {
-  const ColorCircle({Key? key, required this.color, this.onTap}) : super(key: key);
+  const ColorCircle({Key? key, required this.color, this.onTap, this.isSmall = false}) : super(key: key);
   final Color color;
   final void Function(Color color)? onTap;
+  final bool isSmall;
+
+  final double large = 22.0;
+  final double small = 18.0;
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +133,8 @@ class ColorCircle extends StatelessWidget {
       onTap: this.onTap != null ? () => this.onTap!(this.color) : null,
       child: Container(
         margin: EdgeInsets.only(right: 22.0),
-        height: 22.0,
-        width: 22.0,
+        height: this.isSmall ? small : large,
+        width: this.isSmall ? small : large,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: this.color,
@@ -139,6 +144,44 @@ class ColorCircle extends StatelessWidget {
   }
 }
 
+class UserColorRow extends StatelessWidget {
+  const UserColorRow({Key? key, required this.userColor, required this.onTap, required this.onTapRemove,required this.isEditMode, required this.icon}) : super(key: key);
+  final UserColor userColor;
+  final void Function(UserColor uc) onTap;
+  final bool isEditMode;
+  final IconData icon;
+  final void Function(UserColor userColor) onTapRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => this.onTap(this.userColor),
+          child: Container(
+            width: 250.0,
+            margin: EdgeInsets.only(bottom: 12.0),
+            child: Row(
+              children: <Widget>[
+                ColorCircle(
+                  isSmall: true,
+                  color: this.userColor.color,
+                ),
+                Text(this.userColor.title, style: TextStyle(fontSize: 17.0),),
+              ],
+            ),
+          ),
+        ),
+        this.isEditMode ? GestureDetector(
+          child: Icon(icon),
+          onTap: () => this.onTapRemove(this.userColor),
+        ) : Container(),
+      ],
+    );
+  }
+}
+
+
 class AddEventRow extends StatelessWidget {
   const AddEventRow({Key? key, required this.widget, required this.icon}) : super(key: key);
   final Widget widget;
@@ -147,7 +190,7 @@ class AddEventRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
