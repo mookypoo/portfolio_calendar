@@ -3,12 +3,19 @@ import 'package:portfolio_calendar/repos/variables.dart';
 
 import '../class/user_color.dart';
 
-class AddEventProvider with ChangeNotifier {
+enum AddEventMode {
+  normal, addColor, deleteColor, addNote
+}
 
+class AddEventProvider with ChangeNotifier {
   AddEventProvider(this.userColors){
     print("add event provider init");
     this.init();
   }
+
+  AddEventMode _addEventMode = AddEventMode.normal;
+  AddEventMode get addEventMode => this._addEventMode;
+  set addEventMode(AddEventMode a) => throw "error";
 
   List<Color> _eventColors = [
     EventColors.red, EventColors.orange, EventColors.yellow, EventColors.green, EventColors.teal,
@@ -35,15 +42,11 @@ class AddEventProvider with ChangeNotifier {
   Color get newColor => this._newColor;
   set newColor(Color c) => throw "error";
 
-  bool _isAddMode = false;
-  bool get isAddMode => this._isAddMode;
-  set isAddMode(bool b) => throw "error";
-
-  bool _isEditMode = false;
-  bool get isEditMode => this._isEditMode;
-  set isEditMode(bool b) => throw "error";
-
   UserColor get newUserColor => UserColor(color: this._newColor, title: this._newTitle);
+
+  String _note = "";
+  String get note => this._note;
+  set note(String s) => throw "error";
 
   void init(){
     this.userColors.forEach((UserColor uc) {
@@ -51,8 +54,23 @@ class AddEventProvider with ChangeNotifier {
     });
   }
 
-  void switchMode(){
-    this._isAddMode = !this._isAddMode;
+  void addColorMode(){
+    if (this._addEventMode == AddEventMode.normal) {
+      this._addEventMode = AddEventMode.addColor;
+    } else {
+      this._addEventMode = AddEventMode.normal;
+      this._newColor = MyColors.transparent;
+      this._newTitle = "";
+    }
+    this.notifyListeners();
+  }
+
+  void deleteMode(){
+    if (this._addEventMode == AddEventMode.normal) {
+      this._addEventMode = AddEventMode.deleteColor;
+    } else {
+      this._addEventMode = AddEventMode.normal;
+    }
     this.notifyListeners();
   }
 
@@ -71,16 +89,29 @@ class AddEventProvider with ChangeNotifier {
 
   void addNewColor(){
     this.userColors.add(this.newUserColor);
-    this.notifyListeners();
+    this.init();
+    this.addColorMode();
   }
 
   void removeColor(UserColor uc){
     this.userColors.removeWhere((UserColor c) => c.color == uc.color);
+    this._eventColors.add(uc.color);
+    this.deleteMode();
+  }
+
+  void addNoteMode({bool? cancel}){
+    if (this._addEventMode == AddEventMode.normal) {
+      this._addEventMode = AddEventMode.addNote;
+    } else {
+      this._addEventMode = AddEventMode.normal;
+      if (cancel == true) this._note = "";
+    }
     this.notifyListeners();
   }
 
-  void editMode(){
-    this._isEditMode = !this._isEditMode;
-    this.notifyListeners();
+  void saveNote(String s){
+    this._note = s;
+    this.addNoteMode();
   }
+
 }

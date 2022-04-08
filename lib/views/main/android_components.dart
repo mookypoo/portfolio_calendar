@@ -115,8 +115,8 @@ class DateTile extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: this.data.startEvents.length,
-                    itemBuilder: (BuildContext context, int i) => this._events(event: this.data.startEvents[i]),
+                    itemCount: this.data.events.length,
+                    itemBuilder: (BuildContext context, int i) => this._events(event: this.data.events[i]),
                   ),
                 ),
               ],

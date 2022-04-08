@@ -3,18 +3,20 @@ import 'package:flutter/widgets.dart';
 
 import '../../class/time_model.dart' show Period;
 import '../../class/user_color.dart';
+import '../../provider/add_event_provider.dart' show AddEventMode;
 import '../../provider/time_provider.dart';
+import '../../repos/notifications.dart';
 import '../../repos/variables.dart';
 
 class TimeRow extends StatelessWidget {
   TimeRow({Key? key, required this.text, required this.widget, required this.period, required this.timeProvider, required this.isExpanded, required this.hourCt, required this.periodCt}) : super(key: key);
   final String text;
   final Widget widget;
-  TimeProvider timeProvider;
-  bool isExpanded;
-  Period period;
-  ScrollController hourCt;
-  ScrollController periodCt;
+  final TimeProvider timeProvider;
+  final bool isExpanded;
+  final Period period;
+  final ScrollController hourCt;
+  final ScrollController periodCt;
 
   Widget _scrollWidget({bool isPeriod = false, ScrollController? ct, required void Function(int i) onSelectedItemChanged, required List<Widget> children}){
     return Container(
@@ -38,9 +40,7 @@ class TimeRow extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () {
-              this.timeProvider.expand(this.text);
-            },
+            onTap: () => this.timeProvider.expand(this.text),
             child: Container(
               height: 20.0,
               width: 280.0,
@@ -56,7 +56,7 @@ class TimeRow extends StatelessWidget {
           this.isExpanded ? Stack(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 10.0),
                 width: 290.0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -81,7 +81,7 @@ class TimeRow extends StatelessWidget {
                       )).toList(),
                       ct: this.hourCt,
                     ),
-                    Text(":", style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),),
+                    Text(":", style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),),
                     this._scrollWidget(
                       onSelectedItemChanged: this.timeProvider.changeSelectedMinute,
                       children: this.timeProvider.minuteList.map<Widget>((int i) => Container(
@@ -105,10 +105,7 @@ class TimeRow extends StatelessWidget {
                 width: 290.0,
                 left: 0.0,
                 top: 39.0,
-                child: Container(
-                  height: 30.0,
-                  color: MyColors.secondary,
-                ),
+                child: Container(height: 30.0, color: MyColors.secondary,),
               ),
             ],
           ) : Container(),
@@ -132,7 +129,7 @@ class ColorCircle extends StatelessWidget {
     return GestureDetector(
       onTap: this.onTap != null ? () => this.onTap!(this.color) : null,
       child: Container(
-        margin: EdgeInsets.only(right: 22.0),
+        margin: const EdgeInsets.only(right: 22.0),
         height: this.isSmall ? small : large,
         width: this.isSmall ? small : large,
         decoration: BoxDecoration(
@@ -145,10 +142,10 @@ class ColorCircle extends StatelessWidget {
 }
 
 class UserColorRow extends StatelessWidget {
-  const UserColorRow({Key? key, required this.userColor, required this.onTap, required this.onTapRemove,required this.isEditMode, required this.icon}) : super(key: key);
+  const UserColorRow({Key? key, required this.userColor, required this.onTap, required this.onTapRemove, required this.mode, required this.icon}) : super(key: key);
   final UserColor userColor;
   final void Function(UserColor uc) onTap;
-  final bool isEditMode;
+  final AddEventMode mode;
   final IconData icon;
   final void Function(UserColor userColor) onTapRemove;
 
@@ -159,21 +156,18 @@ class UserColorRow extends StatelessWidget {
         GestureDetector(
           onTap: () => this.onTap(this.userColor),
           child: Container(
-            width: 250.0,
-            margin: EdgeInsets.only(bottom: 12.0),
+            width: 260.0,
+            margin: const EdgeInsets.only(bottom: 12.0),
             child: Row(
               children: <Widget>[
-                ColorCircle(
-                  isSmall: true,
-                  color: this.userColor.color,
-                ),
-                Text(this.userColor.title, style: TextStyle(fontSize: 17.0),),
+                ColorCircle(isSmall: true, color: this.userColor.color,),
+                Text(this.userColor.title, style: const TextStyle(fontSize: 17.0),),
               ],
             ),
           ),
         ),
-        this.isEditMode ? GestureDetector(
-          child: Icon(icon),
+        this.mode == AddEventMode.deleteColor ? GestureDetector(
+          child: Icon(icon, color: const Color.fromRGBO(0, 0, 0, 1.0),),
           onTap: () => this.onTapRemove(this.userColor),
         ) : Container(),
       ],
@@ -181,9 +175,8 @@ class UserColorRow extends StatelessWidget {
   }
 }
 
-
-class AddEventRow extends StatelessWidget {
-  const AddEventRow({Key? key, required this.widget, required this.icon}) : super(key: key);
+class CategoryRow extends StatelessWidget {
+  const CategoryRow({Key? key, required this.widget, required this.icon}) : super(key: key);
   final Widget widget;
   final Widget icon;
 
@@ -193,12 +186,9 @@ class AddEventRow extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           this.icon,
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: this.widget,
-          ),
+          Padding(padding: const EdgeInsets.only(left: 20.0), child: this.widget,),
         ],
       ),
     );
@@ -213,9 +203,7 @@ class RepeatAllDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: Container(
         height: 20.0,
         margin: const EdgeInsets.only(bottom: 25.0),

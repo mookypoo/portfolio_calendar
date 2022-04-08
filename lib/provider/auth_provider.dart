@@ -17,7 +17,8 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
-  String? _userUid = "eqwLGthgyHY6JAQESn6g7WPnXij2";
+  // "eqwLGthgyHY6JAQESn6g7WPnXij2"
+  String? _userUid;
   String? get userUid => this._userUid;
   set userUid(String? s) => throw "error";
 
@@ -159,6 +160,7 @@ class AuthProvider with ChangeNotifier {
       if (_res.contains("가능한")) this._pwErrorText = _res;
     }
     if (_res.runtimeType == UserCredential) {
+      print(_res);
       final User? _user = (_res as UserCredential).user;
       if (_user != null) {
         if (!_user.emailVerified) await this._firebaseService.sendEmailVerification();

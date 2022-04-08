@@ -36,6 +36,14 @@ class DayData extends DayAbstract {
   @override
   final int? weekday;
 
+  Map<String, dynamic> toJson(){
+    return {
+      "year": year,
+      "month": month,
+      "date": date,
+    };
+  }
+
   factory DayData.newDay(DayData newDate){
     return DayData(year: newDate.year, month: newDate.month, date: newDate.date,);
   }
@@ -85,8 +93,7 @@ class DateTileData extends DayData {
   @override
   int? weekday;
 
-  List<Event> startEvents = [];
-  List<Event> endEvents = [];
+  List<Event> events = [];
 
   DateTileData({required this.date, required this.month, required this.year, List<Event>? events})
     : super(date: date, year: year, month: month) {
@@ -95,8 +102,7 @@ class DateTileData extends DayData {
 
   void _events({required List<Event> events}){
     for (int i = 0; i < events.length; i++){
-      if (events[i].startTime.day.date == this.date && events[i].startTime.day.month == this.month) this.startEvents.add(events[i]);
-      if (events[i].endTime.day.date == this.date && events[i].startTime.day.month == this.month) this.endEvents.add(events[i]);
+      if (events[i].day.date == this.date && events[i].day.month == this.month) this.events.add(events[i]);
     }
     return;
   }

@@ -1,28 +1,37 @@
 import 'dart:ui';
 
 import 'package:portfolio_calendar/class/time_model.dart' show Time;
-import 'package:portfolio_calendar/repos/variables.dart';
+import 'package:uuid/uuid.dart';
+
 
 import 'day_class.dart' show DayData;
 
-
-class EventTime {
-  final DayData day;
-  final Time time;
-
-  EventTime({required this.day, required this.time});
-}
-
 class Event {
+  final String uid = Uuid().v1();
   final String title;
-  final EventTime startTime;
-  final EventTime endTime;
-
+  final DayData day;
+  final Time startTime;
+  final Time endTime;
   final Color color;
-
   final String? notes;
 
-  Event({required this.endTime, required this.startTime, this.color = EventColors.orange, this.notes, required this.title});
+  Event({required this.title, required this.day, required this.startTime, required this.endTime, this.notes, required this.color});
+
+  Map<String, dynamic> toJsonAll(){
+    return {
+      "eventUid": this.uid,
+      "title": this.title,
+      "day": this.day.toJson(),
+      "startTime": this.startTime.toJson(),
+      "endTime": this.endTime.toJson(),
+      "color": this.color.value,
+      "notes": this.notes,
+    };
+  }
+
+  Map<String, String> toJsonUid(){
+    return {"eventUid": this.uid};
+  }
 }
 
 

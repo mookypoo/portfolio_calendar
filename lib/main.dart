@@ -6,17 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:portfolio_calendar/provider/add_event_provider.dart';
 import 'package:portfolio_calendar/provider/auth_provider.dart';
 import 'package:portfolio_calendar/provider/calendar_provider.dart';
+import 'package:portfolio_calendar/provider/notification_provider.dart';
 import 'package:portfolio_calendar/provider/time_provider.dart';
 import 'package:portfolio_calendar/provider/user_provider.dart';
+import 'package:portfolio_calendar/repos/notifications.dart';
 import 'package:portfolio_calendar/repos/variables.dart';
 import 'package:portfolio_calendar/service/firebase_service.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
 import 'package:portfolio_calendar/views/main/main_page.dart';
+import 'package:portfolio_calendar/views/notification/notification_page.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService.initializeFirebase();
+  await Notifications().init();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown, DeviceOrientation.portraitUp,
   ]);
@@ -44,22 +48,65 @@ class PortfolioCalendar extends StatelessWidget {
       ),
 
       onGenerateRoute: (RouteSettings route) {
-        if (route.name == AddEventPage.routeName) {
-          return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider<TimeProvider>(
-                  create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+        // if (route.name == AddEventPage.routeName) {
+        //   Widget _page = AddEventPage();
+        //
+        //   return MaterialPageRoute(
+        //     builder: (BuildContext context) => MultiProvider(
+        //       providers: [
+        //         ChangeNotifierProvider<TimeProvider>(
+        //           create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+        //           child: NotificationWidget(),
+        //         ),
+        //         ChangeNotifierProvider<AddEventProvider>(
+        //           create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
+        //         ),
+        //         ChangeNotifierProvider<NotificationProvider>(
+        //           create: (BuildContext ctx) => NotificationProvider(
+        //             ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
+        //           ),
+        //           child: NotificationWidget(),
+        //         ),
+        //       ],
+        //       child: AddEventPage(),
+        //     ),
+        //     settings: RouteSettings(name: AddEventPage.routeName),
+        //   );
+        // }
+        // if (route.name == NotificationPage.routeName) {
+        //   return MaterialPageRoute(
+        //     builder: (BuildContext context) => ChangeNotifierProvider<NotificationProvider>(
+        //       create: (BuildContext ctx) => NotificationProvider(
+        //         ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
+        //       ),
+        //       child: NotificationPage(),
+        //     ),
+        //   );
+        // }
+        Widget _page = AddEventPage();
+        if (route.name == NotificationWidget.routeName) _page = NotificationWidget();
+
+        return MaterialPageRoute(
+          builder: (BuildContext context) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider<TimeProvider>(
+                create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+                child: NotificationWidget(),
+              ),
+              ChangeNotifierProvider<AddEventProvider>(
+                create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
+              ),
+              ChangeNotifierProvider<NotificationProvider>(
+                create: (BuildContext ctx) => NotificationProvider(
+                    ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
                 ),
-                ChangeNotifierProvider<AddEventProvider>(
-                  create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
-                ),
-              ],
-              child: AddEventPage(),
-            ),
-            settings: RouteSettings(name: AddEventPage.routeName),
-          );
-        }
+                child: NotificationWidget(),
+              ),
+            ],
+            child: _page,
+          ),
+          settings: RouteSettings(name: AddEventPage.routeName),
+        );
       },
       home: MainPage(),
     );

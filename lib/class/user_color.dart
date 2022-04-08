@@ -10,4 +10,11 @@ class UserColor {
     color: Color(json["color"] as int),
     title: json["title"].toString(),
   );
+
+  Map<String, dynamic> toJson(){
+    return {
+      "color": this.color.value,
+      "title": this.title,
+    };
+  }
 }

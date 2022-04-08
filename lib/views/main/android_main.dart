@@ -95,10 +95,7 @@ class AndroidMain extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.primary,
         child: Icon(Icons.add),
-        onPressed: () async {
-          final bool _save = await Navigator.of(context).pushNamed<bool>(AddEventPage.routeName) ?? false;
-          print(_save);
-        },
+        onPressed: () async => await Navigator.of(context).pushNamed(AddEventPage.routeName),
       ),
     );
   }

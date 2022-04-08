@@ -40,5 +40,13 @@ class Time extends TimeAbstract {
 
   Time({required this.hour, required this.minute, required this.period});
 
+  Map<String, dynamic> toJson(){
+    return {
+      "hour": hour,
+      "minute": minute,
+      "period": period.toString(),
+    };
+  }
+
   String get time => "${this.hour}:${this.minute.toString().padLeft(2, "0")} ${this.period.toString().substring(7)}";
 }

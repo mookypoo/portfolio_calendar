@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:portfolio_calendar/service/time_service.dart';
 
 import '../class/day_class.dart' show DayData;
-import '../class/event_class.dart' show EventTime;
 import '../class/time_model.dart' show Period, Time;
 
 class TimeProvider with ChangeNotifier {
@@ -61,8 +60,8 @@ class TimeProvider with ChangeNotifier {
   List<int> get hours => [...this._hours];
   set hours(List<int> l) => throw "error";
 
-  EventTime get startData => this._startData();
-  EventTime get endData => this._endData();
+  Time get startData => Time(period: this._startPeriod, minute: this._startMinute, hour: this._startHour);
+  Time get endData => Time(period: this._endPeriod, minute: this._endMinute, hour: this._endHour);
 
   TimeProvider(this.day){
     print("time provider init");
@@ -157,15 +156,5 @@ class TimeProvider with ChangeNotifier {
     }
     this.notifyListeners();
     return _shouldScroll;
-  }
-
-  EventTime _startData(){
-    final Time _time = Time(hour: this._startHour, minute: this._startMinute, period: this._startPeriod);
-    return EventTime(day: this.day, time: _time);
-  }
-
-  EventTime _endData(){
-    final Time _time = Time(hour: this._endHour, minute: this._endMinute, period: this._endPeriod);
-    return EventTime(day: this.day, time: _time);
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:portfolio_calendar/repos/enum.dart';
 import 'package:portfolio_calendar/service/user_service.dart';
@@ -18,7 +16,7 @@ class UserProvider with ChangeNotifier {
   ProviderState get state => this._state;
   set state(ProviderState s) => throw "error";
 
-  String? userUid;
+  String userUid = "";
 
   SelectedMonth selectedMonth;
 
@@ -48,225 +46,153 @@ class UserProvider with ChangeNotifier {
   List<Event> _userEvents = [
     Event(
       color: EventColors.yellow,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.AM,
-        ),
-        day: DayData(
-            month: 3,
-            year: 2022,
-            date: 30
-        ),
+      day: DayData(
+        month: 3,
+        year: 2022,
+        date: 30
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.AM,
-        ),
-        day: DayData(
-            month: 3,
-            year: 2022,
-            date: 30
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.AM,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.AM,
       ),
       title: "기몌수 홍대",
     ),
     Event(
       color: EventColors.green,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 3,
-          year: 2022,
-          date: 30,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-            month: 3,
-            year: 2022,
-            date: 30
-        ),
+      day: DayData(
+        month: 3,
+        year: 2022,
+        date: 30,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Study Coding",
     ),
     Event(
       color: EventColors.purple,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 4,
-          year: 2022,
-          date: 2,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-            month: 4,
-          year: 2022,
-          date: 2,
-        ),
+      day: DayData(
+        month: 4,
+        year: 2022,
+        date: 2,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Tattoo",
     ),
     Event(
       color: EventColors.green,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 4,
-          year: 2022,
-          date: 5,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 4,
-          year: 2022,
-          date: 5,
-        ),
+      day: DayData(
+        month: 4,
+        year: 2022,
+        date: 5,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Mom's Bday",
     ),
     Event(
       color: EventColors.red,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-            month: 4,
-            year: 2022,
-            date: 20
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-            month: 4,
-            year: 2022,
-            date: 20
-        ),
+      day: DayData(
+          month: 4,
+          year: 2022,
+          date: 20
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Sarah at Gangnam",
     ),
     Event(
       color: EventColors.orange,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 4,
-          year: 2022,
-          date: 30,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 4,
-          year: 2022,
-          date: 30,
-        ),
+      day: DayData(
+        month: 4,
+        year: 2022,
+        date: 30,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Team meeting",
     ),
     Event(
       color: EventColors.purple,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 5,
-          year: 2022,
-          date: 6,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 5,
-          year: 2022,
-          date: 6,
-        ),
+      day: DayData(
+        month: 5,
+        year: 2022,
+        date: 6,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "My bday",
     ),
     Event(
       color: EventColors.red,
-      startTime: EventTime(
-        time: Time(
-          hour: 8,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 5,
-          year: 2022,
-          date: 31,
-        ),
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
       ),
-      endTime: EventTime(
-        time: Time(
-          hour: 9,
-          minute: 0,
-          period: Period.PM,
-        ),
-        day: DayData(
-          month: 5,
-          year: 2022,
-          date: 31,
-        ),
+      day: DayData(
+        month: 5,
+        year: 2022,
+        date: 31,
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
       ),
       title: "Team meeting",
     ),
@@ -282,13 +208,13 @@ class UserProvider with ChangeNotifier {
     selectedMonth.weekList.forEach((List<DateTileData> week) {
       week.forEach((DateTileData data) {
         if (selectedMonth.weekList.indexOf(week) == 0 && data.date < 32 && data.date > 24) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month - 1 && e.startTime.day.date == data.date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.day.month == selectedMonth.month - 1 && e.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
         } else if (selectedMonth.weekList.indexOf(week) == selectedMonth.weekList.length - 1 && data.date < 7) {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month + 1 && e.startTime.day.date == data.date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.day.month == selectedMonth.month + 1 && e.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
         } else {
-          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.startTime.day.month == selectedMonth.month && e.startTime.day.date == data.date);
+          final Iterable<Event> _indices = this._userEvents.where((Event e) => e.day.month == selectedMonth.month && e.day.date == data.date);
           _thisMonthEvents.addAll(_indices);
         }
       });
@@ -296,9 +222,9 @@ class UserProvider with ChangeNotifier {
     return _thisMonthEvents;
   }
 
-  void addEvent({required String title, required EventTime startTime, required EventTime endTime, required Color color}){
-    final Event _newEvent = Event(title: title, startTime: startTime, color: color, endTime: endTime);
-    this._thisMonthEvents.add(_newEvent);
+  void addEvent(Event newEvent){
+    this._thisMonthEvents.add(newEvent);
+    this._userService.eventActions(userUid: this.userUid, event: newEvent, action: "add");
     this.notifyListeners();
     return;
   }
@@ -308,8 +234,14 @@ class UserProvider with ChangeNotifier {
     return;
   }
 
-  void addColor(UserColor uc) => this._userColors.add(uc);
+  void addColor(UserColor uc){
+    this._userColors.add(uc);
+    this._userService.colorActions(userUid: this.userUid, action: "add", uc: uc);
+  }
 
-  void removeColor(UserColor uc) => this._userColors.removeWhere((UserColor c) => c.color == uc.color);
+  void removeColor(UserColor uc){
+    this._userColors.removeWhere((UserColor c) => c.color == uc.color);
+    this._userService.colorActions(userUid: this.userUid, action: "delete", uc: uc);
+  }
 
 }
