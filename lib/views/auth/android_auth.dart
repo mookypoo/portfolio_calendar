@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_calendar/class/auth_class.dart';
-import 'package:portfolio_calendar/views/auth/android_components.dart';
-import 'package:portfolio_calendar/views/auth/common_components.dart';
+import 'package:portfolio_calendar/views/auth/components/android_components.dart';
+import 'package:portfolio_calendar/views/auth/components/common_components.dart';
 
 import '../../provider/auth_provider.dart';
 

@@ -25,6 +25,8 @@ class MainPage extends StatelessWidget {
       print("is logged in");
     }
 
-    return Platform.isAndroid ? AndroidMain(calendarProvider: _calendarProvider, userProvider: _userProvider, authProvider: _authProvider,) : IosMain();
+    return Platform.isAndroid
+      ? AndroidMain(calendarProvider: _calendarProvider, userProvider: _userProvider, authProvider: _authProvider,)
+      : IosMain(calendarProvider: _calendarProvider, userProvider: _userProvider, authProvider: _authProvider,);
   }
 }

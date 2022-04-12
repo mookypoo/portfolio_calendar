@@ -38,44 +38,6 @@ class BackgroundContainer extends StatelessWidget {
   }
 }
 
-
-class GenderWidget extends StatelessWidget {
-  const GenderWidget({Key? key, required this.maleIcon, required this.isMale, required this.femaleIcon, required this.onSelect}) : super(key: key);
-
-  final IconData maleIcon;
-  final IconData femaleIcon;
-  final bool isMale;
-  final void Function(bool b) onSelect;
-
-  Widget _gender({required IconData icon, required bool isMale}){
-    return GestureDetector(
-      onTap: () => this.onSelect(isMale),
-      child: Container(
-        margin: const EdgeInsets.only(left: 15.0),
-        decoration: BoxDecoration(
-          border: isMale ? Border.all() : null,
-        ),
-        child: Icon(icon),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0, top: 25.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const Text("성별", style: TextStyle(fontSize: 16.0,)),
-          this._gender(icon: this.maleIcon, isMale: this.isMale,),
-          this._gender(icon: this.femaleIcon, isMale: !this.isMale,),
-        ],
-      ),
-    );
-  }
-}
-
 class SignUpBottom extends StatelessWidget {
   SignUpBottom({Key? key, required this.onTapSignUp, required this.switchPage}) : super(key: key);
 

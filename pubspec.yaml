@@ -42,7 +42,6 @@ dependencies:
   uuid: ^3.0.6
   sqflite: ^2.0.2
   flutter_local_notifications: ^9.4.0
-  auto_route: ^3.2.4
 
 dev_dependencies:
   flutter_test:

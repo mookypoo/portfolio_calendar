@@ -17,6 +17,6 @@ class AuthPage extends StatelessWidget {
 
     return Platform.isAndroid
       ? AndroidAuth(authProvider: _authProvider,)
-      : IosAuth();
+      : IosAuth(authProvider: _authProvider,);
   }
 }

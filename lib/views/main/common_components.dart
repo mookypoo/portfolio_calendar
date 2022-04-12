@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../class/day_class.dart' show DateTileData, DayData;
+import '../../class/day_class.dart';
 import '../../class/event_class.dart';
-import '../../repos/variables.dart' show MyColors, Today;
+import '../../repos/variables.dart';
 import '../../service/calendar_service.dart';
 
 class CalendarTopRow extends StatelessWidget {
@@ -11,15 +11,26 @@ class CalendarTopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map<Widget>((String s) => Container(
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color.fromRGBO(192, 192, 192, 1.0), width: 2.0),),
-        ),
-        height: 45.0,
-        width: MediaQuery.of(context).size.width/7,
-        child: Text(s, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: s == "Sun" ? const Color.fromRGBO(216, 31, 42, 1.0) : null,)),
-      )).toList(),
+      children: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map<Widget>((
+          String s) =>
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(
+                  color: Color.fromRGBO(192, 192, 192, 1.0), width: 2.0),),
+            ),
+            height: 45.0,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width / 7,
+            child: Text(s, style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              color: s == "Sun"
+                  ? const Color.fromRGBO(216, 31, 42, 1.0)
+                  : null,)),
+          )).toList(),
     );
   }
 }
@@ -52,7 +63,7 @@ class DateTile extends StatelessWidget {
         shape: BoxShape.circle,
         color: MyColors.primary,
       ),
-      child: Text(data.date.toString(), style: TextStyle(fontSize: 15.0, color: Colors.white),),
+      child: Text(data.date.toString(), style: TextStyle(fontSize: 15.0, color: Color.fromRGBO(255, 255, 255, 1.0)),),
     );
   }
 
@@ -75,7 +86,7 @@ class DateTile extends StatelessWidget {
             width: 5.0,
             color: event.color,
           ),
-          Expanded(child: Text(event.title, style: TextStyle(fontSize: 13.0), overflow: TextOverflow.clip,))
+          Expanded(child: Text(event.title, style: const TextStyle(fontSize: 13.0), overflow: TextOverflow.clip,))
         ],
       ),
     );
@@ -83,7 +94,7 @@ class DateTile extends StatelessWidget {
 
   Color? _tileColor({required DateTileData data}){
     if (this.selectedMonth != data.month) {
-      return Colors.grey.withOpacity(0.17);
+      return Color.fromRGBO(211, 211, 211, 0.17);
     } else {
       return null;
     }
@@ -93,10 +104,8 @@ class DateTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        this.onPressed(this.data);
-      },
+    return GestureDetector(
+      onTap: () => this.onPressed(this.data),
       child: Stack(
         children: <Widget>[
           Container(
@@ -124,7 +133,7 @@ class DateTile extends StatelessWidget {
           ),
           Container(
             height: 110.0,
-            width:  MediaQuery.of(context).size.width/7,
+            width: MediaQuery.of(context).size.width/7,
             color: this._tileColor(data: this.data),
           ),
         ],

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:portfolio_calendar/class/day_class.dart';
 import 'package:portfolio_calendar/provider/calendar_provider.dart';
 import 'package:portfolio_calendar/views/add_event/add_event_page.dart';
-import 'package:portfolio_calendar/views/main/android_components.dart';
 
 import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/enum.dart';
 import '../../repos/variables.dart' show MyColors;
+import 'common_components.dart';
 
 class AndroidMain extends StatelessWidget {
   const AndroidMain({Key? key, required this.calendarProvider, required this.userProvider, required this.authProvider}) : super(key: key);

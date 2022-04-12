@@ -21,6 +21,6 @@ class AddEventPage extends StatelessWidget {
 
     return Platform.isAndroid
         ? AndroidAddEvent(timeProvider: _timeProvider, userProvider: _userProvider, addEventProvider: _addEventProvider,)
-        : IosAddEvent();
+        : IosAddEvent(timeProvider: _timeProvider, userProvider: _userProvider, addEventProvider: _addEventProvider,);
   }
 }

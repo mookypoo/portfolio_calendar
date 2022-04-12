@@ -10,9 +10,10 @@ class AndroidNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Container(
+    return Container(
+      width: 100.0,
+      height: 100.0,
+      child: Material(
         child: Text(this.timeProvider.startTime),
       ),
     );

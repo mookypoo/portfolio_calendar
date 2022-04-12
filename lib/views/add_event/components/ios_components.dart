@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:portfolio_calendar/views/add_event/common_components.dart' show ColorCircle, UserColorRow;
+import 'package:flutter/cupertino.dart';
 
-import '../../class/user_color.dart';
-import '../../provider/add_event_provider.dart';
-import '../../repos/notifications.dart';
-import '../../repos/variables.dart';
-import '../notification/notification_page.dart';
+import '../../../class/user_color.dart';
+import '../../../provider/add_event_provider.dart';
+import '../../../repos/variables.dart' show MyColors;
+import 'common_components.dart';
+
+const TextStyle _style = TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary);
 
 class ColorTopRow extends StatelessWidget {
   const ColorTopRow({Key? key, required this.addEventProvider, required this.removeColor}) : super(key: key);
@@ -21,14 +21,14 @@ class ColorTopRow extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text("Your Colors", style: Theme.of(context).textTheme.bodyText1,),
+              Text("Your Colors", style: _style),
               this.addEventProvider.addEventMode != AddEventMode.deleteColor ? GestureDetector(
                 onTap: this.addEventProvider.addColorMode,
-                child: Text("Add", style: Theme.of(context).textTheme.bodyText1,),
+                child: Text("Add", style: _style),
               ) : Container(),
               GestureDetector(
                 onTap: this.addEventProvider.deleteMode,
-                child: Text(this.addEventProvider.addEventMode == AddEventMode.deleteColor ? "Cancel" : "Delete", style: Theme.of(context).textTheme.bodyText1,),
+                child: Text(this.addEventProvider.addEventMode == AddEventMode.deleteColor ? "Cancel" : "Delete", style: _style),
               ),
             ],
           ),
@@ -43,7 +43,7 @@ class ColorTopRow extends StatelessWidget {
                 this.removeColor(uc);
                 this.addEventProvider.removeColor(uc);
               },
-              icon: Icons.remove,
+              icon: CupertinoIcons.delete,
               mode: this.addEventProvider.addEventMode,
               userColor: this.addEventProvider.userColors[index],
               onTap: this.addEventProvider.changeColor,
@@ -53,35 +53,6 @@ class ColorTopRow extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class AddColorTopRow extends StatelessWidget {
-  const AddColorTopRow({Key? key, required this.addEventProvider, required this.addColor}) : super(key: key);
-  final AddEventProvider addEventProvider;
-  final void Function(UserColor uc) addColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 290.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          GestureDetector(
-            child: Text("Cancel", style: Theme.of(context).textTheme.bodyText1,),
-            onTap: this.addEventProvider.addColorMode,
-          ),
-          GestureDetector(
-            child: Text("Add", style: Theme.of(context).textTheme.bodyText1,),
-            onTap: () {
-              this.addColor(this.addEventProvider.newUserColor);
-              this.addEventProvider.addNewColor();
-            },
-          ),
-        ],
-      ),
     );
   }
 }
@@ -102,15 +73,10 @@ class AddColorWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: TextField(
+                child: CupertinoTextField(
                   onChanged: this.addEventProvider.onChangedNewTitle,
                   cursorColor: MyColors.primary,
-                  decoration: InputDecoration(
-                    hintText: "Title",
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: MyColors.primary)),
-                    contentPadding: const EdgeInsets.only(bottom: 8.0, top: 10.0),
-                    isDense: true,
-                  ),
+                  placeholder: "Title",
                 ),
               ),
               ColorCircle(color: this.addEventProvider.newColor),
@@ -118,7 +84,7 @@ class AddColorWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Text("Available Colors", style: Theme.of(context).textTheme.bodyText1),
+            child: Text("Available Colors", style: _style),
           ),
           Expanded(
             child: ListView.builder(
@@ -136,54 +102,19 @@ class AddColorWidget extends StatelessWidget {
   }
 }
 
-// class AddNotification extends StatelessWidget {
-//   const AddNotification({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       child: Text("Add notification",style: Theme.of(context).textTheme.bodyText1, ),
-//       onTap: () async {
-//
-//       },
-//     );
-//   }
-// }
-
-class AddNotification extends StatefulWidget {
+class AddNotification extends StatelessWidget {
   const AddNotification({Key? key}) : super(key: key);
-
-  @override
-  State<AddNotification> createState() => _AddNotificationState();
-}
-
-class _AddNotificationState extends State<AddNotification> {
-  bool _isExpand = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Stack(
-        children: <Widget>[
-          Text("Add notification",style: Theme.of(context).textTheme.bodyText1, ),
-          this._isExpand ? Positioned(
-            child: Material(
-                child: Container(
-                  height: 100.0,
-                    width: 100.0,
-                    child: Text("YOOOOOOOOO"))),
-          ) : Container(),
-        ],
-      ),
-      onTap: () {
-        this.setState(() {
-          this._isExpand = !this._isExpand;
-        });
+      child: Text("Add notification",style: _style),
+      onTap: () async {
+        //wait Navigator.of(context).push(ModalRoute)
       },
     );
   }
 }
-
 
 class BottomWidget extends StatelessWidget {
   const BottomWidget({Key? key, this.onPressed, required this.text, required this.save}) : super(key: key);
@@ -200,8 +131,7 @@ class BottomWidget extends StatelessWidget {
       ),
       height: 50.0,
       width: MediaQuery.of(context).size.width/2,
-      child: TextButton(
-        style: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.1))),
+      child: CupertinoButton(
         child: Text(text, style: TextStyle(fontSize: 18.0, color: MyColors.primary),),
         onPressed: () {
           if (this.onPressed != null) this.onPressed!();
@@ -213,9 +143,9 @@ class BottomWidget extends StatelessWidget {
 }
 
 class TitleTextField extends StatelessWidget {
-  TitleTextField({Key? key, required this.textCt, required this.color}) : super(key: key);
-  TextEditingController textCt;
-  Color color;
+  const TitleTextField({Key? key, required this.textCt, required this.color}) : super(key: key);
+  final TextEditingController textCt;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -225,15 +155,11 @@ class TitleTextField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            child: TextField(
+            child: CupertinoTextField(
               controller: this.textCt,
               cursorColor: MyColors.primary,
               style: TextStyle(fontSize: 23.0),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Title",
-                contentPadding: const EdgeInsets.only(left: 20.0, top: 15.0, bottom: 10.0),
-              ),
+              placeholder: "Title",
             ),
           ),
           ColorCircle(color: color),
@@ -262,28 +188,23 @@ class AddNotes extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () => this.addEventProvider.addNoteMode(cancel: true),
-                  child: Text(this.addEventProvider.addEventMode == AddEventMode.addNote ? "Cancel / Delete" : "Add notes", style: Theme.of(context).textTheme.bodyText1, ),
+                  child: Text(this.addEventProvider.addEventMode == AddEventMode.addNote ? "Cancel / Delete" : "Add notes", style: _style),
                 ),
                 this.addEventProvider.addEventMode == AddEventMode.addNote ? GestureDetector(
                   onTap: () => this.addEventProvider.saveNote(this.ct.text),
-                  child: Text("Save", style: Theme.of(context).textTheme.bodyText1, ),
+                  child: Text("Save", style: _style),
                 ) : Container(),
               ],
             ),
           ),
           this.addEventProvider.addEventMode == AddEventMode.addNote
-            ? Container(
-              width: 290.0,
-              child: TextField(
-                controller: this.ct..text = this.addEventProvider.note,
-                maxLines: null,
-                decoration: InputDecoration(
-                  constraints: BoxConstraints(),
-                  isDense: true,
-                  contentPadding: const EdgeInsets.only(bottom: 7.0, top: 13.0),
-                ),
-              ),
-            ) : Container(),
+              ? Container(
+            width: 290.0,
+            child: CupertinoTextField(
+              controller: this.ct..text = this.addEventProvider.note,
+              maxLines: null,
+            ),
+          ) : Container(),
           this.addEventProvider.addEventMode != AddEventMode.addNote ? Text(this.addEventProvider.note) : Container(),
         ],
       ),

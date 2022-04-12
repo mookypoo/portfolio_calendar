@@ -31,7 +31,13 @@ class PortfolioCalendar extends StatelessWidget {
   const PortfolioCalendar({Key? key}) : super(key: key);
 
   Widget _iosApp(){
-    return CupertinoApp();
+    return CupertinoApp(
+      theme: CupertinoThemeData(
+        textTheme: CupertinoTextThemeData(
+          textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, ),
+        )
+      ),
+    );
   }
 
   Widget _androidApp(){
@@ -44,68 +50,34 @@ class PortfolioCalendar extends StatelessWidget {
           bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, ),
         ),
         iconTheme: IconThemeData(color: MyColors.primary),
-        switchTheme: SwitchThemeData(),
       ),
 
       onGenerateRoute: (RouteSettings route) {
-        // if (route.name == AddEventPage.routeName) {
-        //   Widget _page = AddEventPage();
-        //
-        //   return MaterialPageRoute(
-        //     builder: (BuildContext context) => MultiProvider(
-        //       providers: [
-        //         ChangeNotifierProvider<TimeProvider>(
-        //           create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
-        //           child: NotificationWidget(),
-        //         ),
-        //         ChangeNotifierProvider<AddEventProvider>(
-        //           create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
-        //         ),
-        //         ChangeNotifierProvider<NotificationProvider>(
-        //           create: (BuildContext ctx) => NotificationProvider(
-        //             ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
-        //           ),
-        //           child: NotificationWidget(),
-        //         ),
-        //       ],
-        //       child: AddEventPage(),
-        //     ),
-        //     settings: RouteSettings(name: AddEventPage.routeName),
-        //   );
-        // }
-        // if (route.name == NotificationPage.routeName) {
-        //   return MaterialPageRoute(
-        //     builder: (BuildContext context) => ChangeNotifierProvider<NotificationProvider>(
-        //       create: (BuildContext ctx) => NotificationProvider(
-        //         ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
-        //       ),
-        //       child: NotificationPage(),
-        //     ),
-        //   );
-        // }
-        Widget _page = AddEventPage();
-        if (route.name == NotificationWidget.routeName) _page = NotificationWidget();
-
-        return MaterialPageRoute(
-          builder: (BuildContext context) => MultiProvider(
-            providers: [
-              ChangeNotifierProvider<TimeProvider>(
-                create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
-                child: NotificationWidget(),
-              ),
-              ChangeNotifierProvider<AddEventProvider>(
-                create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
-              ),
-              ChangeNotifierProvider<NotificationProvider>(
-                create: (BuildContext ctx) => NotificationProvider(
-                    ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
+        if (route.name == AddEventPage.routeName) {
+          return MaterialPageRoute(
+            builder: (BuildContext context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider<TimeProvider>(
+                  create: (BuildContext context) => TimeProvider(context.read<CalendarProvider>().selectedDate),
+                  child: NotificationWidget(),
                 ),
-                child: NotificationWidget(),
-              ),
-            ],
-            child: _page,
-          ),
-          settings: RouteSettings(name: AddEventPage.routeName),
+                ChangeNotifierProvider<AddEventProvider>(
+                  create: (BuildContext context) => AddEventProvider(context.read<UserProvider>().userColors),
+                ),
+                ChangeNotifierProvider<NotificationProvider>(
+                  create: (BuildContext ctx) => NotificationProvider(
+                    ctx.read<TimeProvider>().day, ctx.read<TimeProvider>().startData
+                  ),
+                  child: NotificationWidget(),
+                ),
+              ],
+              child: AddEventPage(),
+            ),
+            settings: RouteSettings(name: AddEventPage.routeName),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (BuildContext context) => MainPage(),
         );
       },
       home: MainPage(),

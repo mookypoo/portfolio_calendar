@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_calendar/views/add_event/android_components.dart';
+import 'package:portfolio_calendar/views/add_event/components/android_components.dart';
 import '../../class/event_class.dart';
 import '../../provider/add_event_provider.dart';
 import '../../provider/time_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../repos/variables.dart' show MyColors;
-import 'common_components.dart';
+import 'components/common_components.dart';
 import '../../class/time_model.dart' show Period;
 
 class AndroidAddEvent extends StatefulWidget {

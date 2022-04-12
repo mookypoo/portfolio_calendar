@@ -1,12 +1,40 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../class/time_model.dart' show Period;
-import '../../class/user_color.dart';
-import '../../provider/add_event_provider.dart' show AddEventMode;
-import '../../provider/time_provider.dart';
-import '../../repos/notifications.dart';
-import '../../repos/variables.dart';
+import '../../../class/time_model.dart' show Period;
+import '../../../class/user_color.dart';
+import '../../../provider/add_event_provider.dart' show AddEventMode, AddEventProvider;
+import '../../../provider/time_provider.dart';
+import '../../../repos/variables.dart';
+
+class AddColorTopRow extends StatelessWidget {
+  const AddColorTopRow({Key? key, required this.addEventProvider, required this.addColor}) : super(key: key);
+  final AddEventProvider addEventProvider;
+  final void Function(UserColor uc) addColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 290.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          GestureDetector(
+            child: Text("Cancel", style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary)),
+            onTap: this.addEventProvider.addColorMode,
+          ),
+          GestureDetector(
+            child: Text("Add", style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500, color: MyColors.primary)),
+            onTap: () {
+              this.addColor(this.addEventProvider.newUserColor);
+              this.addEventProvider.addNewColor();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class TimeRow extends StatelessWidget {
   TimeRow({Key? key, required this.text, required this.widget, required this.period, required this.timeProvider, required this.isExpanded, required this.hourCt, required this.periodCt}) : super(key: key);
