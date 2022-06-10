@@ -72,6 +72,7 @@ class AddColorWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: TextField(
+                  autofocus: true,
                   onChanged: this.addEventProvider.onChangedNewTitle,
                   cursorColor: MyColors.primary,
                   decoration: InputDecoration(
@@ -209,6 +210,7 @@ class AddNotes extends StatelessWidget {
             ? Container(
               width: 290.0,
               child: TextField(
+                autofocus: true,
                 controller: this.ct..text = this.addEventProvider.note,
                 maxLines: null,
                 decoration: InputDecoration(

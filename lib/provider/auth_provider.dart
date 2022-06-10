@@ -17,7 +17,6 @@ class AuthProvider with ChangeNotifier {
     print("auth provider init");
   }
 
-  // "eqwLGthgyHY6JAQESn6g7WPnXij2"
   String? _userUid;
   String? get userUid => this._userUid;
   set userUid(String? s) => throw "error";
@@ -66,7 +65,6 @@ class AuthProvider with ChangeNotifier {
     this._isLoginPage = !this._isLoginPage;
     this.clearSubtexts();
     this.notifyListeners();
-    return;
   }
 
   void clearSubtexts(){
@@ -76,51 +74,43 @@ class AuthProvider with ChangeNotifier {
     this._isMale = true;
     this._pwErrorText = null;
     this.notifyListeners();
-    return;
   }
 
   void selectGender(bool isMale){
     this._isMale = isMale;
     this.notifyListeners();
-    return;
   }
 
   void onTapRedEye(bool isPw1){
     if (isPw1) this._pw1obscure = !this._pw1obscure;
     if (!isPw1) this._pw2obscure = !this._pw2obscure;
     this.notifyListeners();
-    return;
   }
 
   void checkName({required String name}){
     this._nameErrorText = this._authService.checkName(name: name);
     this.notifyListeners();
-    return;
   }
 
   void checkEmail({required String email}){
     this._emailErrorText = this._authService.checkEmail(email: email);
     this.notifyListeners();
-    return;
   }
 
   void checkPw({required String pw}){
     if (!this._isLoginPage) this._pwErrorText = this._authService.checkPw(pw: pw);
     if (this._isLoginPage && pw == "") this._pwErrorText = "비밀번호를 입력해주세요.";
     this.notifyListeners();
-    return;
   }
 
   void confirmPw({required String pw, required String pw2}){
     this._pw2ErrorText = this._authService.confirmPw(pw: pw, pw2: pw2);
     this.notifyListeners();
-    return;
   }
 
   void checkTos(){
     this._isTosChecked = !this._isTosChecked;
     this.notifyListeners();
-    return;
   }
 
   bool _hasErrors(){
@@ -130,7 +120,7 @@ class AuthProvider with ChangeNotifier {
 
   // todo exception handling when can't save auth info to server
   Future<bool> firebaseSignUp({required SignUpInfo data}) async {
-    //if (this._hasErrors()) return;
+    //if (this._hasErrors()) return false;
     final SignUpInfo data = SignUpInfo(email: "sookim482@gmail.com", name: "Soo Kim", pw: "calendar123", isMale: false);
     bool _success = false;
     final _res1 = await this._firebaseService.signup(email: data.email, pw: data.pw);

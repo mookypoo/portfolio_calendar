@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../provider/auth_provider.dart';
 import '../../provider/user_provider.dart';
 import '../auth/auth_page.dart';
+import '../loading/loading_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -19,7 +20,8 @@ class MainPage extends StatelessWidget {
     CalendarProvider _calendarProvider = Provider.of<CalendarProvider>(context);
     UserProvider _userProvider = Provider.of<UserProvider>(context);
 
-    if (_authProvider.authState != AuthState.loggedIn) return AuthPage();
+    if (_authProvider.authState == AuthState.loggedOut) return AuthPage();
+    if (_authProvider.authState == AuthState.await) return LoadingPage();
     if (_authProvider.authState == AuthState.loggedIn) {
       _userProvider.init(userUid: _authProvider.userUid ?? "");
       print("is logged in");

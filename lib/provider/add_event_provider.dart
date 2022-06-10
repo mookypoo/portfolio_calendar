@@ -44,6 +44,10 @@ class AddEventProvider with ChangeNotifier {
 
   UserColor get newUserColor => UserColor(color: this._newColor, title: this._newTitle);
 
+  bool _setTime = true;
+  bool get setTime => this._setTime;
+  set setTime(bool b) => throw "error";
+
   String _note = "";
   String get note => this._note;
   set note(String s) => throw "error";
@@ -97,6 +101,11 @@ class AddEventProvider with ChangeNotifier {
     this.userColors.removeWhere((UserColor c) => c.color == uc.color);
     this._eventColors.add(uc.color);
     this.deleteMode();
+  }
+
+  void onTapSetTime(bool b){
+    this._setTime = !this._setTime;
+    this.notifyListeners();
   }
 
   void addNoteMode({bool? cancel}){

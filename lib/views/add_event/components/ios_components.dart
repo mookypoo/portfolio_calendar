@@ -64,7 +64,7 @@ class AddColorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+      padding: const EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0, top: 8.0),
       height: 130.0,
       width: MediaQuery.of(context).size.width,
       child: Column(
@@ -74,6 +74,9 @@ class AddColorWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: CupertinoTextField(
+                  autofocus: true,
+                  placeholderStyle: TextStyle(color: CupertinoColors.secondaryLabel),
+                  decoration: BoxDecoration(color: MyColors.bg,),
                   onChanged: this.addEventProvider.onChangedNewTitle,
                   cursorColor: MyColors.primary,
                   placeholder: "Title",
@@ -129,7 +132,7 @@ class BottomWidget extends StatelessWidget {
         color: MyColors.bg,
         boxShadow: <BoxShadow>[BoxShadow(spreadRadius: 0.6),]
       ),
-      height: 50.0,
+      height: 60.0,
       width: MediaQuery.of(context).size.width/2,
       child: CupertinoButton(
         child: Text(text, style: TextStyle(fontSize: 18.0, color: MyColors.primary),),
@@ -156,9 +159,11 @@ class TitleTextField extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: CupertinoTextField(
+              placeholderStyle: TextStyle(color: CupertinoColors.secondaryLabel),
+              decoration: BoxDecoration(color: MyColors.bg,),
               controller: this.textCt,
               cursorColor: MyColors.primary,
-              style: TextStyle(fontSize: 23.0),
+              style: TextStyle(fontSize: 21.0),
               placeholder: "Title",
             ),
           ),
@@ -198,11 +203,13 @@ class AddNotes extends StatelessWidget {
             ),
           ),
           this.addEventProvider.addEventMode == AddEventMode.addNote
-              ? Container(
-            width: 290.0,
-            child: CupertinoTextField(
-              controller: this.ct..text = this.addEventProvider.note,
-              maxLines: null,
+            ? Container(
+                width: 290.0,
+                child: CupertinoTextField(
+                  autofocus: true,
+                  decoration: BoxDecoration(color: MyColors.bg,),
+                  controller: this.ct..text = this.addEventProvider.note,
+                  maxLines: null,
             ),
           ) : Container(),
           this.addEventProvider.addEventMode != AddEventMode.addNote ? Text(this.addEventProvider.note) : Container(),

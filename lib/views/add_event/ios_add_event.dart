@@ -49,103 +49,109 @@ class _IosAddEventState extends State<IosAddEvent> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: GestureDetector(
-        onTap: FocusManager.instance.primaryFocus?.unfocus,
-        child: CupertinoPageScaffold(
-          child: Stack(
-            children: <Widget>[
-              SingleChildScrollView(
-                child: Container(
-                  color: MyColors.bg,
-                  padding: MediaQuery.of(context).viewPadding + EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-                  width: _size.width,
-                  height: _size.height,
-                  child: Column(
-                    children: <Widget>[
-                      TitleTextField(textCt: this._titleCt..text = this.widget.addEventProvider.title, color: this.widget.addEventProvider.color,),
-                      CategoryRow(
-                        widget: Column(
-                          children: <Widget>[
-                            RepeatAllDay(widget: CupertinoSwitch(value: false, onChanged: (bool b) {}), text: "All day"),
-                            TimeRow(
-                              hourCt: this._hourCt,
-                              periodCt: this._periodCt,
-                              period: this.widget.timeProvider.startPeriod,
-                              isExpanded: this.widget.timeProvider.isStartExpanded,
-                              timeProvider: this.widget.timeProvider,
-                              text: "Starts",
-                              widget: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: Text(this.widget.timeProvider.dateText),
-                                  ),
-                                  Text(this.widget.timeProvider.startTime),
-                                ],
-                              ),
+    return GestureDetector(
+      onTap: FocusManager.instance.primaryFocus?.unfocus,
+      child: CupertinoPageScaffold(
+        child: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Container(
+                color: MyColors.bg,
+                padding: MediaQuery.of(context).viewPadding + EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                width: _size.width,
+                height: _size.height,
+                child: Column(
+                  children: <Widget>[
+                    TitleTextField(textCt: this._titleCt..text = this.widget.addEventProvider.title, color: this.widget.addEventProvider.color,),
+                    CategoryRow(
+                      widget: Column(
+                        children: <Widget>[
+                          RepeatNoTime(
+                            widget: CupertinoSwitch(
+                              value: this.widget.addEventProvider.setTime,
+                              onChanged: this.widget.addEventProvider.onTapSetTime,
+                              activeColor: MyColors.primary,
                             ),
-                            TimeRow(
-                              hourCt: this._hourCt,
-                              periodCt: this._periodCt,
-                              period: this.widget.timeProvider.endPeriod,
-                              isExpanded: this.widget.timeProvider.isEndExpanded,
-                              timeProvider: this.widget.timeProvider,
-                              text: "Ends",
-                              widget: Text(this.widget.timeProvider.endTime),
+                            text: "Set Time",
+                          ),
+                          TimeRow(
+                            hourCt: this._hourCt,
+                            periodCt: this._periodCt,
+                            period: this.widget.timeProvider.startPeriod,
+                            isExpanded: this.widget.timeProvider.isStartExpanded,
+                            timeProvider: this.widget.timeProvider,
+                            text: "Starts",
+                            widget: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: Text(this.widget.timeProvider.dateText),
+                                ),
+                                Text(this.widget.timeProvider.startTime),
+                              ],
                             ),
-                            RepeatAllDay(
-                              widget: Text("Never"),
-                              text: "Repeat",
-                            ),
-                          ],
-                        ),
-                        icon: Icon(CupertinoIcons.time),
+                          ),
+                          TimeRow(
+                            hourCt: this._hourCt,
+                            periodCt: this._periodCt,
+                            period: this.widget.timeProvider.endPeriod,
+                            isExpanded: this.widget.timeProvider.isEndExpanded,
+                            timeProvider: this.widget.timeProvider,
+                            text: "Ends",
+                            widget: Text(this.widget.timeProvider.endTime),
+                          ),
+                          RepeatNoTime(
+                            widget: Text("Never"),
+                            text: "Repeat",
+                          ),
+                        ],
                       ),
-                      CategoryRow(
-                          icon: Icon(CupertinoIcons.tag_fill, size: 28.0,),
-                          widget: this.widget.addEventProvider.addEventMode == AddEventMode.addColor
-                              ? AddColorTopRow(addEventProvider: this.widget.addEventProvider, addColor: this.widget.userProvider.addColor)
-                              : ColorTopRow(addEventProvider: this.widget.addEventProvider, removeColor: this.widget.userProvider.removeColor)
-                      ),
-                      this.widget.addEventProvider.addEventMode == AddEventMode.addColor ? AddColorWidget(addEventProvider: this.widget.addEventProvider) : Container(),
-                      CategoryRow(
-                        icon: Icon(CupertinoIcons.bell, ),
-                        widget: AddNotification(),
-                      ),
-                      CategoryRow(
-                        icon: Icon(CupertinoIcons.pencil_ellipsis_rectangle),
-                        widget: AddNotes(addEventProvider: this.widget.addEventProvider, ct: this._noteCt),
-                      ),
-                    ],
-                  ),
+                      icon: Icon(CupertinoIcons.time),
+                    ),
+                    CategoryRow(
+                        icon: Icon(CupertinoIcons.tag_fill, size: 23.0,),
+                        widget: this.widget.addEventProvider.addEventMode == AddEventMode.addColor
+                            ? AddColorTopRow(addEventProvider: this.widget.addEventProvider, addColor: this.widget.userProvider.addColor)
+                            : ColorTopRow(addEventProvider: this.widget.addEventProvider, removeColor: this.widget.userProvider.removeColor)
+                    ),
+                    this.widget.addEventProvider.addEventMode == AddEventMode.addColor ? AddColorWidget(addEventProvider: this.widget.addEventProvider) : Container(),
+                    CategoryRow(
+                      icon: Icon(CupertinoIcons.bell, ),
+                      widget: AddNotification(),
+                    ),
+                    CategoryRow(
+                      icon: Icon(CupertinoIcons.pencil_ellipsis_rectangle),
+                      widget: AddNotes(addEventProvider: this.widget.addEventProvider, ct: this._noteCt),
+                    ),
+                  ],
                 ),
               ),
-              this.widget.addEventProvider.addEventMode == AddEventMode.normal ? Positioned(
-                bottom: 0.0,
-                child: Container(
-                  child: Row(
-                    children: <Widget>[
-                      BottomWidget(text: "Cancel", save: false,),
-                      BottomWidget(
-                        onPressed: () {
-                          this.widget.userProvider.addEvent(Event(
-                            day: this.widget.timeProvider.day,
-                            color: this.widget.addEventProvider.color,
-                            title: this.widget.addEventProvider.title,
-                            endTime: this.widget.timeProvider.endData,
-                            startTime: this.widget.timeProvider.startData,
-                            notes: this.widget.addEventProvider.note,
-                          ));
-                        },
-                        text: "Save Event", save: true,
-                      ),
-                    ],
-                  ),
+            ),
+            this.widget.addEventProvider.addEventMode == AddEventMode.normal ? Positioned(
+              bottom: 0.0,
+              child: Container(
+                child: Row(
+                  children: <Widget>[
+                    BottomWidget(text: "Cancel", save: false,),
+                    BottomWidget(
+                      onPressed: () {
+                        this.widget.userProvider.addEvent(Event(
+                          setTime: this.widget.addEventProvider.setTime,
+                          day: this.widget.timeProvider.day,
+                          color: this.widget.addEventProvider.color,
+                          title: this.widget.addEventProvider.title,
+                          endTime: this.widget.timeProvider.endData,
+                          startTime: this.widget.timeProvider.startData,
+                          notes: this.widget.addEventProvider.note,
+                        ));
+                      },
+                      text: "Save Event", save: true,
+                    ),
+                  ],
                 ),
-              ) : Container(),
-            ],
-          ),
+              ),
+            ) : Container(),
+          ],
         ),
       ),
     );

@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Connect {
-  // todo check what headers do (content type xxx urlencoded)
-  final String _serverEndPoint = "http://192.168.200.181:3000";
+  final String _serverEndPoint = "http://192.168.35.152:3000";
   final Map<String, String> _headers = {"Mooky": "calendar", "content-type": "application/json"};
 
   Future<T?> reqPostServer<T>({required String path, required void Function(ReqModel) cb, Map<String, String>? headers, dynamic body}) async {

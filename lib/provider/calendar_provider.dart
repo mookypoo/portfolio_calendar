@@ -17,6 +17,8 @@ class CalendarProvider with ChangeNotifier {
   DayData get selectedDate => this._selectedDate;
   set selectedDate(DayData d) => throw "error";
 
+  String get selectedDateText => this._selectedDate.textInfo();
+
   SelectedMonth _selectedMonth = SelectedMonth(
     month: DateTime.now().month,
     year: DateTime.now().year,
@@ -35,18 +37,20 @@ class CalendarProvider with ChangeNotifier {
 
   List<week> get weekList => [...this._selectedMonth.weekList];
 
+  bool _viewDay = false;
+  bool get viewDay => this._viewDay;
+  set viewDay(bool b) => throw "error";
+
   void nextMonth(){
     this._selectedMonth = this._calendarService.nextMonth(month: this.month, year: this.year);
     this._changeSelectedDate(month: this.month, year: this.year);
     this.notifyListeners();
-    return;
   }
 
   void prevMonth(){
     this._selectedMonth = this._calendarService.prevMonth(month: this.month, year: this.year);
     this._changeSelectedDate(month: this.month, year: this.year);
     this.notifyListeners();
-    return;
   }
 
   void _changeSelectedDate({required int month, required int year}){
@@ -55,12 +59,13 @@ class CalendarProvider with ChangeNotifier {
     } else {
       this._selectedDate = DayData(date: 1, month: month, year: this.year);
     }
-    return;
   }
 
   void selectDate(DateTileData newDate){
     this._selectedDate = this._calendarService.changeDay(newDate);
+    if (newDate.events.isNotEmpty){
+      print(newDate.events.length);
+    }
     this.notifyListeners();
-    return;
   }
 }

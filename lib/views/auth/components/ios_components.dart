@@ -26,26 +26,28 @@ class AuthTextField extends StatelessWidget {
   final TextInputType? textInputType;
   final String? errorText;
 
-  // todo cupertion needs its own error text places
-  // const TextStyle(height: 0.7, fontSize: 15.0)
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 22.0, right: 5.0, left: 5.0),
-      child: CupertinoTextField(
-        focusNode: this.focusNode,
-        controller: this.textCt,
-        style: TextStyle(fontSize: 17.0),
-        textAlignVertical: TextAlignVertical.bottom,
-        placeholder: this.hintText,
-        suffix: this.suffixIcon ?? null,
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide()),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        CupertinoTextField(
+          focusNode: this.focusNode,
+          padding: EdgeInsets.only(top: 25.0, bottom: 5.0, left: 5.0),
+          controller: this.textCt,
+          style: TextStyle(fontSize: 17.0),
+          textAlignVertical: TextAlignVertical.bottom,
+          placeholder: this.hintText,
+          suffix: this.suffixIcon ?? null,
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide()),
+          ),
+          textInputAction: this.textInputAction ?? null,
+          keyboardType: this.textInputType ?? null,
+          obscureText: this.obscureText ?? false,
         ),
-        textInputAction: this.textInputAction ?? null,
-        keyboardType: this.textInputType ?? null,
-        obscureText: this.obscureText ?? false,
-      ),
+        Text(this.errorText ?? "", style: TextStyle(color: CupertinoColors.systemRed),),
+      ],
     );
   }
 }

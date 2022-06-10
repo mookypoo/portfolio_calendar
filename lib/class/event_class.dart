@@ -10,15 +10,17 @@ class Event {
   final String uid = Uuid().v1();
   final String title;
   final DayData day;
+  final bool setTime;
   final Time startTime;
   final Time endTime;
   final Color color;
   final String? notes;
 
-  Event({required this.title, required this.day, required this.startTime, required this.endTime, this.notes, required this.color});
+  Event({required this.setTime, required this.title, required this.day, required this.startTime, required this.endTime, this.notes, required this.color});
 
   Map<String, dynamic> toJsonAll(){
     return {
+      "setTime": this.setTime,
       "eventUid": this.uid,
       "title": this.title,
       "day": this.day.toJson(),

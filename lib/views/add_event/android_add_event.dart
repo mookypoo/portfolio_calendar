@@ -57,7 +57,14 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                     CategoryRow(
                       widget: Column(
                         children: <Widget>[
-                          RepeatAllDay(widget: Switch(value: false, onChanged: (bool b) {}), text: "All day"),
+                          RepeatNoTime(
+                            widget: Switch(
+                              value: this.widget.addEventProvider.setTime,
+                              onChanged: this.widget.addEventProvider.onTapSetTime,
+                              activeColor: MyColors.primary,
+                            ),
+                            text: "Set Time",
+                          ),
                           TimeRow(
                             hourCt: this._hourCt,
                             periodCt: this._periodCt,
@@ -84,7 +91,7 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                             text: "Ends",
                             widget: Text(this.widget.timeProvider.endTime),
                           ),
-                          RepeatAllDay(
+                          RepeatNoTime(
                             widget: Text("Never"),
                             text: "Repeat",
                           ),
@@ -120,6 +127,7 @@ class _AndroidAddEventState extends State<AndroidAddEvent> {
                     BottomWidget(
                       onPressed: () {
                         this.widget.userProvider.addEvent(Event(
+                          setTime: this.widget.addEventProvider.setTime,
                           day: this.widget.timeProvider.day,
                           color: this.widget.addEventProvider.color,
                           title: this.widget.addEventProvider.title,

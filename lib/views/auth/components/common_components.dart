@@ -47,7 +47,7 @@ class SignUpBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 35.0,
+      bottom: 45.0,
       left: 0.0,
       right: 0.0,
       child: Column(
@@ -56,7 +56,7 @@ class SignUpBottom extends StatelessWidget {
             onTap: () async => await this.onTapSignUp(),
             child: Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(bottom: 15.0),
+              margin: const EdgeInsets.only(bottom: 20.0),
               padding: const EdgeInsets.all(7.0),
               width: 110.0,
               height: 50.0,
@@ -103,7 +103,7 @@ class LogInBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 65.0,
+      bottom: 45.0,
       left: 0.0,
       right: 0.0,
       child: Column(

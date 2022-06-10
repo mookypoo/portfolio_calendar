@@ -4,8 +4,12 @@ import 'package:portfolio_calendar/repos/connect.dart';
 
 class FirebaseService {
   static Future<void> initializeFirebase() async => await Firebase.initializeApp();
-
   FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FirebaseService(){
+    print("firebase service init");
+  }
+
   Connect _connect = Connect();
 
   Future<Object?> signup({required String email, required String pw}) async {
@@ -58,7 +62,7 @@ class FirebaseService {
   }
 
   Future<void> sendEmailVerification() async {
-    final User? _user = this._auth.currentUser;
+    final User? _user = _auth.currentUser;
     if (_user != null && !_user.emailVerified) await _user.sendEmailVerification();
     return;
   }

@@ -45,6 +45,7 @@ class UserProvider with ChangeNotifier {
 
   List<Event> _userEvents = [
     Event(
+      setTime: true,
       color: EventColors.yellow,
       day: DayData(
         month: 3,
@@ -64,6 +65,7 @@ class UserProvider with ChangeNotifier {
       title: "기몌수 홍대",
     ),
     Event(
+      setTime: true,
       color: EventColors.green,
       startTime: Time(
         hour: 8,
@@ -83,6 +85,7 @@ class UserProvider with ChangeNotifier {
       title: "Study Coding",
     ),
     Event(
+      setTime: false,
       color: EventColors.purple,
       startTime: Time(
         hour: 8,
@@ -102,6 +105,7 @@ class UserProvider with ChangeNotifier {
       title: "Tattoo",
     ),
     Event(
+      setTime: true,
       color: EventColors.green,
       startTime: Time(
         hour: 8,
@@ -121,6 +125,7 @@ class UserProvider with ChangeNotifier {
       title: "Mom's Bday",
     ),
     Event(
+      setTime: false,
       color: EventColors.red,
       startTime: Time(
         hour: 8,
@@ -140,6 +145,67 @@ class UserProvider with ChangeNotifier {
       title: "Sarah at Gangnam",
     ),
     Event(
+      setTime: false,
+      color: EventColors.purple,
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
+      ),
+      day: DayData(
+          month: 4,
+          year: 2022,
+          date: 20
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
+      ),
+      title: "Study Coding",
+    ),
+    Event(
+      setTime: true,
+      color: EventColors.brown,
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.PM,
+      ),
+      day: DayData(
+          month: 4,
+          year: 2022,
+          date: 20
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.PM,
+      ),
+      title: "Walk Happy",
+    ),
+    Event(
+      setTime: true,
+      color: EventColors.green,
+      startTime: Time(
+        hour: 8,
+        minute: 0,
+        period: Period.AM,
+      ),
+      day: DayData(
+          month: 4,
+          year: 2022,
+          date: 20
+      ),
+      endTime: Time(
+        hour: 9,
+        minute: 0,
+        period: Period.AM,
+      ),
+      title: "Workout",
+    ),
+    Event(
+      setTime: false,
       color: EventColors.orange,
       startTime: Time(
         hour: 8,
@@ -159,6 +225,7 @@ class UserProvider with ChangeNotifier {
       title: "Team meeting",
     ),
     Event(
+      setTime: false,
       color: EventColors.purple,
       startTime: Time(
         hour: 8,
@@ -178,6 +245,7 @@ class UserProvider with ChangeNotifier {
       title: "My bday",
     ),
     Event(
+      setTime: false,
       color: EventColors.red,
       startTime: Time(
         hour: 8,
@@ -197,7 +265,6 @@ class UserProvider with ChangeNotifier {
       title: "Team meeting",
     ),
   ];
-
 
   List<Event> _thisMonthEvents = [];
   List<Event> get thisMonthEvents => [...this._thisMonthEvents];

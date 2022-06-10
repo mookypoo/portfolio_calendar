@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:portfolio_calendar/views/add_event/components/common_components.dart' show ColorCircle;
 
 import '../../class/day_class.dart';
 import '../../class/event_class.dart';
@@ -11,26 +12,23 @@ class CalendarTopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map<Widget>((
-          String s) =>
-          Container(
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(
-                  color: Color.fromRGBO(192, 192, 192, 1.0), width: 2.0),),
+      children: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map<Widget>((String s) =>
+        Container(
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(
+              color: Color.fromRGBO(192, 192, 192, 1.0), width: 2.0),
             ),
-            height: 45.0,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 7,
-            child: Text(s, style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              color: s == "Sun"
-                  ? const Color.fromRGBO(216, 31, 42, 1.0)
-                  : null,)),
-          )).toList(),
+          ),
+          height: 45.0,
+          width: MediaQuery.of(context).size.width / 7,
+          child: Text(s, style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: s == "Sun"
+                ? const Color.fromRGBO(216, 31, 42, 1.0)
+                : null,)),
+        )).toList(),
     );
   }
 }
@@ -76,18 +74,12 @@ class DateTile extends StatelessWidget {
 
   Widget _events({required Event event}){
     return Container(
-      margin: const EdgeInsets.only(top: 2.0),
-      height: 35.0,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 3.0),
-            width: 5.0,
-            color: event.color,
-          ),
-          Expanded(child: Text(event.title, style: const TextStyle(fontSize: 13.0), overflow: TextOverflow.clip,))
-        ],
+      margin: const EdgeInsets.all(3.0),
+      //height: 10.0,
+      //width: 10.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: event.color,
       ),
     );
   }
@@ -100,8 +92,6 @@ class DateTile extends StatelessWidget {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -113,7 +103,7 @@ class DateTile extends StatelessWidget {
               border: CalendarService.isSame(date1: this.data, date2: this.selectedDate) ? Border.all(color: MyColors.primary) : null,
             ),
             padding: const EdgeInsets.only(top: 2.0),
-            height: 110.0,
+            height: 87.0,
             width:  MediaQuery.of(context).size.width/7,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -122,17 +112,23 @@ class DateTile extends StatelessWidget {
                     ? this._today(data: this.data)
                     : this._date(data: this.data, color: this._dateColor(data: this.data, dayIndex: this.dayIndex)),
                 Expanded(
-                  child: ListView.builder(
+                  child: GridView.builder(
+                    shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    itemCount: this.data.events.length,
-                    itemBuilder: (BuildContext context, int i) => this._events(event: this.data.events[i]),
+                    itemCount: this.data.events.length < 4 ? this.data.events.length : 4,
+                    itemBuilder: (BuildContext context, int i) {
+                      if (i == 3) return Align(
+                        alignment: Alignment.center,child: Text("+ ${this.data.events.length - 3}", style: TextStyle(fontWeight: FontWeight.w500),));
+                      return this._events(event: this.data.events[i]);
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 25.0),
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            height: 110.0,
+            height: 87.0,
             width: MediaQuery.of(context).size.width/7,
             color: this._tileColor(data: this.data),
           ),

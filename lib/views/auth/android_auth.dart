@@ -28,7 +28,13 @@ class _AndroidAuthState extends State<AndroidAuth> {
   void initState() {
     <TextEditingController>[this._nameCt, this._emailCt, this._pw1Ct, this._pw2Ct].forEach((TextEditingController ct) {
       ct.addListener(() {
-        if (ct.text.trim().length == 1) this.setState(() {});
+        if (ct.text.trim().length == 1) {
+          //this.setState(() {});
+          if (ct == this._nameCt) this.widget.authProvider.checkName(name: this._nameCt.text);
+          if (ct == this._emailCt) this.widget.authProvider.checkEmail(email: this._emailCt.text);
+          if (ct == this._pw1Ct) this.widget.authProvider.checkPw(pw: this._pw1Ct.text.trim());
+          if (ct == this._pw2Focus) this.widget.authProvider.confirmPw(pw: this._pw1Ct.text.trim(), pw2: this._pw2Ct.text.trim());
+        }
         if (ct.text.trim().isEmpty) this.setState(() {});
       });
     });

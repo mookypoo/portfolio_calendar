@@ -223,8 +223,8 @@ class CategoryRow extends StatelessWidget {
   }
 }
 
-class RepeatAllDay extends StatelessWidget {
-  const RepeatAllDay({Key? key, required this.widget, required this.text}) : super(key: key);
+class RepeatNoTime extends StatelessWidget {
+  const RepeatNoTime({Key? key, required this.widget, required this.text}) : super(key: key);
   final Widget widget;
   final String text;
 
