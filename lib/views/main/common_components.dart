@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:portfolio_calendar/views/add_event/components/common_components.dart' show ColorCircle;
 
 import '../../class/day_class.dart';
 import '../../class/event_class.dart';
@@ -117,6 +116,7 @@ class DateTile extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     itemCount: this.data.events.length < 4 ? this.data.events.length : 4,
                     itemBuilder: (BuildContext context, int i) {
+
                       if (i == 3) return Align(
                         alignment: Alignment.center,child: Text("+ ${this.data.events.length - 3}", style: TextStyle(fontWeight: FontWeight.w500),));
                       return this._events(event: this.data.events[i]);
@@ -133,6 +133,55 @@ class DateTile extends StatelessWidget {
             color: this._tileColor(data: this.data),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TodayEventTile extends StatelessWidget {
+  const TodayEventTile({Key? key, required this.event, required this.onTapEvent}) : super(key: key);
+  final Event event;
+  final void Function(String eventUid) onTapEvent;
+
+  @override
+  Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onTap: () {
+        this.onTapEvent(this.event.uid);
+      },
+      child: Container(
+        height: 60.0,
+        decoration: const BoxDecoration(border: Border(
+          bottom: BorderSide(color: Color.fromRGBO(192, 192, 192, 1.0)),
+        )),
+        width: _size.width,
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              width: _size.width * 0.3,
+              decoration: BoxDecoration(
+                border: Border(right: BorderSide(
+                  color: this.event.color,
+                  width: 8.0,
+                )),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(this.event.startTime.time, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),),
+                  Text(this.event.endTime.time, style: TextStyle(fontSize: 15.0, color: Color.fromRGBO(114, 114, 114, 1.0))),
+                ],
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text(this.event.title),
+            ),
+          ],
+        ),
       ),
     );
   }

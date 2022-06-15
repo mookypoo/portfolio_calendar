@@ -117,7 +117,7 @@ class PortfolioCalendar extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<CalendarProvider>(create: (_) => CalendarProvider()),
-        ChangeNotifierProvider<UserProvider>(create: (BuildContext context) => UserProvider(Provider.of<CalendarProvider>(context, listen: false).selectedMonth)),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
       ],
       child: Platform.isAndroid ? this._androidApp() : this._iosApp(),
     );

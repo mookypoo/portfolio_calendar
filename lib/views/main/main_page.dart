@@ -16,16 +16,13 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    CalendarProvider _calendarProvider = Provider.of<CalendarProvider>(context);
-    UserProvider _userProvider = Provider.of<UserProvider>(context);
+    final AuthProvider _authProvider = Provider.of<AuthProvider>(context);
+    final CalendarProvider _calendarProvider = Provider.of<CalendarProvider>(context);
+    final UserProvider _userProvider = Provider.of<UserProvider>(context);
 
     if (_authProvider.authState == AuthState.loggedOut) return AuthPage();
     if (_authProvider.authState == AuthState.await) return LoadingPage();
-    if (_authProvider.authState == AuthState.loggedIn) {
-      _userProvider.init(userUid: _authProvider.userUid ?? "");
-      print("is logged in");
-    }
+    if (_authProvider.authState == AuthState.loggedIn) _userProvider.init(userUid: _authProvider.userUid ?? "");
 
     return Platform.isAndroid
       ? AndroidMain(calendarProvider: _calendarProvider, userProvider: _userProvider, authProvider: _authProvider,)

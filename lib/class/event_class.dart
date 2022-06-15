@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'day_class.dart' show DayData;
 
 class Event {
-  final String uid = Uuid().v1();
+  final String uid = Uuid().v1(); // done at server
   final String title;
   final DayData day;
   final bool setTime;

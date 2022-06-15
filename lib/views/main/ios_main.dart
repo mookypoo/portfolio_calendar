@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../class/day_class.dart';
+import '../../class/event_class.dart';
 import '../../provider/auth_provider.dart';
 import '../../provider/calendar_provider.dart';
 import '../../provider/user_provider.dart';
@@ -17,6 +18,7 @@ class IosMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate).length);
     Size _size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
@@ -28,7 +30,10 @@ class IosMain extends StatelessWidget {
             CupertinoButton(
               padding: const EdgeInsets.only(right: 35.0),
               child: const Icon(CupertinoIcons.arrow_left, size: 28.0, color: CupertinoColors.white),
-              onPressed: this.calendarProvider.prevMonth,
+              onPressed: () {
+                this.calendarProvider.prevMonth();
+                this.userProvider.changeMonth(selectedMonth: this.calendarProvider.selectedMonth);
+              },
             ),
             GestureDetector(
               onTap: () {},
@@ -40,7 +45,10 @@ class IosMain extends StatelessWidget {
             CupertinoButton(
               padding: const EdgeInsets.only(left: 25.0),
               child: const Icon(CupertinoIcons.arrow_right, size: 28.0, color: CupertinoColors.white),
-              onPressed: this.calendarProvider.nextMonth,
+              onPressed: () {
+                this.calendarProvider.nextMonth();
+                this.userProvider.changeMonth(selectedMonth: this.calendarProvider.selectedMonth);
+              }
             ),
           ],
         ),
@@ -55,61 +63,96 @@ class IosMain extends StatelessWidget {
       ),
       child: Stack(
         children: <Widget>[
-          Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 87.0 * this.calendarProvider.weekList.length + 45.0,
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) => Container(
-                      height: _size.height,
-                      color: MyColors.bg,
-                      width: _size.width,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CalendarTopRow(),
-                          ...List.generate(this.calendarProvider.weekList.length, (int weekIndex) =>
-                              Row(
-                                children: List.generate(7, (int dayIndex) => DateTile(
-                                  dayIndex: dayIndex,
-                                  selectedMonth: this.calendarProvider.month,
-                                  thisMonthEvents: this.userProvider.thisMonthEvents,
-                                  onPressed: this.calendarProvider.selectDate,
-                                  selectedDate: this.calendarProvider.selectedDate,
-                                  data: DateTileData.withEvents(
-                                    data: this.calendarProvider.weekList[weekIndex][dayIndex],
-                                    events: this.userProvider.thisMonthEvents,
-                                  ),
+          Column(
+            children: <Widget>[
+              Container(
+                height: 87.0 * this.calendarProvider.weekList.length + 45.0,
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) => Container(
+                    height: _size.height,
+                    color: MyColors.bg,
+                    width: _size.width,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CalendarTopRow(),
+                        ...List.generate(this.calendarProvider.weekList.length, (int weekIndex) =>
+                            Row(
+                              children: List.generate(7, (int dayIndex) => DateTile(
+                                dayIndex: dayIndex,
+                                selectedMonth: this.calendarProvider.month,
+                                thisMonthEvents: this.userProvider.thisMonthEvents,
+                                onPressed: this.calendarProvider.selectDate,
+                                selectedDate: this.calendarProvider.selectedDate,
+                                data: DateTileData.withEvents(
+                                  data: this.calendarProvider.weekList[weekIndex][dayIndex],
+                                  events: this.userProvider.thisMonthEvents,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        SingleChildScrollView(
+                          child: Container(
+                            height: 40.0 + 30.0 * this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate).length,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: 40.0,
+                                    width: _size.width,
+                                    color: MyColors.primary,
+                                    child: Text(this.calendarProvider.selectedDateText, style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1.0), fontWeight: FontWeight.w500, fontSize: 18.0),),
+                                  ),
+                                  Container(
+                                    width: _size.width,
+                                    color: MyColors.bg,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate).length,
+                                      itemBuilder: (BuildContext ctx, int index) {
+                                        final List<Event> _events = this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate);
+                                        return TodayEventTile(event: _events[index], onTapEvent: (String eventUid) {});
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40.0,
-                        width: _size.width,
-                        color: MyColors.primary,
-                        child: Text(this.calendarProvider.selectedDateText, style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1.0), fontWeight: FontWeight.w500, fontSize: 18.0),),
-                      ),
-                      Container(
-                        width: _size.width,
-                        color: MyColors.bg,
-                        child: Container(),
-                      ),
-                    ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    height: 40.0,
+                    width: _size.width,
+                    color: MyColors.primary,
+                    child: Text(this.calendarProvider.selectedDateText, style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1.0), fontWeight: FontWeight.w500, fontSize: 18.0),),
                   ),
-                ),
-              ],
-            ),
+                  Container(
+                    width: _size.width,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate).length,
+                      itemBuilder: (BuildContext ctx, int index) {
+                        final List<Event> _events = this.userProvider.selectedDayEvents(this.calendarProvider.selectedDate);
+                        return TodayEventTile(event: _events[index], onTapEvent: (String eventUid) {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           Positioned(
             bottom: 20.0,

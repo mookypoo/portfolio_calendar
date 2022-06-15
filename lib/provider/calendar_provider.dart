@@ -7,7 +7,7 @@ import '../class/selected_month.dart';
 import '../repos/variables.dart' show Today;
 
 class CalendarProvider with ChangeNotifier {
-  CalendarService _calendarService = CalendarService();
+  final CalendarService _calendarService = CalendarService();
 
   CalendarProvider(){
     print("calendar provider init");

@@ -18,8 +18,8 @@ class AddEventProvider with ChangeNotifier {
   set addEventMode(AddEventMode a) => throw "error";
 
   List<Color> _eventColors = [
-    EventColors.red, EventColors.orange, EventColors.yellow, EventColors.green, EventColors.teal,
-    EventColors.aqua, EventColors.blue, EventColors.purple, EventColors.brown, EventColors.grey,
+    EventColors.pink, EventColors.red, EventColors.orange, EventColors.yellow, EventColors.green, EventColors.teal,
+    EventColors.blue, EventColors.purple, EventColors.brown, EventColors.grey,
   ];
   List<Color> get eventColors => [...this._eventColors];
   set eventColors(List<Color> c) => throw "error";
